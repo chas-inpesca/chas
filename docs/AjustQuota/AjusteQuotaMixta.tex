@@ -1,0 +1,413 @@
+\documentclass[]{article}
+\usepackage[T1]{fontenc}
+\usepackage{lmodern}
+\usepackage{amssymb,amsmath}
+\usepackage{ifxetex,ifluatex}
+\usepackage{fixltx2e} % provides \textsubscript
+% use upquote if available, for straight quotes in verbatim environments
+\IfFileExists{upquote.sty}{\usepackage{upquote}}{}
+\ifnum 0\ifxetex 1\fi\ifluatex 1\fi=0 % if pdftex
+  \usepackage[utf8]{inputenc}
+\else % if luatex or xelatex
+  \ifxetex
+    \usepackage{mathspec}
+    \usepackage{xltxtra,xunicode}
+  \else
+    \usepackage{fontspec}
+  \fi
+  \defaultfontfeatures{Mapping=tex-text,Scale=MatchLowercase}
+  \newcommand{\euro}{€}
+\fi
+% use microtype if available
+\IfFileExists{microtype.sty}{\usepackage{microtype}}{}
+\usepackage[margin=1in]{geometry}
+\usepackage{color}
+\usepackage{fancyvrb}
+\newcommand{\VerbBar}{|}
+\newcommand{\VERB}{\Verb[commandchars=\\\{\}]}
+\DefineVerbatimEnvironment{Highlighting}{Verbatim}{commandchars=\\\{\}}
+% Add ',fontsize=\small' for more characters per line
+\usepackage{framed}
+\definecolor{shadecolor}{RGB}{248,248,248}
+\newenvironment{Shaded}{\begin{snugshade}}{\end{snugshade}}
+\newcommand{\KeywordTok}[1]{\textcolor[rgb]{0.13,0.29,0.53}{\textbf{{#1}}}}
+\newcommand{\DataTypeTok}[1]{\textcolor[rgb]{0.13,0.29,0.53}{{#1}}}
+\newcommand{\DecValTok}[1]{\textcolor[rgb]{0.00,0.00,0.81}{{#1}}}
+\newcommand{\BaseNTok}[1]{\textcolor[rgb]{0.00,0.00,0.81}{{#1}}}
+\newcommand{\FloatTok}[1]{\textcolor[rgb]{0.00,0.00,0.81}{{#1}}}
+\newcommand{\CharTok}[1]{\textcolor[rgb]{0.31,0.60,0.02}{{#1}}}
+\newcommand{\StringTok}[1]{\textcolor[rgb]{0.31,0.60,0.02}{{#1}}}
+\newcommand{\CommentTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{\textit{{#1}}}}
+\newcommand{\OtherTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{{#1}}}
+\newcommand{\AlertTok}[1]{\textcolor[rgb]{0.94,0.16,0.16}{{#1}}}
+\newcommand{\FunctionTok}[1]{\textcolor[rgb]{0.00,0.00,0.00}{{#1}}}
+\newcommand{\RegionMarkerTok}[1]{{#1}}
+\newcommand{\ErrorTok}[1]{\textbf{{#1}}}
+\newcommand{\NormalTok}[1]{{#1}}
+\usepackage{graphicx}
+% Redefine \includegraphics so that, unless explicit options are
+% given, the image width will not exceed the width of the page.
+% Images get their normal width if they fit onto the page, but
+% are scaled down if they would overflow the margins.
+\makeatletter
+\def\ScaleIfNeeded{%
+  \ifdim\Gin@nat@width>\linewidth
+    \linewidth
+  \else
+    \Gin@nat@width
+  \fi
+}
+\makeatother
+\let\Oldincludegraphics\includegraphics
+{%
+ \catcode`\@=11\relax%
+ \gdef\includegraphics{\@ifnextchar[{\Oldincludegraphics}{\Oldincludegraphics[width=\ScaleIfNeeded]}}%
+}%
+\ifxetex
+  \usepackage[setpagesize=false, % page size defined by xetex
+              unicode=false, % unicode breaks when used with xetex
+              xetex]{hyperref}
+\else
+  \usepackage[unicode=true]{hyperref}
+\fi
+\hypersetup{breaklinks=true,
+            bookmarks=true,
+            pdfauthor={Luis Cubillos},
+            pdftitle={Ajuste de las cuotas de sardina común y anchoveta considerando la composición de las capturas},
+            colorlinks=true,
+            citecolor=blue,
+            urlcolor=blue,
+            linkcolor=magenta,
+            pdfborder={0 0 0}}
+\urlstyle{same}  % don't use monospace font for urls
+\setlength{\parindent}{0pt}
+\setlength{\parskip}{6pt plus 2pt minus 1pt}
+\setlength{\emergencystretch}{3em}  % prevent overfull lines
+\setcounter{secnumdepth}{0}
+
+\title{Ajuste de las cuotas de sardina común y anchoveta considerando la
+composición de las capturas}
+\author{Luis Cubillos}
+\date{10 de diciembre de 2014}
+
+\begin{document}
+
+\begin{center}
+\huge Ajuste de las cuotas de sardina común y anchoveta considerando la
+composición de las capturas \\[0.2cm]
+\end{center}
+\begin{center}
+\large \emph{Luis Cubillos}\\[0.1cm]
+\end{center}
+\begin{center}
+\large \emph{10 de diciembre de 2014} \\
+\end{center}
+\normalsize
+
+
+\section{Introduction}\label{introduction}
+
+En la actualidad, el manejo de pesquerías mediante el control de cuotas
+de captura de especies separadas es ampliamente aceptado e
+institucionalizado. Aunque el manejo mediante cuotas puede ser efectivo
+en determinadas pesquerías, cuando se trata de pesquerías
+multiespecíficas mixtas (PMM) podría ser poco efectivas. En efecto, en
+PPM normalmente se acepta que se siga capturando hasta que todas las
+cuotas hayan sido cubiertas. Asimismo, es común que algunas cuotas se
+superen debido a que aún hay especies por capturas, o bien genera
+descarte y malas prácticas.
+
+En PPM, el balance óptimo de la contribución relativa de las especies a
+la captura total se debe a multiples factores que están relacionados con
+las operaciones de pesca y por el grado de mezcla que se de en
+determinadas zonas de pesca. Este es el caso de la pesquería de sardina
+común y anchoveta en la zona centro-sur de Chile. Ambos recursos son
+especies objetivo de la flota artesanal e industrial, son recursos de
+tamaño similar que forman agregaciones y cardúmenes mezclados e
+imposibles de separar acústicamente (Gerlotto et al., 2004), y tiene
+igual precio.
+
+En este trabajo se propone un sistema de ajuste de cuotas sobre la base
+de la contribución relativa de cada especie al desembarque que fue
+registrada en el pasado reciente.
+
+\section{Metodología}\label{metodologia}
+
+La metodología se basa en un sistema de dos recursos que conforman una
+pesquería mixta, y para los cuales se establecen cuotas de captura
+biológicamente aceptables (CBA) por separado. Si se denomina por $Qs$ y
+$Qa$ a la CBA del recurso $s$ y $a$, respectivamente; entonces resta por
+conocer la composición de la captura total de la flota y que corresponde
+a una fracción $p \ [0,1]$ para uno de los recursos. De esta manera, se
+tendrá que el aporte del recurso $s$ a la captura total será $p$ y la
+del otro recurso será su complemento $1-p$. Si $p=0.55$ entonces la
+razón entre los recursos será $a/s= 0.45/0.55$.
+
+La composición de especies puede variar por múltiples factores entre un
+nivel inferior $l$ y otro superior $u$. Por ejemplo si $l=0.5$ y
+$u=0.6$, entonces la composición específica entre $s$ y $a$ podría
+fluctuar entre $a/s=0.5/0.5$ y $a/s=0.5/0.6$. Para la pesquería se asume
+que los límites $l$ y $u$ son conocidos, y que la composición de la
+captura viene dada por $p=\in [l,u]$. Con el objeto de proceder con el
+ajuste de las cuotas, el procedimiento asume que bajo el sistema de
+cuota la pesquería se detendrá cuando se logre completar una de las
+cuotas. En otras palabras $Qs$, $Qa$, $l$, y $u$ son conocidos, mientras
+que la composición final $p$ puede ser determinada en el rango $[l,u]$.
+
+Al considerar que las capturas efectivas de los recursos pueden ser
+menor o igual que las respectivas cuotas, i.e.,
+
+\[Ca \leq Qa\] y
+
+\[Cs \leq Qs\]
+
+La captura total que conforma la mezcla es $Ca+Cs$, y por definición la
+composición de la captura es $p$ asociada a $Cs$ es:
+
+\[\frac{Cs}{Ca+Cs}=p\]
+
+lo que equivale a:
+
+\[pCa-(1-p)Cs=0\]
+
+Esta última ecuación es una línea recta que pasa por los puntos
+($Ca,Cs$) con una pendiente $b=p/(1-p)$ e intercepto $a=0$. Ya que $p$
+varía en el intervalo $[l,u]$, la pendiente podría variar en el
+intervalo:
+
+\[[\frac{l}{1-l},\frac{u}{1-u}]\]
+
+Las restricciones de este sistema de ecuaciones se muestran en la Figura
+1, suponiendo que $Qs=11$, $Qa=25$, $l=0.3$ y $u=0.6$. Si el límite
+superior es $u=0.6$ y al considerar que es más factible que la cuota de
+$Qs$ se complete primero, entonces el desembarque final de $Qa$ debería
+ser ajustado a que inevitablemente será $Ca=16,5$. Sin embargo, si se
+considera $l=0.3$, entonces el ajuste debería ser más drástico
+($Ca=4,7$).En consecuencia, la cuota mixta ($Qm=Cs+Ca$) podría fluctuar
+entre 15,7 y 27,5, en vez de la suma inicial de cuotas de 36.
+
+\includegraphics{./AjusteQuotaMixta_files/figure-latex/unnamed-chunk-2.pdf}
+
+Al valorar la contribución de cada especie, y al suponer que la especie
+con menor captura tiene mayor valor entonces se podría plantear que el
+beneficio de la captura conjunta será:
+
+\[Im=Ps*Cs+Pa*Ca\]
+
+Al suponer que el valor de la conservación viene dado por el inverso de
+la cuota, entonces $Ps=1/Qs$ y $Pa=1/Qa$. Esto implica que si se logra
+extraer la totalidad de la cuota de cada especie, entonces el máximo
+beneficio conjunto será igual a 2 ($Im=2$). Otra forma de valorar es por
+el inverso de la biomasa con el objeto de asignar mayor peso a la
+especie con menor biomasa. Sin embargo, ya que en las pesquerías de
+peces pelágicos las cuotas son proporcional a la biomasa, es preferible
+utilizar el inverso de la cuota.
+
+Las restricciones del sistema de ecuaciones son:
+
+\[Im=PsCs+PaCa=Max!\] \[Ca \leq Qa\] \[Cs \leq Qs\] \[pCa-(1-p)Cs=0\]
+
+La optimización para encontrar el valor de la composición de la captura
+considera los siguientes casos:
+
+\begin{itemize}
+\itemsep1pt\parskip0pt\parsep0pt
+\item
+  Caso I : $Qa/Qs < l/(1-l)$
+\item
+  Caso II : $l/(1-l) \leq Qa/Qs \leq u/(1-u)$
+\item
+  Caso III: $u/(1-u) < Qa/Qs$
+\end{itemize}
+
+En estos casos, la solución óptima para la composición de la captura
+($p^{o}$) es:
+
+\begin{itemize}
+\itemsep1pt\parskip0pt\parsep0pt
+\item
+  Caso I : $p^{o}=l$
+\item
+  Caso II : $p^{o}=Qa/(Qa+Qs)$
+\item
+  CAso III: $p^{o}=u$
+\end{itemize}
+
+Las capturas ópimas serían:
+
+\begin{itemize}
+\itemsep1pt\parskip0pt\parsep0pt
+\item
+  Caso I : $[Ca^{o},Cs^{o}]=[((1-l)/l)Qa,Qa]$
+\item
+  Caso II : $[Ca^{o},Cs^{o}]=[Qs,Qa]$
+\item
+  Caso III: $[Ca^{o},Cs^{o}]=[Qs,(u/(1-u))Qs]$
+\end{itemize}
+
+El beneficio de las capturas totales sería:
+
+\begin{itemize}
+\itemsep1pt\parskip0pt\parsep0pt
+\item
+  Caso I : $Im^{o}=(Ps((1-l)/l)+Pa)Qa$
+\item
+  Caso II : $Im^{o}=PsQs+PaQa$
+\item
+  Caso III: $Im^{o}=(Ps+Pa(u/(1-u)))Qs$
+\end{itemize}
+
+A modo de ejemplo, si se considera $Qa=42$, $Qs=572$, $Pa=0,0238$,
+$Ps=0,0017$, $l=0,08$ y $u=0,38$, entonces se tiene como resultado que
+la composición de la captura óptima es $p^{o}=0,08$, luego $Ca=42$,
+$Cs=483$, $Qm=Ca+Cs=525$, y máximo beneficio de la conservación
+$Im=1,84$ muy próximo a 2.
+
+\section{La composición de captura
+históricas}\label{la-composicion-de-captura-historicas}
+
+La pesquería de anchoveta y sardina común es un caso de pesquería mixta
+multiespecifica, y la mezcla de especie puede ser debida tanto a
+interacción tecnológica como ecológica. La interacción ecológica es más
+dificil de demostrar, por ejemplo competencia. Sin embargo es más fácil
+considerar que la mezcla de especies se debe a la interacción
+tecnológica, ya que para el pescador no hay preferencias por una u otra
+especie ya que el destino de la captura es para la reducción y tienen el
+mismo precio. La preferencia, sin embargo, es un tema complejo ya que
+cuando hay restricciones por agotamiento de la cuota de una de las
+especies, el pescador preferirá capturar la especie que tiene un saldo
+de la cuota.
+
+Se utilizó los datos de capturas mensuales del periodo 1998-2013 para
+calcular la razón entre la captura de anchoveta y la captura de sardina
+($Ca/Cs$) mediante un modelo de efectos mixtos y considerando el año
+como factor aleatoriocon intercepto cero.
+
+Los resultados muestran que los límites de confianza de 95\% para la
+composición de especies fluctúa entre 0,44 y 0,96 con un estimado de 0,7
+para los efectos fijos, mientras que para el efecto aleatorio asociado a
+los años el límite de confianza de 95\% fluctúa entre 0,36 y 0,76 con un
+estimado de 0,52.
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\KeywordTok{intervals}\NormalTok{(m4,}\DataTypeTok{level=}\FloatTok{0.95}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## Approximate 95% confidence intervals
+## 
+##  Fixed effects:
+##              lower    est.     upper
+## (Intercept) 233.48 843.608 1453.7337
+## sardina       0.44   0.699    0.9579
+## attr(,"label")
+## [1] "Fixed effects:"
+## 
+##  Random Effects:
+##   Level: as.factor(YY) 
+##              lower   est. upper
+## sd(sardina) 0.3618 0.5227 0.755
+## 
+##  Within-group standard error:
+## lower  est. upper 
+##  9149  9554  9976
+\end{verbatim}
+
+Los cambios anuales han fluctuado entre 0,078 en el 2012 y 1,848 en el
+2007 (Figura). En los años más recientes (2008-2013), la razón de
+capturas fluctúa entre 0,078 y 0,378. Estos valores pueden ser
+considerado como límite inferior (l=0,078) y superior (u=0,378) para
+ajustar las cuotas de captura.
+
+\includegraphics{./AjusteQuotaMixta_files/figure-latex/unnamed-chunk-5.pdf}
+
+\includegraphics{./AjusteQuotaMixta_files/figure-latex/unnamed-chunk-6.pdf}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{tb1}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+##       Year  rate2
+##  [1,] 1998 0.8100
+##  [2,] 1999 1.0380
+##  [3,] 2000 0.5790
+##  [4,] 2001 0.4055
+##  [5,] 2002 0.6179
+##  [6,] 2003 1.0640
+##  [7,] 2004 1.0415
+##  [8,] 2005 1.6448
+##  [9,] 2006 0.6740
+## [10,] 2007 1.8480
+## [11,] 2008 0.3460
+## [12,] 2009 0.3220
+## [13,] 2010 0.3770
+## [14,] 2011 0.1250
+## [15,] 2012 0.0780
+## [16,] 2013 0.2120
+\end{verbatim}
+
+\section{Discusión}\label{discusion}
+
+\section{Anexo}\label{anexo}
+
+El algoritmo de optimización es el siguiente:
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{comp <-}\StringTok{ }\NormalTok{function()\{}
+  \NormalTok{if(Qr<}\StringTok{ }\NormalTok{A)\{}
+        \NormalTok{p=l}
+        \NormalTok{CaCs =}\StringTok{ }\KeywordTok{c}\NormalTok{(((}\DecValTok{1}\NormalTok{-l)/l)*Qa,Qa)}
+        \NormalTok{Im =}\StringTok{ }\NormalTok{(Ps*((}\DecValTok{1}\NormalTok{-l)/l)+Pa)*Qa}
+        \NormalTok{\}}
+    \NormalTok{if(Qr>B)\{}
+        \NormalTok{p=u}
+        \NormalTok{CaCs =}\StringTok{ }\KeywordTok{c}\NormalTok{(Qs,(u/(}\DecValTok{1}\NormalTok{-u))*Qs)}
+        \NormalTok{Im =}\StringTok{ }\NormalTok{(Ps+Pa*(u/(}\DecValTok{1}\NormalTok{-u)))*Qs}
+        \NormalTok{\}}
+     \NormalTok{if(Qr>=A &&}\StringTok{ }\NormalTok{Qr<=B)\{}
+        \NormalTok{p=Qa/(Qs+Qa)}
+        \NormalTok{CaCs =}\StringTok{ }\KeywordTok{c}\NormalTok{(Qs,Qa)}
+        \NormalTok{Im =}\StringTok{ }\NormalTok{Ps*Qs+Pa*Qa}
+        \NormalTok{\}}
+    \NormalTok{out <-}\StringTok{ }\KeywordTok{list}\NormalTok{()}
+    \NormalTok{out$p =}\StringTok{ }\NormalTok{p}
+    \NormalTok{out$CaCs=CaCs}
+    \NormalTok{out$Im=Im}
+    \KeywordTok{return}\NormalTok{(out)}
+\NormalTok{\}}
+\end{Highlighting}
+\end{Shaded}
+
+Un ejemplo de aplicación es el siguiente
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{Qa =}\StringTok{ }\DecValTok{42}  \CommentTok{#Cuota de la especie a}
+\NormalTok{Qs =}\StringTok{ }\DecValTok{572}  \CommentTok{#Cuota de la especie b}
+\NormalTok{Pa =}\StringTok{ }\DecValTok{1}\NormalTok{/Qa  }\CommentTok{#Valor de la especie a por conservación}
+\NormalTok{Ps =}\StringTok{ }\DecValTok{1}\NormalTok{/Qs  }\CommentTok{#Valor de la especie b por conservación}
+\NormalTok{l=}\FloatTok{0.08}     \CommentTok{#limite inferior razon anchoveta/sardina}
+\NormalTok{u=}\FloatTok{0.38}     \CommentTok{#Límite superior razón anchoveta/sardina}
+\CommentTok{#Balance y ajuste de las cuotas separadas}
+\NormalTok{Qr =}\StringTok{ }\NormalTok{Qa/Qs}
+\NormalTok{A =}\StringTok{ }\NormalTok{(l/(}\DecValTok{1}\NormalTok{-l))}
+\NormalTok{B =}\StringTok{ }\NormalTok{(u/(}\DecValTok{1}\NormalTok{-u))}
+\NormalTok{sa <-}\StringTok{ }\KeywordTok{comp}\NormalTok{()}
+\NormalTok{Qmixta <-}\StringTok{ }\NormalTok{sa$CaCs[}\DecValTok{1}\NormalTok{]+sa$CaCs[}\DecValTok{2}\NormalTok{]}
+\NormalTok{Cs<-sa$CaCs[}\DecValTok{1}\NormalTok{]}
+\NormalTok{Ca<-sa$CaCs[}\DecValTok{2}\NormalTok{]}
+\NormalTok{Qmixta}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## [1] 525
+\end{verbatim}
+
+\end{document}
