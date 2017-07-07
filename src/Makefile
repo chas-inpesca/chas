@@ -6,12 +6,18 @@ else
     COPY=cp
 endif
 
-all: build/chas 
+all: build/chas build/mixchas
 
 build/chas: build chas.tpl 
 	@admb -g chas.tpl $(LIB)
 	@$(COPY) chas build/
 	@$(RM) chas
+
+build/mixchas: build mixchas.tpl
+	@admb -g mixchas.tpl $(LIB)
+	@$(COPY) mixchas build/
+	@$(RM) mixchas
+
 
 build:
 	@echo creating build directory
@@ -19,7 +25,6 @@ build:
 
 clean:
 	@$(RM) build
-	@$(RM) gmacs.cpp
-	@$(RM) gmacs.htp
-	@$(RM) gmacs.obj
-	@$(RM) lib/*.obj
+	@$(RM) chas.cpp
+	@$(RM) chas.htp
+	@$(RM) chas.obj

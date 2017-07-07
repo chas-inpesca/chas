@@ -2456,6 +2456,8 @@ TOP_OF_MAIN_SECTION
 GLOBALS_SECTION
     #include <admodel.h> 
   #include <string.h>
+  #undef rep
+  #define rep(object) report << #object "\n" << object << endl;
   adstring s_simname;
   adstring a_simname;
   
@@ -2485,5 +2487,3 @@ GLOBALS_SECTION
   ofstream reprat7("s_rpr_mcmc",ios::app);
   ofstream reprat8("a_rpr_mcmc",ios::app);
    
-  #undef rep
-  #define rep(object) report << #object "\n" << object << endl;

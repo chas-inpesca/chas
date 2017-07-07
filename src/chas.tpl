@@ -6,6 +6,7 @@
 DATA_SECTION
   !! *(ad_comm::global_datafile) >>  datafile_name; // First line is datafile 
   !!ad_comm::change_datafile_name(datafile_name);
+  !! *(ad_comm::global_datafile) >>  ctlfile_name; // First line is datafile 
   init_int styr  
   init_int endyr
   init_int nages  
@@ -39,7 +40,7 @@ DATA_SECTION
 //#################### 
 //CONTROLADOR 
 //####################
-  !!ad_comm::change_datafile_name("sardina.ctl"); 
+  !!ad_comm::change_datafile_name(ctlfile_name);
   init_int ph_sel_fish             //selectividad
   init_number shif_r               //selectividad
   init_number h                    //escarpamiento
@@ -1233,3 +1234,4 @@ TOP_OF_MAIN_SECTION
 GLOBALS_SECTION
  #include <admodel.h>
   adstring datafile_name;
+  adstring ctlfile_name;
