@@ -61,7 +61,7 @@
 #init_int ph_seldev_f1
 2
 #init_vector lambda(1,3)
-10.
+10. 1 1 
 #crecimiento
 18
 0.7

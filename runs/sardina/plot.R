@@ -144,7 +144,7 @@ par(mar=c(3.5,3.5,1,1),mgp=c(2,0.7,0),xaxs="r",yaxs="r")
 plotBubbles(ResPel,xval=x,yval=y,powr=powr,cex.axis=0.7,size=0.25,xlim=xlim,ylim=ylim,xlab="Longitud (cms)",ylab="Años Crucero Pelaces",cex.lab=0.8,clrs=c("black","red","blue"),main="",hide0=TRUE,lab=c(10, 10, 15),cex=1,cpro=0, lwd=1.5,frange=1.5, prettyaxis=TRUE)
 
 ##################COMPOSICIONES POR EDAD PESQUERÍA
-source('figures.r')
+source('../R/figures.r')
 variable <-  M8$Propobservada
 dimnames(variable) <- list(c("1991","1992", "1993", "1994", "1995", "1996", "1997", "1998", "1999", "2000", "2001", "2002", "2003", "2004", "2005",
                        "2006", "2007","2008","2009","2010","2011","2012","2013","2014","2015","2016"),c("3", "3.5", "4", "4.5","5","5.5","6","6.5","7","7.5","8","8.5","9","9.5","10","10.5","11","11.5","12","12.5","13","13.5","14","14.5","15","15.5","16","16.5","17","17.5","18","18.5","19"))

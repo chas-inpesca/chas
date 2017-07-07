@@ -1,12 +1,11 @@
 //#########################MODELO EVALUACION STOCK INPESCA 2016#############################
 //##################Modelo edad-estructurado con ajuste de observaciones de tallas#########################
-//#####################################SARDINA COMUN########################################
 //############################################################################################
 
 DATA_SECTION
   !! *(ad_comm::global_datafile) >>  datafile_name; // First line is datafile 
-  !!ad_comm::change_datafile_name(datafile_name);
   !! *(ad_comm::global_datafile) >>  ctlfile_name; // First line is datafile 
+  !!ad_comm::change_datafile_name(datafile_name);
   init_int styr  
   init_int endyr
   init_int nages  
@@ -29,6 +28,32 @@ DATA_SECTION
   init_matrix obs_p_lenreclas(1,nobs_surv,1,nlenbins)          
   init_matrix obs_p_lenpelaces(1,nobs_survpel,1,nlenbins)  
   init_matrix wta(styr,endyr,1,nages)                                     
+ LOCAL_CALCS
+    ECHO(styr);
+    ECHO(endyr);
+    ECHO(nages);  
+    ECHO(catch_bio);  
+    ECHO(nobs_cpue);
+    ECHO(yr_cpue);
+    ECHO(obs_cpue);
+    ECHO(nobs_surv);
+    ECHO(yr_surv);
+    ECHO(obs_surv);
+    ECHO(nobs_survpel);
+    ECHO(yr_survpel);
+    ECHO(obs_survpel);
+    ECHO(nlenbins );
+    ECHO(nobs_fishlen);
+    ECHO(yr_fishlen);                               
+    ECHO(yr_fishlenreclas);                             
+    ECHO(yr_fishlenpelaces);   
+    ECHO(obs_p_len);              
+    ECHO(obs_p_lenreclas);          
+    ECHO(obs_p_lenpelaces);  
+    ECHO(wta);                                     
+ END_CALCS
+
+
   
   int styr_rec
   int phase_F40; 
@@ -53,7 +78,7 @@ DATA_SECTION
   init_number CV_survpel           //Coeficiente de variacion para el crucero pelaces
   init_number CV_catch             //Coef. de Var para las capturas
   init_number CV_cpue              //Coef. de Var para la CPUE
-  init_int ph_M                    //inicia fase para estimar M (p.e. la ultima =5)
+  init_int ph_M                    //inicia fase para estimar M (p.e. la ultima = 5)
   init_int ph_sigmar               //inicia fase sigma reclutamiento
   init_int ph_Fdev                 //inicia fase F mort
   init_int ph_recdev               //inicia fase dev recluta
@@ -76,15 +101,55 @@ DATA_SECTION
   init_int ph_sel_fish1            //selectividad
   init_int ph_seldev_f1            //selectividad
   init_vector lambda(1,3)          //selectividad
-  init_int Linfdat;                //crecimiento
-  init_int kdat;
-  init_int t0dat;
-  init_int Cdat;
-  init_int Tsdat; 
+  init_number Linfdat;                //crecimiento
+  init_number kdat;
+  init_number t0dat;
+  init_number Cdat;
+  init_number Tsdat; 
 
 //####################  
  LOCAL_CALCS
 //####################
+  ECHO(ph_sel_fish);
+  ECHO(shif_r);
+  ECHO(h);
+  ECHO(crecimiento);
+  ECHO(opt_VB);
+  ECHO(nlen_fish  );
+  ECHO(nlen_fishr );
+  ECHO(nlen_fishp );  
+  ECHO(CV_surv    );
+  ECHO(CV_survpel );
+  ECHO(CV_catch   );
+  ECHO(CV_cpue    );
+  ECHO(ph_M       );
+  ECHO(ph_sigmar  );
+  ECHO(ph_Fdev    );
+  ECHO(ph_recdev  );
+  ECHO(ph_q       );
+  ECHO(ph_qsurv   );
+  ECHO(ph_qsurvpel);
+  ECHO(natmortprior);
+  ECHO(cvnatmortprior);
+  ECHO(qprior);
+  ECHO(cvqprior);
+  ECHO(edad);
+  ECHO(len);
+  ECHO(avgL);
+  ECHO(obs_CV);
+  ECHO(wt);
+  ECHO(maturity);
+  ECHO(nselagef1      );  
+  ECHO(group_num_f1  );
+  ECHO(ph_sel_fish1   );
+  ECHO(ph_seldev_f1   );
+  ECHO(lambda    );
+  ECHO(Linfdat       );
+  ECHO(kdat);
+  ECHO(t0dat);
+  ECHO(Cdat);
+  ECHO(Tsdat); 
+
   int if1=0;
   for (int i=styr;i<endyr;i++)
   {
@@ -125,9 +190,9 @@ INITIALIZATION_SECTION
 //####################  
 PARAMETER_SECTION
 //####################  
-  init_bounded_number M(0.96,0.97,ph_M)                             
-  init_bounded_number log_Lo(1,2.1,opt_VB)                           
-  init_bounded_number log_cv_edad(-4,-1.8,opt_VB)
+  init_bounded_number M(0.3,1.7,ph_M)                             
+  init_bounded_number log_Lo(1,2.1,-1)                           
+  init_bounded_number log_cv_edad(-4,-1.8,-1)
   init_bounded_number linf(18,21,-1)                                            
   init_bounded_number k1(0.3,1.5,-1)  
   init_bounded_number t0(-1,0.0,-1)    
@@ -383,13 +448,15 @@ FUNCTION get_agematrix
   }
   else
   {
-    Lo      =exp(log_Lo);
-    cv_edad =exp(log_cv_edad);
+    Lo      = mfexp(log_Lo);
+    cv_edad = mfexp(log_cv_edad);
   }
   int i, j;
   mu_edad(1)=Lo;
-  for (i=2;i<=nages;i++){
-  mu_edad(i)=linf*(1-exp(-k1))+exp(-k1)*mu_edad(i-1);}
+  for (i=2;i<=nages;i++)
+  {
+    mu_edad(i) = linf*(1-mfexp(-k1))+exp(-k1)*mu_edad(i-1);
+  }
 
   for (int i=1;i<=nages;i++)
   {
@@ -1028,29 +1095,29 @@ FUNCTION evaluate_the_objective_function
       sel_dev_like+=lambda(3)*norm2(first_difference(first_difference(log_sel_f1(styr))));
     }
 
-//verosimilitudes total  
-  f+=rec_like;
-  f+=sel_like;
-  f+=sel_dev_like;
-  f+=age_like;
-  f+=age_liker;
-  f+=age_likep;
-  f+=cpue_like;
-  f+=catch_like;
-  f+=surv_like;
-  f+=surv_likepel;
-  f+=cvage_like;
+  //verosimilitudes total  
+  f += rec_like;
+  f += sel_like;
+  f += sel_dev_like;
+  f += age_like;
+  f += age_liker;
+  f += age_likep;
+  f += cpue_like;
+  f += catch_like;
+  f += surv_like;
+  f += surv_likepel;
+  f += cvage_like;
  
 //penaliza F altos
   if (current_phase()<3)
-    fpen=10.*norm2(mfexp(fmort_dev+log_avg_fmort)-.2);
+    fpen= 10.*norm2(mfexp(fmort_dev+log_avg_fmort)-.2);
   else
-    fpen=.3*norm2(mfexp(fmort_dev+log_avg_fmort)-.2);
+    fpen= .3*norm2(mfexp(fmort_dev+log_avg_fmort)-.2);
   if (active(fmort_dev))
-    fpen+=norm2(fmort_dev);
+    fpen+= norm2(fmort_dev);
  
-  f+=fpen;
-  f+=sprpen;
+  f+= fpen;
+  f+= sprpen;
   
 //################  
 FUNCTION MCWrite   
@@ -1142,49 +1209,49 @@ FUNCTION MCWrite
 REPORT_SECTION
 //###############
 
-	report << "$So" << endl;
+    report << "$So" << endl;
     report << So << endl;
-	report << "$F60" << endl;
+    report << "$F60" << endl;
     report << F60 << endl;
-	report << "$residualcaptura" << endl;
+    report << "$residualcaptura" << endl;
     report << ssqcatch_residuals << endl;
     report << "$residualcpue" << endl;
     report << cpue_like_residuals << endl;
-	report << "$residualreclas" << endl;
+    report << "$residualreclas" << endl;
     report << surv_like_residuals << endl;
-	report << "$residualpelaces" << endl;
+    report << "$residualpelaces" << endl;
     report << surv_like_residualspel << endl;
-	report << "$Numerodepecesenelstock" << endl;
+    report << "$Numerodepecesenelstock" << endl;
     report << natage << endl;
-	report << "$Reclutamiento" << endl;
+    report << "$Reclutamiento" << endl;
     report << BR << endl;
-	report << "$Mortalidadporpesca " << endl;
+    report << "$Mortalidadporpesca " << endl;
     report << F << endl;
-	report << "$SurveyObs" << endl;
+    report << "$SurveyObs" << endl;
     report << obs_surv << endl;
-	report << "$SurveyEstReclas" << endl;
+    report << "$SurveyEstReclas" << endl;
     report << pred_surv << endl;
-	report << "$SurveyObsPelaces" << endl;
+    report << "$SurveyObsPelaces" << endl;
     report << obs_survpel << endl;
     report << "$SurveyEstPelaces" << endl;
     report << pred_survpel << endl;
-	report << "$edad" << endl;
+    report << "$edad" << endl;
     report << edad << endl;
     report << "$yrsurv" << endl;
     report << yr_surv << endl;
     report << "$yrfish" << endl;
     report << yr_fishlen << endl;
-	report << "$DatosobservadosCPUE" << endl;
+    report << "$DatosobservadosCPUE" << endl;
     report << obs_cpue << endl;
     report << "$DatospredichosCPUE" << endl;
     report << pred_cpue << endl;
     report << "$Capturaobservada"<<endl;
     report << catch_bio << endl;
-	report << "$Capturapredicha"<<endl;
+    report << "$Capturapredicha"<<endl;
     report << pred_catch << endl;
-	report << "$Mortalidadporpescaanual"<< endl;
+    report << "$Mortalidadporpescaanual"<< endl;
     report << Fmort <<endl;
-	report << "$Biomasatotal "<<endl;
+    report << "$Biomasatotal "<<endl;
     report << totbiom <<endl;
     report << "$Biomasaadulta "<<endl;
     report << bioadul <<endl;
@@ -1192,36 +1259,38 @@ REPORT_SECTION
     report << ssbiom <<endl;
     report << "$potencialreproductivo "<<endl;
     report << RPR <<endl;
-	report << "$Residualesproporcionpesqueria "<<endl;
+    report << "$Residualesproporcionpesqueria "<<endl;
     report << pred_p_residual <<endl;
-	report << "$Residualesproporcionreclas "<<endl;
+    report << "$Residualesproporcionreclas "<<endl;
     report << pred_p_residualsreclas <<endl;
     report << "$Residualesproporcionpelaces "<<endl;
     report << pred_p_residualspelaces <<endl;
-	report << "$Propobservada" <<endl;
+    report << "$Propobservada" <<endl;
     report << obs_p_len << endl;
     report << "$Proppredicha " <<endl;
-	report << pred_p_len << endl;
-	report << "$Propobservadar" <<endl;
+    report << pred_p_len << endl;
+    report << "$Propobservadar" <<endl;
     report << obs_p_lenreclas << endl;
     report << "$Proppredichar " <<endl;
-	report << pred_p_lenreclas << endl;
-	report << "$Propobservadap" <<endl;
+    report << pred_p_lenreclas << endl;
+    report << "$Propobservadap" <<endl;
     report << obs_p_lenpelaces << endl;
     report << "$Proppredichap " <<endl;
-	report << pred_p_lenpelaces << endl;
-	report << "$FuncionObjetivo "<<endl;
+    report << pred_p_lenpelaces << endl;
+    report << "$FuncionObjetivo "<<endl;
     report << f <<endl;
-	report << "$selectividadreclas"<<endl;
+    report << "$selectividadreclas"<<endl;
     report << age_selr <<endl;
-	report << "$selectividadpelaces "<<endl;
+    report << "$selectividadpelaces "<<endl;
     report << age_selp <<endl;
-	report << "$selectividadpesquerias "<<endl;
+    report << "$selectividadpesquerias "<<endl;
     report << age_sel <<endl;
-	report << "$rbmsylast "<<endl;
+    report << "$rbmsylast "<<endl;
     report << rbmsylast <<endl;
-	report << "$Fmsylast "<<endl;
+    report << "$Fmsylast "<<endl;
     report << Fmsylast <<endl;
+    report << "$trans "<<endl;
+    report << trans <<endl;
 
 //####################
 TOP_OF_MAIN_SECTION
@@ -1235,3 +1304,12 @@ GLOBALS_SECTION
  #include <admodel.h>
   adstring datafile_name;
   adstring ctlfile_name;
+
+  /**
+  \def ECHO(object)
+  Prints name and value of \a object on echoinput %ofstream file.
+  */
+  #undef ECHO
+  #define ECHO(object) echoinput << #object << "\n" << object << endl;
+
+  ofstream echoinput("checkfile.rep");
