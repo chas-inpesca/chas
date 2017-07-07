@@ -6,6 +6,8 @@ chas
 *p0*
 *.rep
 *.log
+*.bar
+*.par
 *tmp
 *.r0*
 *.cov
