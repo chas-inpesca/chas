@@ -7,7 +7,7 @@
 #Loo, k, Lt(a=1), cv(edad),  M
 18.5  0.71  8.5  0.182872  0.96
 #vb
-2
+-2
 # n muestral pesquería
 20
 # n muestral crucero reclas
@@ -33,7 +33,7 @@
 #Fase q
 -4
 #Fase q_surv reclas
--2
+2
 #Fase q_surv pelaces
 2
 #Natmort prior y cvnatmortprior
@@ -57,15 +57,11 @@
 #init_int group_num_f1
 2
 #init_int ph_sel_fish1
-1
+-1
 #init_int ph_seldev_f1
-2
+-2
 #init_vector lambda(1,3)
-10. 1 1 
+25. 25 25 
 #crecimiento
-18
-0.7
--0.5
-0.5  
-0.5 
+18.5  0.71  8.5  0.182872  
 

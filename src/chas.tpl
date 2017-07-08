@@ -180,13 +180,14 @@ INITIALIZATION_SECTION
   log_q_survpel -0.001
   sigr 0.6;
   log_Bo 8.45;
-  log_a50 -6
-  log_a95 -0.5
-  log_a50p -6
-  log_a95p -0.5
+  a50 .2
+  a95 1.8
+  a50p .2
+  a95p 1.5
   linf Linfdat
+  k1 kdat
+  t0 t0dat
 
-  
 //####################  
 PARAMETER_SECTION
 //####################  
@@ -196,18 +197,18 @@ PARAMETER_SECTION
   init_bounded_number linf(18,21,-1)                                            
   init_bounded_number k1(0.3,1.5,-1)  
   init_bounded_number t0(-1,0.0,-1)    
-  init_bounded_number C(0.1,1)     
-  init_bounded_number Ts(0.1,1.0) 
+  init_bounded_number C(0.1,1,-1)     
+  init_bounded_number Ts(0.1,1.0,-1) 
   init_bounded_number sigr(0.55,1,ph_sigmar) 
-  init_bounded_number log_P(-4,0,2)
-  init_bounded_number log_a50(-3,-1,ph_sel_fish) 
-  init_bounded_number log_a95(0.1,2,ph_sel_fish) 
-  init_bounded_number log_a50p(-3,-1,ph_sel_fish)
-  init_bounded_number log_a95p(0.1,2,ph_sel_fish)
+  init_bounded_number log_P(-4,0,-2)    // OjO not really used
+  init_bounded_number a50(-4,4,ph_sel_fish) 
+  init_bounded_number a95(0.1,7.,ph_sel_fish) 
+  init_bounded_number a50p(-4,4,ph_sel_fish)
+  init_bounded_number a95p(0.1,7,ph_sel_fish)
   init_bounded_number F60(.01,2.,phase_F40)
   init_bounded_number F40(.01,2.,phase_F40)
   init_bounded_number F20(.01,2.,phase_F40)
-  init_bounded_number log_Bo(4,12,2)
+  init_bounded_number log_Bo(4,12,-2)    // OjO not really used
   init_bounded_vector rec_dev_future(styr_fut,endyr_fut,-20.,20.,ph_recdev);
   init_bounded_vector cv_age(1,nages,0.02,0.18,1)  
   init_bounded_dev_vector fmort_dev(styr,endyr,-10,10,ph_Fdev)  
@@ -224,10 +225,6 @@ PARAMETER_SECTION
   init_number log_Nini(1)
   init_number log_avg_fmort(1)
   number avgsel_fish1;
-  number a_50
-  number a_95
-  number a_50p
-  number a_95p
   number diff
   number Rlast 
   number Rmedio 
@@ -403,23 +400,15 @@ PRELIMINARY_CALCS_SECTION
 //Arreglo parámetros de crecimiento
   k1 = kdat;
   t0 = t0dat;
-  C  = Cdat;
-  Ts = Tsdat; 
+  C  = Cdat;  //???
+  Ts = Tsdat; //???
   get_agematrix();
-
-//################  
-RUNTIME_SECTION
-//################
-
-  maximum_function_evaluations 100, 400, 800, 800
-  convergence_criteria 1e-4,1e-6,1e-6, 1e-6
 
 //###################
 PROCEDURE_SECTION
 //###################
   get_selectividad();
   get_mortalidad();
-  surv=mfexp(-1.0*M);
   get_abundancia();
   get_captura();
   get_stock_recluta();
@@ -460,12 +449,12 @@ FUNCTION get_agematrix
 
   for (int i=1;i<=nages;i++)
   {
-    sd_age(i)=cv_age(i)*mu_edad(i);
-    var_age(i)=sd_age(i)*sd_age(i);
+    sd_age(i)  = cv_age(i)*mu_edad(i);
+    var_age(i) = sd_age(i)*sd_age(i);
     for (int j=1;j<=nlenbins;j++)
     {
-      diff = len(j)-mu_edad(i);
-      trans(i,j)=2/sd_age(i)*exp(-diff*diff/(2*var_age(i)));
+      diff       = len(j)-mu_edad(i);
+      trans(i,j) = 2/sd_age(i)*exp(-diff*diff/(2*var_age(i)));
     }
     trans(i)=trans(i)/sum(trans(i)); 
   }
@@ -505,20 +494,20 @@ FUNCTION get_selectividad
       ii++;
       log_sel_f1(i+1)-=log(mean(mfexp(log_sel_f1(i+1))));
      }
-     else
-     {
-      for (int j=1;j<=nselagef1;j++)
-       {
-        log_sel_f1(i+1,j)=log_sel_f1(i,j);
-       }
-      for (int j=nselagef1+1;j<=nages;j++)
-       {
-        log_sel_f1(i+1,j)=log_sel_f1(i+1,j-1);
-       }
-      log_sel_f1(i+1)-=log(mean(mfexp(log_sel_f1(i+1))));
-     }
+  else
+  {
+    for (int j=1;j<=nselagef1;j++)
+    {
+      log_sel_f1(i+1,j)=log_sel_f1(i,j);
     }
-   }
+      for (int j=nselagef1+1;j<=nages;j++)
+      {
+        log_sel_f1(i+1,j)=log_sel_f1(i+1,j-1);
+      }
+      log_sel_f1(i+1)-=log(mean(mfexp(log_sel_f1(i+1))));
+    }
+  }
+  }
   else
   {
    for (int i=styr;i<endyr;i++)
@@ -530,36 +519,36 @@ FUNCTION get_selectividad
       for (int j=nselagef1+1;j<=nages;j++)
       {
         log_sel_f1(i+1,j)=log_sel_f1(i+1,j-1);
-        }
       }
     }
-  sel_f1=exp(log_sel_f1);
-  age_sel=sel_f1;
-  size_sel=age_sel*trans;  
+  }
+  sel_f1   =exp(log_sel_f1);
+  age_sel  =sel_f1;
+  size_sel =age_sel*trans;  
   
 //Selectividad Reclas
-  a_50=mfexp(log_a50);
-  a_95=mfexp(log_a95);
+  // a_50 = mfexp(log_a50);
+  // a_95 = mfexp(log_a95);
   for (int j=1;j<=nages;j++)
   {
-  sel_fishr(j)=1./(1.+mfexp(-log(19)*(edad(j)-a_50)/(a_95-a_50)));
-    }
+    sel_fishr(j)=1./(1.+mfexp(-log(19)*(edad(j)-a50)/(a95)));
+  }
   for (int i=styr;i<=endyr;i++)
   {
-     for(int j=1;j<=nages;j++)
-     {
-        age_selr(i,j)=sel_fishr(j);
-      }
-    }  
+    for(int j=1;j<=nages;j++)
+    {
+      age_selr(i,j) = sel_fishr(j);
+    }
+  }  
   size_selr=age_selr*trans;//conversion a tallas
 
 //Selectividad Pelaces
-  a_50p=mfexp(log_a50p);
-  a_95p=mfexp(log_a95p);
+  // a_50p = mfexp(log_a50p);
+  // a_95p = mfexp(log_a95p);
   for (int j=1;j<=nages;j++)
   {
-  sel_fishp(j)=1./(1.+mfexp(-log(19)*(edad(j)-a_50p)/(a_95p-a_50p)));
-    }
+    sel_fishp(j) = 1./(1.+mfexp(-log(19)*(edad(j)-a50p)/(a95p)));
+  }
   for (int i=styr;i<=endyr;i++)
   {
     for(int j=1;j<=nages;j++)
@@ -578,10 +567,11 @@ FUNCTION get_mortalidad
     for (int j=1;j<=nages;j++)
     {
       F(i,j)=Fmort(i)*age_sel(i,j);
-       }
     }
-  Z=F+M;
-  S=mfexp(-1.0*Z);
+  }
+  Z    = F+M;
+  S    = mfexp(-Z);
+  surv = mfexp(-M);
   
 //#####################
 FUNCTION get_abundancia
@@ -592,29 +582,29 @@ FUNCTION get_abundancia
 //condición inicial
   Neq(1)=1;
   for (j=2;j<=nages;j++)
-   {Neq(j)=Neq(j-1)*mfexp(-1*M);} 
-    Neq(nages)=Neq(nages)/(1-exp(-1*M)); 
-    BPRo=sum(elem_prod(Neq,wt));  
-    log_Ro=log_Bo-log(BPRo);
-    Nstage=Neq*mfexp(mean_log_rec)+0.5*square(sigr);
-  
-  for (int j=2;j<=nages;j++)
   {
-    natage(styr,j)= mfexp(log_Nini+log_dev_ini(j))+0.5*square(sigr);
-  }
-  for (int i=styr;i<=106;i++) 
-  {
-    natage(i,1)=mfexp(mean_log_rec+rec_dev(i))+0.5*square(sigr);
-  }
-  for (int i=107;i<=endyr;i++)
-  {
-    natage(i,1)=mfexp(mean_log_rec1+rec_dev(i))+0.5*square(sigr);
-  }
-  for (int i=styr;i < endyr;i++)
-  {
-    natage(i+1)(2,nages)=++elem_prod(natage(i)(1,nages-1),S(i)(1,nages-1));
-	  natage(i+1,nages)+=natage(i,nages)*S(i,nages)+natage(i,nages)*S(i,nages);
-	}
+    Neq(j)     = Neq(j-1)*mfexp(-1*M);} 
+    Neq(nages) = Neq(nages)/(1-exp(-1*M)); 
+    BPRo       = sum(elem_prod(Neq,wt));  
+    log_Ro     = log_Bo-log(BPRo);          // OjO, this parameter not used elsewhere...
+    Nstage     = Neq*mfexp(mean_log_rec)+0.5*square(sigr);
+    for (int j=2;j<=nages;j++)
+    {
+      natage(styr,j)= mfexp(log_Nini+log_dev_ini(j))+0.5*square(sigr);
+    }
+    for (int i=styr;i<=106;i++) 
+    {
+      natage(i,1)=mfexp(mean_log_rec+rec_dev(i))+0.5*square(sigr);
+    }
+    for (int i=107;i<=endyr;i++)
+    {
+      natage(i,1)=mfexp(mean_log_rec1+rec_dev(i))+0.5*square(sigr);
+    }
+    for (int i=styr;i < endyr;i++)
+    {
+      natage(i+1)(2,nages)=++elem_prod(natage(i)(1,nages-1),S(i)(1,nages-1));
+  	  natage(i+1,nages)+=natage(i,nages)*S(i,nages)+natage(i,nages)*S(i,nages);
+  	}
 
 //variables estimadas y capturabilidad (pesquería, reclas y pelaces)  
   q_fish    = exp(log_q_cpue);
@@ -1313,3 +1303,11 @@ GLOBALS_SECTION
   #define ECHO(object) echoinput << #object << "\n" << object << endl;
 
   ofstream echoinput("checkfile.rep");
+
+
+//################  
+RUNTIME_SECTION
+//################
+
+  maximum_function_evaluations 100, 400, 800, 800
+  convergence_criteria 1e-4,1e-6,1e-6, 1e-6
