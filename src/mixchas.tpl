@@ -2462,28 +2462,28 @@ GLOBALS_SECTION
   adstring a_simname;
   
   //Mortalidad por pesca
-  ofstream rep1("sben_fyr_mcmc",ios::app);
-  ofstream rep2("erin_fyr_mcmc",ios::app);
+  ofstream rep1("sben_fyr.mcmc",ios::app);
+  ofstream rep2("erin_fyr.mcmc",ios::app);
 
   //Catch
-  ofstream rep3("sben_cyr_mcmc",ios::app);
-  ofstream rep4("erin_cyr_mcmc",ios::app);
+  ofstream rep3("sben_cyr.mcmc",ios::app);
+  ofstream rep4("erin_cyr.mcmc",ios::app);
   
   //SSB
-  ofstream rep5("sben_syr_mcmc",ios::app);
-  ofstream rep6("erin_syr_mcmc",ios::app);
+  ofstream rep5("sben_syr.mcmc",ios::app);
+  ofstream rep6("erin_syr.mcmc",ios::app);
   
   //Biomass
-  ofstream rep7("sben_byr_mcmc",ios::app);
-  ofstream rep8("erin_byr_mcmc",ios::app);
+  ofstream rep7("sben_byr.mcmc",ios::app);
+  ofstream rep8("erin_byr.mcmc",ios::app);
 
   //ratio ssb
-  ofstream reprat1("s_ssb_rat1_mcmc",ios::app);
-  ofstream reprat2("a_ssb_rat1_mcmc",ios::app);
-  ofstream reprat3("s_ssb_rat2_mcmc",ios::app);
-  ofstream reprat4("a_ssb_rat2_mcmc",ios::app);
-  ofstream reprat5("s_ssb_rat3_mcmc",ios::app);
-  ofstream reprat6("a_ssb_rat3_mcmc",ios::app);
-  ofstream reprat7("s_rpr_mcmc",ios::app);
-  ofstream reprat8("a_rpr_mcmc",ios::app);
+  ofstream reprat1("s_ssb_rat1.mcmc",ios::app);
+  ofstream reprat2("a_ssb_rat1.mcmc",ios::app);
+  ofstream reprat3("s_ssb_rat2.mcmc",ios::app);
+  ofstream reprat4("a_ssb_rat2.mcmc",ios::app);
+  ofstream reprat5("s_ssb_rat3.mcmc",ios::app);
+  ofstream reprat6("a_ssb_rat3.mcmc",ios::app);
+  ofstream reprat7("s_rpr.mcmc",ios::app);
+  ofstream reprat8("a_rpr.mcmc",ios::app);
    
