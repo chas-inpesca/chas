@@ -31,7 +31,7 @@
 #Fase rec_dev
 3
 #Fase q
--4
+1
 #Fase q_surv reclas
 2
 #Fase q_surv pelaces
