@@ -760,7 +760,10 @@ PROCEDURE_SECTION
   }
 
   if (mceval_phase())
-    Oper_Model();
+  {
+    write_mcmc_pars();
+    // Oper_Model();
+  }
 
 FUNCTION S_R_parameters
 
@@ -768,20 +771,22 @@ FUNCTION S_R_parameters
 	a_R0 = (1-mean(prop))*mfexp(log_R);
 	s_neq(1)=s_R0;
 	a_neq(1)=a_R0;
-    for(j=2;j<=nages;j++){
-    	s_neq(j)=s_neq(j-1)*mfexp(-1.0*s_natmort);
+  for(j=2;j<=nages;j++)
+  {
+    s_neq(j)=s_neq(j-1)*mfexp(-1.0*s_natmort);
 		a_neq(j)=a_neq(j-1)*mfexp(-1.0*a_natmort);
-    }
+  }
 	s_S0=0;
 	a_S0=0;
-	for(j=1;j<=nages;j++){
+	for(j=1;j<=nages;j++)
+  {
 		s_S0+=s_neq(j)*s_wt(j)*s_mat(j)*mfexp(-.583*s_natmort);
 		a_S0+=a_neq(j)*a_wt(j)*a_mat(j)*mfexp(-.583*a_natmort);
 	}
 	S0 = s_S0+a_S0;
-    s_alpha = (s_S0/s_R0)*(1.0-h)/(4.0*h);
+  s_alpha = (s_S0/s_R0)*(1.0-h)/(4.0*h);
 	a_alpha = (a_S0/a_R0)*(1.0-h)/(4.0*h);
-    s_beta  = (5.0*h-1.0)/(4.0*h*s_R0);
+  s_beta  = (5.0*h-1.0)/(4.0*h*s_R0);
 	a_beta  = (5.0*h-1.0)/(4.0*h*a_R0);
 	
 	s_avgssb = mean(s_ssb(endyr-5,endyr));
@@ -789,7 +794,6 @@ FUNCTION S_R_parameters
 	avgssb = mean(ssb(endyr-5,endyr));
 
 FUNCTION Oper_Model
-
 	//Sardina
 	dvector ran_rec_vect(styr_fut,endyr_fut); //Random para reclutamiento
 	dvector ran_prop_vect(styr_fut,endyr_fut); //Random proporcion de reclutas
@@ -1279,15 +1283,15 @@ FUNCTION Oper_Model
 			}
 			else
 			{
-				s_natage_future(i)(2,nages)=++elem_prod(s_natage_future(i-1)(1,nages-1),s_S_future(i-1)(1,nages-1));
-				a_natage_future(i)(2,nages)=++elem_prod(a_natage_future(i-1)(1,nages-1),a_S_future(i-1)(1,nages-1));
-				s_natage_future(i,1)=new_prop(i)*mfexp(log_R)*new_rec_epsilon(i);
-				a_natage_future(i,1)=(1-new_prop(i))*mfexp(log_R)*new_rec_epsilon(i);
-				//numeros sin pesca
-				s_natagev_fut(i)(2,nages)=++elem_prod(s_natagev_fut(i-1)(1,nages-1),s_Sv_future(i-1)(1,nages-1));
-				a_natagev_fut(i)(2,nages)=++elem_prod(a_natagev_fut(i-1)(1,nages-1),a_Sv_future(i-1)(1,nages-1));
-				s_natagev_fut(i,1)=s_natage_future(i,1);
-				a_natagev_fut(i,1)=a_natage_future(i,1);				
+        s_natage_future(i)(2,nages) =++elem_prod(s_natage_future(i-1)(1,nages-1),s_S_future(i-1)(1,nages-1));
+        a_natage_future(i)(2,nages) =++elem_prod(a_natage_future(i-1)(1,nages-1),a_S_future(i-1)(1,nages-1));
+        s_natage_future(i,1)        =new_prop(i)*mfexp(log_R)*new_rec_epsilon(i);
+        a_natage_future(i,1)        =(1-new_prop(i))*mfexp(log_R)*new_rec_epsilon(i);
+        //numeros sin pesca
+        s_natagev_fut(i)(2,nages)   =++elem_prod(s_natagev_fut(i-1)(1,nages-1),s_Sv_future(i-1)(1,nages-1));
+        a_natagev_fut(i)(2,nages)   =++elem_prod(a_natagev_fut(i-1)(1,nages-1),a_Sv_future(i-1)(1,nages-1));
+        s_natagev_fut(i,1)          =s_natage_future(i,1);
+        a_natagev_fut(i,1)          =a_natage_future(i,1);				
 				
 				/*
 			    if(SrType==1)
@@ -1304,14 +1308,14 @@ FUNCTION Oper_Model
 				//Guarda la proporcion teorica de captura
 				prop_scatch_mop_future(l,i)=2.5*new_prop(i)-4.5*square(new_prop(i))+3*pow(new_prop(i),3);
 
-				s_expl_biom(i)=0.;
-				a_expl_biom(i)=0.;
-				expl_biom(i)=0.;
+        s_expl_biom(i) =0.;
+        a_expl_biom(i) =0.;
+        expl_biom(i)   =0.;
 				for(j=1;j<=nages;j++)
 				{
-					s_expl_biom(i)+=s_sel_f(endyr,j)*s_wt(j)*s_natage_future(i,j);
-					a_expl_biom(i)+=a_sel_f(endyr,j)*a_wt(j)*a_natage_future(i,j);
-					expl_biom(i)+=a_expl_biom(i)+s_expl_biom(i);
+          s_expl_biom(i) +=s_sel_f(endyr,j)*s_wt(j)*s_natage_future(i,j);
+          a_expl_biom(i) +=a_sel_f(endyr,j)*a_wt(j)*a_natage_future(i,j);
+          expl_biom(i)   +=a_expl_biom(i)+s_expl_biom(i);
 				}
 				
 				//Simulacion de nuevos datos considerando la Mortalidad por Pesca generada por la captura
@@ -1324,52 +1328,52 @@ FUNCTION Oper_Model
 				a_ssbv_future(i)=0.;
 				for(j=1;j<=nages;j++)
 				{
-					s_sim_p_recage(i,j)=s_sel_reclas(j)*s_natage_future(i,j); //Solucion exacta
-					a_sim_p_recage(i,j)=a_sel_reclas(j)*a_natage_future(i,j); //Solucion exacta
-					s_biomass_future(i)+=s_wt(j)*s_natage_future(i,j);  //biomasa
-					a_biomass_future(i)+=a_wt(j)*a_natage_future(i,j);  //biomasa
-					s_sim_HB(i)+=s_sel_reclas(j)*s_wt(j)*s_natage_future(i,j)*s_reclas_epsilon(i);
-					a_sim_HB(i)+=a_sel_reclas(j)*a_wt(j)*a_natage_future(i,j)*a_reclas_epsilon(i);
-					s_ssbv_future(i)+=s_natagev_fut(i,j)*s_wt(j)*s_mat(j)*mfexp(-.583*s_natmort);
-					a_ssbv_future(i)+=a_natagev_fut(i,j)*a_wt(j)*a_mat(j)*mfexp(-.583*a_natmort);
+          s_sim_p_recage(i,j) =s_sel_reclas(j)*s_natage_future(i,j); //Solucion exacta
+          a_sim_p_recage(i,j) =a_sel_reclas(j)*a_natage_future(i,j); //Solucion exacta
+          s_biomass_future(i) +=s_wt(j)*s_natage_future(i,j);  //biomasa
+          a_biomass_future(i) +=a_wt(j)*a_natage_future(i,j);  //biomasa
+          s_sim_HB(i)         +=s_sel_reclas(j)*s_wt(j)*s_natage_future(i,j)*s_reclas_epsilon(i);
+          a_sim_HB(i)         +=a_sel_reclas(j)*a_wt(j)*a_natage_future(i,j)*a_reclas_epsilon(i);
+          s_ssbv_future(i)    +=s_natagev_fut(i,j)*s_wt(j)*s_mat(j)*mfexp(-.583*s_natmort);
+          a_ssbv_future(i)    +=a_natagev_fut(i,j)*a_wt(j)*a_mat(j)*mfexp(-.583*a_natmort);
 				}
 				s_freq.initialize();
 				a_freq.initialize();
 				ivector s_bin(1,100);
 				ivector a_bin(1,100);
-				s_sim_p_recage(i)=s_sim_p_recage(i)/sum(s_sim_p_recage(i));
-				a_sim_p_recage(i)=a_sim_p_recage(i)/sum(a_sim_p_recage(i));
-				s_sim_p_reclen(i)=s_sim_p_recage(i)*s_alk;
-				a_sim_p_reclen(i)=a_sim_p_recage(i)*a_alk;
-				s_p = value(s_sim_p_reclen(i));
-				a_p = value(a_sim_p_reclen(i));
-				s_p /=sum(s_p);
-				a_p /=sum(a_p);
-				s_bin.fill_multinomial(rng,s_p);
-				a_bin.fill_multinomial(rng,a_p);
-				for(j=1;j<=100;j++){s_freq(s_bin(j))++;a_freq(a_bin(j))++;}
-				s_p = s_freq/sum(s_freq);
-				a_p = a_freq/sum(a_freq);
-				s_sim_p_reclen(i)=s_p; //Composicion por tallas reclas
-				a_sim_p_reclen(i)=a_p;				
+        s_sim_p_recage(i) =s_sim_p_recage(i)/sum(s_sim_p_recage(i));
+        a_sim_p_recage(i) =a_sim_p_recage(i)/sum(a_sim_p_recage(i));
+        s_sim_p_reclen(i) =s_sim_p_recage(i)*s_alk;
+        a_sim_p_reclen(i) =a_sim_p_recage(i)*a_alk;
+        s_p               = value(s_sim_p_reclen(i));
+        a_p               = value(a_sim_p_reclen(i));
+        s_p               /=sum(s_p);
+        a_p               /=sum(a_p);
+        s_bin.fill_multinomial(rng,s_p);
+        a_bin.fill_multinomial(rng,a_p);
+        for(j             =1;j<=100;j++){s_freq(s_bin(j))++;a_freq(a_bin(j))++;}
+        s_p               = s_freq/sum(s_freq);
+        a_p               = a_freq/sum(a_freq);
+        s_sim_p_reclen(i) =s_p; //Composicion por tallas reclas
+        a_sim_p_reclen(i) =a_p;				
 				
 				if(catch_future(l,i)!=0)
 				{
 					//Sardina 
-					dvariable s_ffpen=0.0;
-					dvariable s_SK=posfun((s_expl_biom(i)-s_catch_future(l,i))/s_expl_biom(i),0.05,s_ffpen);
-					s_Kobs_tot_catch=s_expl_biom(i)-s_SK*s_expl_biom(i);
-					do_Newton_Raphson_for_mortality1(i);					
-					//Anchoveta
-					dvariable a_ffpen=0.0;
-					dvariable a_SK=posfun((a_expl_biom(i)-a_catch_future(l,i))/a_expl_biom(i),0.05,a_ffpen);
-					a_Kobs_tot_catch=a_expl_biom(i)-a_SK*a_expl_biom(i);
-					do_Newton_Raphson_for_mortality2(i);
-					//Efecto total					
-					dvariable ffpen=0.0;
-					dvariable SK=posfun((expl_biom(i)-catch_future(l,i))/expl_biom(i),0.05,ffpen);
-					Kobs_tot_catch=expl_biom(i)-SK*expl_biom(i);
-					do_Newton_Raphson_for_mortality(i);					
+          dvariable s_ffpen =0.0;
+          dvariable s_SK    =posfun((s_expl_biom(i)-s_catch_future(l,i))/s_expl_biom(i),0.05,s_ffpen);
+          s_Kobs_tot_catch  =s_expl_biom(i)-s_SK*s_expl_biom(i);
+          do_Newton_Raphson_for_mortality1(i);					
+          //Anchoveta
+          dvariable a_ffpen =0.0;
+          dvariable a_SK    =posfun((a_expl_biom(i)-a_catch_future(l,i))/a_expl_biom(i),0.05,a_ffpen);
+          a_Kobs_tot_catch  =a_expl_biom(i)-a_SK*a_expl_biom(i);
+          do_Newton_Raphson_for_mortality2(i);
+          //Efecto total					
+          dvariable ffpen   =0.0;
+          dvariable SK      =posfun((expl_biom(i)-catch_future(l,i))/expl_biom(i),0.05,ffpen);
+          Kobs_tot_catch    =expl_biom(i)-SK*expl_biom(i);
+          do_Newton_Raphson_for_mortality(i);					
 				}
 				else
 				{
@@ -1377,33 +1381,33 @@ FUNCTION Oper_Model
 					a_F_future(i)=0.;
 					F_future(i)=0.;
 				}				
-
-				s_Z_future(i)=s_F_future(i)+s_natmort;
-				s_S_future(i)=exp(-1.*s_Z_future(i));
-				s_Fyr_future(l,i)=max(s_F_future(i));
-				a_Z_future(i)=a_F_future(i)+a_natmort;
-				a_S_future(i)=exp(-1.*a_Z_future(i));
-				a_Fyr_future(l,i)=max(a_F_future(i));
-				Z_future(i)=F_future(i)+natmort;
-				S_future(i)=exp(-1.*Z_future(i));
-				Fyr_future(l,i)=max(F_future(i));				
-				s_Sv_future(i)=mfexp(-1.*s_natmort);
-				a_Sv_future(i)=mfexp(-1.*a_natmort);
-				future_biomass(l,i)=0;
-				future_ssbiom(l,i)=0;
-				s_future_biomass(l,i)=0;
-				s_future_ssbiom(l,i)=0;
-				a_future_biomass(l,i)=0;
-				a_future_ssbiom(l,i)=0;
+        
+        s_Z_future(i)         =s_F_future(i)+s_natmort;
+        s_S_future(i)         =exp(-1.*s_Z_future(i));
+        s_Fyr_future(l,i)     =max(s_F_future(i));
+        a_Z_future(i)         =a_F_future(i)+a_natmort;
+        a_S_future(i)         =exp(-1.*a_Z_future(i));
+        a_Fyr_future(l,i)     =max(a_F_future(i));
+        Z_future(i)           =F_future(i)+natmort;
+        S_future(i)           =exp(-1.*Z_future(i));
+        Fyr_future(l,i)       =max(F_future(i));				
+        s_Sv_future(i)        =mfexp(-1.*s_natmort);
+        a_Sv_future(i)        =mfexp(-1.*a_natmort);
+        future_biomass(l,i)   =0;
+        future_ssbiom(l,i)    =0;
+        s_future_biomass(l,i) =0;
+        s_future_ssbiom(l,i)  =0;
+        a_future_biomass(l,i) =0;
+        a_future_ssbiom(l,i)  =0;
 								
 				for(j=1;j<=nages;j++)
 				{
-					s_future_biomass(l,i)+=s_wt(j)*s_natage_future(i,j);
-					s_future_ssbiom(l,i)+=s_natage_future(i,j)*s_wt(j)*s_mat(j)*mfexp(-.583*s_Z_future(i,j));
-					a_future_biomass(l,i)+=a_wt(j)*a_natage_future(i,j);
-					a_future_ssbiom(l,i)+=a_natage_future(i,j)*a_wt(j)*a_mat(j)*mfexp(-.583*a_Z_future(i,j));
-					future_biomass(l,i)+=s_future_biomass(l,i)+a_future_biomass(l,i);
-					future_ssbiom(l,i)+=s_future_ssbiom(l,i)+a_future_ssbiom(l,i);
+          s_future_biomass(l,i) +=s_wt(j)*s_natage_future(i,j);
+          s_future_ssbiom(l,i)  +=s_natage_future(i,j)*s_wt(j)*s_mat(j)*mfexp(-.583*s_Z_future(i,j));
+          a_future_biomass(l,i) +=a_wt(j)*a_natage_future(i,j);
+          a_future_ssbiom(l,i)  +=a_natage_future(i,j)*a_wt(j)*a_mat(j)*mfexp(-.583*a_Z_future(i,j));
+          future_biomass(l,i)   +=s_future_biomass(l,i)+a_future_biomass(l,i);
+          future_ssbiom(l,i)    +=s_future_ssbiom(l,i)+a_future_ssbiom(l,i);
 				}
 				s_ssb1_ratio(l,i)=s_future_ssbiom(l,i)/s_ssb(endyr);
 				s_ssb2_ratio(l,i)=s_future_ssbiom(l,i)/s_avgssb;
@@ -2429,6 +2433,39 @@ FUNCTION evaluate_the_objective_function  //-Funcion de Verosimilitud-------
    f+=prop_like;
    f+=sum(fpen);
 
+FUNCTION write_mcmc_pars
+  mcrep(s_log_q_reclas);
+  mcrep(a_log_q_reclas);
+  mcrep(s_log_q_pelaces);
+  mcrep(a_log_q_pelaces);
+  mcrep(s_log_q_mph);
+  mcrep(a_log_q_mph);
+  mcrep(log_R);  
+  mcrep(s_rec_dev_ini);
+  mcrep(a_rec_dev_ini);
+  mcrep(rec_dev);
+  mcrep(sigr);
+  mcrep(sigr_ini);
+  mcrep(prop);
+  mcrep(s_log_avg_fmort);
+  mcrep(a_log_avg_fmort);
+  mcrep(s_fmort_dev);
+  mcrep(a_fmort_dev);
+  mcrep(s_log_selcoffs_f);
+  // mcrep(s_sel_devs_f);
+  mcrep(a_log_selcoffs_f);
+  // mcrep(a_sel_devs_f);
+  mcrep(s_log_selcoffs_reclas);
+  mcrep(a_log_selcoffs_reclas);
+  mcrep(s_log_selcoffs_pelaces);
+  mcrep(a_log_selcoffs_pelaces);
+  mcrep(endbiom);
+  mcrep(s_endbio);
+  mcrep(a_endbio);
+  mcrep(recruits);
+  mcrep(biomass);  
+  mcout<<endl;
+  
 
 REPORT_SECTION
 
@@ -2446,9 +2483,17 @@ REPORT_SECTION
    rep(yrs_reclas)
    rep(t_obs_reclas)
    rep(t_pred_reclas)
+   rep(a_obs_reclas)
+   rep(a_pred_reclas)
+   rep(s_obs_reclas)
+   rep(s_pred_reclas)
    rep(yrs_pel)
    rep(t_obs_pel)
    rep(t_pred_pelaces)
+   rep(a_obs_pel)
+   rep(a_pred_pelaces)
+   rep(s_obs_pel)
+   rep(s_pred_pelaces)
    rep(yrs_mph)
    rep(t_obs_mph)
    rep(t_pred_mph)
@@ -2543,4 +2588,8 @@ GLOBALS_SECTION
   ofstream reprat6("a_ssb_rat3.mcmc",ios::app);
   ofstream reprat7("s_rpr.mcmc",ios::app);
   ofstream reprat8("a_rpr.mcmc",ios::app);
+
+  #undef mcrep
+  #define mcrep(object) mcout << object << " ";
+  ofstream mcout("mcmc.rep");
    
