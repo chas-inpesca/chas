@@ -32,6 +32,25 @@ DATA_SECTION
   init_vector s_obs_pel(1,nobs_pel)
   init_vector a_obs_pel(1,nobs_pel)
   init_vector t_obs_pel(1,nobs_pel)  //Biomasa total acústica
+ LOCAL_CALCS
+  check(nyr);
+  check(styr);
+  check(endyr);
+  check(years);
+  check(t_obs_catch);
+  check(s_obs_catch);
+  check(a_obs_catch);
+  check(nobs_reclas);
+  check(yrs_reclas);
+  check(s_obs_reclas);
+  check(a_obs_reclas);
+  check(t_obs_reclas);
+  check(nobs_pel);
+  check(yrs_pel);
+  check(s_obs_pel);
+  check(a_obs_pel);
+  check(t_obs_pel);
+ END_CALCS
   //==+==+== MPH
   init_int nobs_mph
   init_ivector yrs_mph(1,nobs_mph) //años con datos (p.e. 1993,...,2000)
@@ -42,6 +61,16 @@ DATA_SECTION
   init_int nobs_effort
   init_ivector yrs_effort(1,nobs_effort)
   init_vector obs_effort(1,nobs_effort)
+ LOCAL_CALCS
+  check(nobs_mph);
+  check(yrs_mph);
+  check(s_obs_mph);
+  check(a_obs_mph);
+  check(t_obs_mph);
+  check(nobs_effort);
+  check(yrs_effort);
+  check(obs_effort);
+ END_CALCS
   //==+==+== Length Composition Fishery
   init_int nlen
   init_int s_nobs_lfdfish
@@ -66,7 +95,28 @@ DATA_SECTION
   init_matrix a_obs_p_len_pel(1,a_nobs_lfdpel,1,nlen)
   //====End of file
   init_number eof;
-  //!!cout<< eof << endl;
+ LOCAL_CALCS
+  check(nlen);
+  check(s_nobs_lfdfish);
+  check(s_yrs_lfdfish);
+  check(s_obs_p_len_fish);  
+  check(a_nobs_lfdfish);
+  check(a_yrs_lfdfish);
+  check(a_obs_p_len_fish);  
+  check(s_nobs_lfdrec);
+  check(s_yrs_lfdrec);
+  check(s_obs_p_len_rec);  
+  check(a_nobs_lfdrec);
+  check(a_yrs_lfdrec);
+  check(a_obs_p_len_rec);  
+  check(s_nobs_lfdpel);
+  check(s_yrs_lfdpel);
+  check(s_obs_p_len_pel);  
+  check(a_nobs_lfdpel);
+  check(a_yrs_lfdpel);
+  check(a_obs_p_len_pel);
+  check(eof);
+ END_CALCS
   int s_dim_sel_f
   int a_dim_sel_f
   int styr_rec
@@ -2464,6 +2514,9 @@ GLOBALS_SECTION
   adstring s_simname;
   adstring a_simname;
   adstring datafile_name;
+  #undef check
+  #define check(object) input << #object "\n" << object << endl;
+  ofstream input("check_input.rep");
   
   //Mortalidad por pesca
   ofstream rep1("sben_fyr.mcmc",ios::app);
