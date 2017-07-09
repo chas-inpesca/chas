@@ -3,6 +3,8 @@
   //
 
 DATA_SECTION
+  !! *(ad_comm::global_datafile) >>  datafile_name; // First line is datafile 
+  !!ad_comm::change_datafile_name(datafile_name);
 	int iseed
 	!!long int lseed=iseed;
 	!!CLASS random_number_generator rng(iseed);
@@ -76,13 +78,6 @@ DATA_SECTION
   int endyr_fut;
   int styr_fut;
   int num_str; // Numero de estrategias a evaluar
- LOCAL_CALCS
-   styr_rec=styr-nages+1;
-   styr_fut=endyr+1;
-   endyr_fut=styr_fut+5;
-   phase_F40=5;
-   num_str=3;
- END_CALCS
 
   !!ad_comm::change_datafile_name("mixsaninpesca.ctl");
   init_int nages   //numero de grupos de edad
@@ -139,6 +134,14 @@ DATA_SECTION
   //!!ad_comm::change_datafile_name("fut_cat.dat");
   //init_matrix MLE_catch(1,5,styr_fut,endyr_fut);
   //!!cout << MLE_catch << endl;
+ LOCAL_CALCS
+   styr_rec=styr-nages+1;
+   styr_fut=endyr+1;
+   endyr_fut=styr_fut+5;
+   phase_F40=5;
+   num_str=3;
+ END_CALCS
+
 
 
   //===+===+===+===+===+===+===+===+===+===
@@ -1980,42 +1983,42 @@ FUNCTION get_predicted_values
   //cout << "qs "<< q_reclas << q_pelaces << q_mph << endl;
   for (i=1;i<=nobs_reclas;i++)
   {
-   ii=yrs_reclas(i);
-   s_pred_reclas(i)=0.;
-   s_pred_num_reclas(i)=0.;
-   a_pred_reclas(i)=0.;
-   a_pred_num_reclas(i)=0.;
-   t_pred_reclas(i)=0.;
+   ii                   =yrs_reclas(i);
+   s_pred_reclas(i)     =0.;
+   s_pred_num_reclas(i) =0.;
+   a_pred_reclas(i)     =0.;
+   a_pred_num_reclas(i) =0.;
+   t_pred_reclas(i)     =0.;
    for (j=1;j<=nages;j++)
-    {
-		s_pred_num_reclas(i)+=s_sel_reclas(j)*s_natage(ii,j);
-		a_pred_num_reclas(i)+=a_sel_reclas(j)*a_natage(ii,j);
-		s_pred_reclas(i)+=s_q_reclas*(s_sel_reclas(j)*s_natage(ii,j)*s_wt(j));
-		a_pred_reclas(i)+=a_q_reclas*(a_sel_reclas(j)*a_natage(ii,j)*a_wt(i));
-		//s_pred_reclas(i)+=q_reclas*(s_sel_reclas(j)*s_natage(ii,j)*s_wt(j));
-		//a_pred_reclas(i)+=q_reclas*(a_sel_reclas(j)*a_natage(ii,j)*a_wt(i));
+   {
+      s_pred_num_reclas(i) +=s_sel_reclas(j)*s_natage(ii,j);
+      a_pred_num_reclas(i) +=a_sel_reclas(j)*a_natage(ii,j);
+      s_pred_reclas(i)     +=s_q_reclas*(s_sel_reclas(j)*s_natage(ii,j)*s_wt(j));
+      a_pred_reclas(i)     +=a_q_reclas*(a_sel_reclas(j)*a_natage(ii,j)*a_wt(j));
+      //s_pred_reclas(i)   +=q_reclas*(s_sel_reclas(j)*s_natage(ii,j)*s_wt(j));
+      //a_pred_reclas(i)   +=q_reclas*(a_sel_reclas(j)*a_natage(ii,j)*a_wt(i));
     }
-	t_pred_reclas(i)=(s_pred_reclas(i)+a_pred_reclas(i));	
+	  t_pred_reclas(i)=(s_pred_reclas(i)+a_pred_reclas(i));	
   }
   //PELACES
   for (i=1;i<=nobs_pel;i++)
   {
-   ii=yrs_pel(i);
-   s_pred_pelaces(i)=0.;
-   s_pred_num_pelaces(i)=0.;
-   a_pred_pelaces(i)=0.;
-   a_pred_num_pelaces(i)=0.;
-   t_pred_pelaces(i)=0.;
-   for (j=1;j<=nages;j++)
+    ii                    =yrs_pel(i);
+    s_pred_pelaces(i)     =0.;
+    s_pred_num_pelaces(i) =0.;
+    a_pred_pelaces(i)     =0.;
+    a_pred_num_pelaces(i) =0.;
+    t_pred_pelaces(i)     =0.;
+    for (j=1;j<=nages;j++)
     {
-     	s_pred_num_pelaces(i)+=s_sel_pelaces(j)*s_natage(ii,j)*mfexp(-0.375*s_Z(ii,j));
-     	a_pred_num_pelaces(i)+=a_sel_pelaces(j)*a_natage(ii,j)*mfexp(-0.375*a_Z(ii,j));
-	 	s_pred_pelaces(i)+=s_q_pelaces*(s_sel_pelaces(j)*s_natage(ii,j)*mfexp(-0.375*s_Z(ii,j))*s_wt(j));
-	 	a_pred_pelaces(i)+=a_q_pelaces*(a_sel_pelaces(j)*a_natage(ii,j)*mfexp(-0.375*a_Z(ii,j))*a_wt(j));
-	 	//s_pred_pelaces(i)+=q_pelaces*(s_sel_pelaces(j)*s_natage(ii,j)*mfexp(-0.375*s_Z(ii,j))*s_wt(j));
-	 	//a_pred_pelaces(i)+=q_pelaces*(a_sel_pelaces(j)*a_natage(ii,j)*mfexp(-0.375*a_Z(ii,j))*a_wt(j));		
+      s_pred_num_pelaces(i) +=s_sel_pelaces(j)*s_natage(ii,j)*mfexp(-0.375*s_Z(ii,j));
+      a_pred_num_pelaces(i) +=a_sel_pelaces(j)*a_natage(ii,j)*mfexp(-0.375*a_Z(ii,j));
+      s_pred_pelaces(i)     +=s_q_pelaces*(s_sel_pelaces(j)*s_natage(ii,j)*mfexp(-0.375*s_Z(ii,j))*s_wt(j));
+      a_pred_pelaces(i)     +=a_q_pelaces*(a_sel_pelaces(j)*a_natage(ii,j)*mfexp(-0.375*a_Z(ii,j))*a_wt(j));
+      //s_pred_pelaces(i)   +=q_pelaces*(s_sel_pelaces(j)*s_natage(ii,j)*mfexp(-0.375*s_Z(ii,j))*s_wt(j));
+      //a_pred_pelaces(i)   +=q_pelaces*(a_sel_pelaces(j)*a_natage(ii,j)*mfexp(-0.375*a_Z(ii,j))*a_wt(j));		
     }
- 	t_pred_pelaces(i)=(s_pred_pelaces(i)+a_pred_pelaces(i));
+ 	  t_pred_pelaces(i)=(s_pred_pelaces(i)+a_pred_pelaces(i));
   }
 
   //ACA VOY
@@ -2222,20 +2225,20 @@ FUNCTION evaluate_the_objective_function  //-Funcion de Verosimilitud-------
 
     //surv_like=0.;
     //==+==+==+==+==+==+==Fit to indices
-	surv_like(1)=norm2(log(t_obs_reclas+.1)-log(t_pred_reclas+.1))/(2*square(CV_r))+nobs_reclas*log(CV_r);
-    surv_like(2)=norm2(log(s_obs_reclas+.1)-log(s_pred_reclas+.1))/(2*square(CV_r)); //+nobs_reclas*log(CV_r);
-    surv_like(3)=norm2(log(a_obs_reclas+.1)-log(a_pred_reclas+.1))/(2*square(CV_r)); //+nobs_reclas*log(CV_r);
-    surv_like(4)=norm2(log(t_obs_pel+.1)-log(t_pred_pelaces+.1))/(2*square(CV_p))+nobs_pel*log(CV_p);
-    surv_like(5)=norm2(log(s_obs_pel+.1)-log(s_pred_pelaces+.1))/(2*square(CV_p)); //+nobs_pel*log(CV_p);
-    surv_like(6)=norm2(log(a_obs_pel+.1)-log(a_pred_pelaces+.1))/(2*square(CV_p)); //+nobs_pel*log(CV_p);
-    surv_like(7)=norm2(log(t_obs_mph+.1)-log(t_pred_mph+.1))/(2*square(CV_d))+nobs_mph*log(CV_d);
-    surv_like(8)=norm2(log(s_obs_mph+.1)-log(s_pred_mph+.1))/(2*square(CV_d)); //+nobs_mph*log(CV_d);
-    surv_like(9)=norm2(log(a_obs_mph+.1)-log(a_pred_mph+.1))/(2*square(CV_d)); //+nobs_mph*log(CV_d);
-
-   //cout << "surv_like "<< surv_like << endl;
-	ssqcatch(1)=norm2(log(t_obs_catch+0.1)-log(pred_catch+0.1))/(2*square(CV_y))+size_count(t_obs_catch)*log(CV_y);  //Total catch biomass
-	ssqcatch(2)=norm2(log(s_obs_catch+0.1)-log(s_pred_catch+0.1))/(2*square(CV_y))+size_count(s_obs_catch)*log(CV_y);  //Total catch biomass
-	ssqcatch(3)=norm2(log(a_obs_catch+0.1)-log(a_pred_catch+0.1))/(2*square(CV_y))+size_count(a_obs_catch)*log(CV_y);  //Total catch biomass
+    surv_like(1) =norm2(log(t_obs_reclas+.1)-log(t_pred_reclas+.1))/(2*square(CV_r))+nobs_reclas*log(CV_r);
+    surv_like(2) =norm2(log(s_obs_reclas+.1)-log(s_pred_reclas+.1))/(2*square(CV_r)); //+nobs_reclas*log(CV_r);
+    surv_like(3) =norm2(log(a_obs_reclas+.1)-log(a_pred_reclas+.1))/(2*square(CV_r)); //+nobs_reclas*log(CV_r);
+    surv_like(4) =norm2(log(t_obs_pel+.1)-log(t_pred_pelaces+.1))/(2*square(CV_p))+nobs_pel*log(CV_p);
+    surv_like(5) =norm2(log(s_obs_pel+.1)-log(s_pred_pelaces+.1))/(2*square(CV_p)); //+nobs_pel*log(CV_p);
+    surv_like(6) =norm2(log(a_obs_pel+.1)-log(a_pred_pelaces+.1))/(2*square(CV_p)); //+nobs_pel*log(CV_p);
+    surv_like(7) =norm2(log(t_obs_mph+.1)-log(t_pred_mph+.1))/(2*square(CV_d))+nobs_mph*log(CV_d);
+    surv_like(8) =norm2(log(s_obs_mph+.1)-log(s_pred_mph+.1))/(2*square(CV_d)); //+nobs_mph*log(CV_d);
+    surv_like(9) =norm2(log(a_obs_mph+.1)-log(a_pred_mph+.1))/(2*square(CV_d)); //+nobs_mph*log(CV_d);
+    
+    //cout << "surv_like "<< surv_like << endl;
+    ssqcatch(1)  =norm2(log(t_obs_catch+0.1)-log(pred_catch+0.1))/(2*square(CV_y))+size_count(t_obs_catch)*log(CV_y);  //Total catch biomass
+    ssqcatch(2)  =norm2(log(s_obs_catch+0.1)-log(s_pred_catch+0.1))/(2*square(CV_y))+size_count(s_obs_catch)*log(CV_y);  //Total catch biomass
+    ssqcatch(3)  =norm2(log(a_obs_catch+0.1)-log(a_pred_catch+0.1))/(2*square(CV_y))+size_count(a_obs_catch)*log(CV_y);  //Total catch biomass
 
        //Selectividad +==+==+==+==+==
    sel_like=0.;
@@ -2454,12 +2457,13 @@ TOP_OF_MAIN_SECTION
 
   
 GLOBALS_SECTION
-    #include <admodel.h> 
+  #include <admodel.h> 
   #include <string.h>
   #undef rep
   #define rep(object) report << #object "\n" << object << endl;
   adstring s_simname;
   adstring a_simname;
+  adstring datafile_name;
   
   //Mortalidad por pesca
   ofstream rep1("sben_fyr.mcmc",ios::app);
