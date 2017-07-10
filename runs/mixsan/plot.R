@@ -4,6 +4,7 @@ setwd(wd)
 source("../../R/read.admb.R")
 source("../../R/FunctionMixSAN.R")
 # setwd("~/ADMwork/MixSan2013/MixSANIFOPv2/")
+# Con fecha 10 jul 2017 mixchas trabaja.
 
 san <- read.admb("om")
 pdf("om.pdf")
