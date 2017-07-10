@@ -1,4 +1,4 @@
-EXEC = mixchas
+EXEC = om
 ARGS = -nox -iprint 50 
 
 	DIST = ../../src/build/

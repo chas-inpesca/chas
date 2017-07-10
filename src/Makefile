@@ -6,17 +6,17 @@ else
     COPY=cp
 endif
 
-all: build/chas build/mixchas
+all: build/em build/om
 
-build/chas: build chas.tpl 
-	@admb -g chas.tpl $(LIB)
-	@$(COPY) chas build/
-	@$(RM) chas
+build/em: build em.tpl 
+	@admb -g em.tpl $(LIB)
+	@$(COPY) em build/
+	@$(RM) em
 
-build/mixchas: build mixchas.tpl
-	@admb -g mixchas.tpl $(LIB)
-	@$(COPY) mixchas build/
-	@$(RM) mixchas
+build/om: build om.tpl
+	@admb -g om.tpl $(LIB)
+	@$(COPY) om build/
+	@$(RM) om
 
 
 build:
@@ -25,6 +25,6 @@ build:
 
 clean:
 	@$(RM) build
-	@$(RM) chas.cpp
-	@$(RM) chas.htp
-	@$(RM) chas.obj
+	@$(RM) em.cpp
+	@$(RM) em.htp
+	@$(RM) em.obj
