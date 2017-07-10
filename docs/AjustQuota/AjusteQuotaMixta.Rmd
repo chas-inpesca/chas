@@ -119,7 +119,7 @@ La pesquería de anchoveta y sardina común es un caso de pesquería mixta multi
 Se utilizó los datos de capturas mensuales del periodo 1998-2013 para calcular la razón entre la captura de anchoveta y la captura de sardina ($Ca/Cs$) mediante un modelo de efectos mixtos y considerando el año como factor aleatoriocon intercepto cero.
 
 ```{r echo=FALSE}
-setwd("/Users/luiscubillos/ADMwork/MOSAN/Mixed/DataMix")
+setwd("DataMix")
 library(lattice)
 library(nlme)
 ca <- read.csv("catchmix.csv")
