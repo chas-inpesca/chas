@@ -4,6 +4,7 @@
 
 DATA_SECTION
   !! *(ad_comm::global_datafile) >>  datafile_name; // First line is datafile 
+  !! *(ad_comm::global_datafile) >>  ctlfile_name; // First line is datafile 
   !!ad_comm::change_datafile_name(datafile_name);
 	int iseed
 	!!long int lseed=iseed;
@@ -129,7 +130,7 @@ DATA_SECTION
   int styr_fut;
   int num_str; // Numero de estrategias a evaluar
 
-  !!ad_comm::change_datafile_name("mixsaninpesca.ctl");
+  !!ad_comm::change_datafile_name(ctlfile_name);
   init_int nages   //numero de grupos de edad
   init_number h //steepness
   init_vector len(1,nlen)
@@ -339,7 +340,7 @@ PARAMETER_SECTION
   init_bounded_dev_vector rec_dev(styr+1,endyr,-10,10,ph_recdev)
   init_bounded_number sigr(0.01,2,ph_sigmar) //recruitment variance
   init_bounded_number sigr_ini(0.01,2,ph_sigmar)
-  init_bounded_vector prop(styr,endyr,0.01,0.99,4)
+  init_bounded_vector prop(styr,endyr,0.001,0.999,4)
   //init_bounded_vector prop(styr_rec,endyr,0.01,0.99,1)
   //====== S-R stuff =====
   number s_R0
@@ -2088,30 +2089,30 @@ FUNCTION get_predicted_values
      	s_pred_mph(i)+=s_q_mph*s_wt(j)*s_mat(j)*s_natage(ii,j)*mfexp(-0.583*s_Z(ii,j));
      	a_pred_mph(i)+=a_q_mph*a_wt(j)*a_mat(j)*a_natage(ii,j)*mfexp(-0.583*a_Z(ii,j));
     }
- 	t_pred_mph(i)=(s_pred_mph(i)+a_pred_mph(i));
+   	t_pred_mph(i)=(s_pred_mph(i)+a_pred_mph(i));
   }
   //cout << "t_pred_reclas " << t_pred_reclas << endl;
 
   //==+==+==+==Estimated age composition Pesqueria+==+==+==
-     for (i=1;i<=s_nobs_lfdfish;i++)
-      {
-      ii=s_yrs_lfdfish(i);
-       s_pred_p_age_fish(i)=s_catage(ii)/sum(s_catage(ii));
-      }
-     for (i=1;i<=s_nobs_lfdfish;i++)
-      {
-       s_pred_p_len_fish(i)=s_pred_p_age_fish(i)*s_alk;
-      }
+  for (i=1;i<=s_nobs_lfdfish;i++)
+  {
+    ii=s_yrs_lfdfish(i);
+    s_pred_p_age_fish(i)=s_catage(ii)/sum(s_catage(ii));
+  }
+  for (i=1;i<=s_nobs_lfdfish;i++)
+  {
+    s_pred_p_len_fish(i)=s_pred_p_age_fish(i)*s_alk;
+  }
 
-     for (i=1;i<=a_nobs_lfdfish;i++)
-      {
-      ii=a_yrs_lfdfish(i);
-       a_pred_p_age_fish(i)=a_catage(ii)/sum(a_catage(ii));
-      }
-     for (i=1;i<=a_nobs_lfdfish;i++)
-      {
-       a_pred_p_len_fish(i)=a_pred_p_age_fish(i)*a_alk;
-      }
+  for (i=1;i<=a_nobs_lfdfish;i++)
+  {
+    ii=a_yrs_lfdfish(i);
+    a_pred_p_age_fish(i)=a_catage(ii)/sum(a_catage(ii));
+  }
+  for (i=1;i<=a_nobs_lfdfish;i++)
+  {
+    a_pred_p_len_fish(i)=a_pred_p_age_fish(i)*a_alk;
+  }
 
 
   //cout << "a_pred_p_len_fish "<< a_pred_p_len_fish<< endl; 
@@ -2559,6 +2560,7 @@ GLOBALS_SECTION
   adstring s_simname;
   adstring a_simname;
   adstring datafile_name;
+  adstring ctlfile_name;
   #undef check
   #define check(object) input << #object "\n" << object << endl;
   ofstream input("check_input.rep");
