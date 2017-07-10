@@ -213,11 +213,10 @@ PARAMETER_SECTION
   init_bounded_number F20(.01,2.,phase_F40)
   init_bounded_number log_Bo(4,12,-2)    // OjO not really used
   init_bounded_vector rec_dev_future(styr_fut,endyr_fut,-20.,20.,ph_recdev);
-  init_bounded_vector cv_age(1,nages,0.02,0.18,1)  
+  init_bounded_vector cv_age(1,nages,0.02,0.18,-1)  
   init_bounded_dev_vector fmort_dev(styr,endyr,-10,10,ph_Fdev)  
   init_bounded_dev_vector log_dev_ini(2,nages,-10,10,1)
   init_bounded_dev_vector rec_dev(styr,endyr,-20,20,ph_recdev)
-  init_bounded_vector log_dev_Rt(styr,endyr-1,-20,20,3)  
   init_bounded_matrix sel_devs_f1(1,dim_sel_f1,1,4,-5.,5.,ph_seldev_f1)  
   init_vector log_selcoffs_f1(1,nselagef1,ph_sel_fish1)
   init_number log_q_surv(ph_qsurv)
