@@ -94,7 +94,10 @@ DATA_SECTION
   init_vector avgL(1,nages)        //Longitud media por edad
   init_vector obs_CV(1,nages)      //Coef. Variacion por edad
   init_vector wt(1,nages)          //peso promedio stock
-//  init_vector wti(1,nages)           //peso promedio stock INICIAL
+  init_vector wti(1,nages)         //peso promedio stock INICIAL
+	init_number fecha_desov          //Peak spawning calendar date
+	number      SpawnMo_Frac         // convert to elapse time
+	!! SpawnMo_Frac = fecha_desov / 12;
   init_vector maturity(1,nages)    //madurez promedio stock
   init_int nselagef1               //selectividad  
   init_int group_num_f1;           //selectividad
@@ -585,7 +588,7 @@ FUNCTION get_abundancia
   {
     Neq(j)     = Neq(j-1)*mfexp(-1*M);} 
     Neq(nages) = Neq(nages)/(1-exp(-1*M)); 
-    BPRo       = sum(elem_prod(Neq,wt));  
+    BPRo       = sum(elem_prod(Neq,wti));  
     log_Ro     = log_Bo-log(BPRo);          // OjO, this parameter not used elsewhere...
     Nstage     = Neq*mfexp(mean_log_rec)+0.5*square(sigr);
     for (int j=2;j<=nages;j++)
@@ -941,7 +944,7 @@ FUNCTION void do_Newton_Raphson_for_mortality(int i)
 //######################
 FUNCTION get_stock_recluta
 //######################
-  So=sum(elem_prod(elem_prod(Nstage*exp(-0.0833333*M),maturity),wt));
+  So=sum(elem_prod(elem_prod(Nstage*exp(-SpawnMo_Frac*M),maturity),wti));
   alfa=(So/mfexp(mean_log_rec))*(1-h)/(4*h);
   beta1=(5*h-1)/(4*h*mfexp(mean_log_rec));
   beta2=(5*h-1)/(4*h*mfexp(mean_log_rec1)); //1

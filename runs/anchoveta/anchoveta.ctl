@@ -55,6 +55,8 @@
 0.0072	0.0134	0.0233	0.0318	0.0390
 #peso	promedio	stock inicial
 0.0083	0.0148	0.0258	0.0371	0.0465
+# Month of spawning
+7
 #maturity																																
 0.32	1	1	1	1
 #init_int nselagef1 
