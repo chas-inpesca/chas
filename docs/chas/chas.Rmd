@@ -1,0 +1,37 @@
+---
+title: "Techical description of Chilean Anchovy and Sardine models"
+author: "Marcos Arteaga Vasquez, Claudio Gatica, Aquiles Sepulveda, Luis Cubillos and James Ianell"
+date: "2017"
+output:
+  pdf_document:
+    keep_tex: yes
+---
+
+# Introduction
+
+# Methods
+The operating model and estimation models were written in ADMB (Fournier et al. 20??).
+
+## Operating model specifications
+
+$$
+C_{ij} =N_{ij}\frac{F_{ij}}{Z_{ij}}[1-e^{-Z_{ij}}]
+$$
+$$
+N_{ij}= N_{i-1j-1}e^{-Z_{ij}}
+$$
+
+## Estimation model specficiations   
+$$
+C_{ij} =N_{ij}\frac{F_{ij}}{Z_{ij}}[1-e^{Z_{ij}}]
+$$
+
+  
+# Results  
+
+## Reference Operating model conditioning  
+
+## Posterior estimation for operating model 
+
+#Appendix 1, Data input
+Tables of input data
