@@ -1,10 +1,12 @@
 rm(list=ls())
+wd= getwd()
+setwd(wd)
 source("../../R/read.admb.R")
 source("../../R/FunctionMixSAN.R")
 # setwd("~/ADMwork/MixSan2013/MixSANIFOPv2/")
 
-san <- read.admb("mixchas")
-pdf("mixchas.pdf")
+san <- read.admb("om")
+pdf("om.pdf")
 names(san)
 #Biomasa
 #quartz()
