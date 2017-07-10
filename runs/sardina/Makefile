@@ -1,4 +1,4 @@
-EXEC = chas
+EXEC = em
 ARGS = -nox -iprint 50 
 
 	DIST = ../../src/build/
