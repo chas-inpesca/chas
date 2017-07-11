@@ -6,7 +6,7 @@
 library(adnuts)
 #install.packages("snowfall")
 #install.packages("shinystan")
-install.packages("R2admb")
+#install.packages("R2admb")
 library(R2admb)
 library(snowfall)
 library(shinystan)
@@ -14,7 +14,7 @@ library(shinystan)
 ## Directory containing all files. When run in parallel copies of this are
 ## made in the working diretory.
 d <- '.'
-m <- './mixchas' # executable name
+m <- './om' # executable name
 
 ## First step: optimize model and get admodel.cov and .par files.
 
@@ -26,12 +26,12 @@ m <- './mixchas' # executable name
 
 ## Step 3: Run RWM since it is more robust to crazy models (yours probably
 ## is!).
-iter <- 100000 # iterations after thinning
-warmup <- iter/100 # warmup iterations after thinning
-thin <- 10 # thin rate
+iter <- 1000 # iterations after thinning
+warmup <- iter/2 # warmup iterations after thinning
+thin <- 100 # thin rate
 reps <- 4 # parallel chains to run
-inits <- rep(list(rnorm(154)),4) #"mixchas.pin" #NULL # use MLE after optimizing
-inits <- (list(rnorm(154))) #"mixchas.pin" #NULL # use MLE after optimizing
+inits <- NULL #rep(list(rnorm(154)),4) #"mixchas.pin" #NULL # use MLE after optimizing
+#inits <- (list(rnorm(154))) #"mixchas.pin" #NULL # use MLE after optimizing
 ## Prepare snowfall for parallel execution
 sfStop()
 sfInit(parallel=TRUE, cpus=reps)
@@ -42,14 +42,25 @@ fit.rwm <-
               parallel=TRUE, chains=reps, warmup=thin*warmup,
               dir=d, cores=reps, control=list(metric=NULL),
               algorithm='RWM')
+thin <- 1 # thin rate
+fit.nuts <-
+  sample_admb(model=m, iter=thin*iter, init=inits, thin=thin,
+              #parallel=FALSE, chains=reps, warmup=thin*warmup,
+              parallel=TRUE, chains=reps, warmup=thin*warmup,
+              dir=d, cores=reps, control=list(metric=NULL),
+              algorithm='NUTS')
 launch_shinyadmb(fit.rwm)
+names(fit.rwm$mle$nopar )
+(fit.rwm$mle$nopar )
+(fit.rwm$mle$fit )
+mle.fit <- fit.rwm$mle
 ## Quickly compare variances
-vars.mle <- mle.fit$se[1:mle.fit$nopar]
+vars.mle <- fit.rwm$mle$se[1:(fit.rwm$mle$nopar)]
 ## data.frame of posterior draws, after thinning and discarding warmup(burnin)
 samples <- extract_samples(fit.rwm, inc_warmup=FALSE, inc_lp=FALSE)
+dim(samples)
 vars.mcmc <- apply(samples, 2, sd)
 plot(vars.mle, vars.mcmc)
-
 ## Examine the slowest mixing parameters
 chains <- rep(1:reps, each=dim(fit.rwm$samples)[1]-fit.rwm$warmup)
 pars <- names(sort(fit.rwm$ess))[1:15]
