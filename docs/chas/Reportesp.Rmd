@@ -1,0 +1,111 @@
+---
+title: "Reporte Técnico, Evaluación de estrategias de explotación en pequeños pelágicos,año 2017"
+
+author: Marcos Arteaga Vasquez, Claudio Gatica, Aquiles Sepulveda
+date: 'Julio 2017'
+output:
+  pdf_document:
+    keep_tex: yes
+  word_document: default
+---
+# Resumen Ejecutivo
+Se desarrolla una "Evaluación de Estrategias de explotación" para la pesquería de pequeños pelágicos de Chile centro Sur. El proyecto consta de 3 etapas: a) diseño modelo operativo; b) Implementación MO; y c) Análisis de Estrategias de explotación. La primera etapa, se inicia con la preparación de información y consolidación de información y modelos en actual uso. Luego, se organiza un sitio para compartir los antecedentes con el experto internacional, Dr. James Ianelli (NOAA, Washington). Se coordina un taller en la ciudad de Seattle, con la participación del experto y el grupo de investigadores de INPESCA. La actividad se desarrolla entre los días 5-10 julio de 2017 en dependencias de la Universidad de Washington. Como resultado, se desarrolla un primer MO para la pesquería de pequeños pelágicos que consta de una retro-alimentación con modelos de estimación de sardina común y anchoveta.
+
+# Metodologia
+La metodología para desarrollar un modelo operativo para la pesquería de pequeños pelágicos se basa en dos enfoques. Un primer enfoque de conocimiento de los recursos, sobre la base de documentos técnicos, publicaciones y conocimiento experto de investigadores a cargo del desarrollo de las evaluaciones de pequeños pelágicos. El segundo enfoque es trabajo directo de desarrollo de modelos de dinámica, modelos operativos y análisis de datos para alimemtar los modelos a implementar. Por lo tanto, se requiere ir avanzando en paralelo entre conocimiento y herramientas avanzadas de análisis. 
+
+## Coordinación y actualización
+La coordinación se verifica utilizando un sition de almacenamientod e información (dropbox) y un sitio de trabajo y actualización de modelos en github (https://github.com/chas-inpesca). En chas-inpesca, se encuentran alojados los modelos de estimación de sardina común y anchoveta y el **modelo operativo**, denominado (**chas**,"Chilean anchovy-sardine").
+
+## Operating model specifications
+
+$$
+C_{ij} =N_{ij}\frac{F_{ij}}{Z_{ij}}[1-e^{-Z_{ij}}]
+$$
+$$
+N_{ij}= N_{i-1j-1}e^{-Z_{ij}}
+$$
+
+## Estimation model specficiations   
+$$
+C_{ij} =N_{ij}\frac{F_{ij}}{Z_{ij}}[1-e^{Z_{ij}}]
+$$
+
+  
+# Results  
+
+## Reference Operating model conditioning  
+
+## Posterior estimation for operating model 
+
+#Appendix 1, Data input
+# Conclusiones
+The following key conclusions were made after reviewing materials related to the workshop:
+
+1. Adopt MixSan.tpl code for use as an operating model.	Include better diagnostics for conditioning (fitting) two-species model (MCMC).
+
+2. Update data (completed).
+
+3. MPH (DEPM) is included (may not be getting much weight?)
+
+4. Review treatment of inter-specific recruitment
+
+5. Review proportions of catch
+
+6. Estimation (assessment) model work for future management strategy testing
+
+7. Modify code so that same code works both for sardine and anchovy (inputs differ) o	Clarify growth aspects (there were some options for specifying different growth transitions)o	Average.
+
+8.	No need to make Operating model work for IFOP assessment.
+
+9. 	Coordinate document and code using github and dropbox
+o	Dropbox for documents and background information
+o	Github standalone to work with windows/linux/macos
+o Tasks addressed during the workshop.
+
+# Actividades realizadas
+
+Given the approach for an OM based on MixSan, then the following issues were addressed during the workshop:
+
+1.	Update both datasets through 2016 (based on calendar year)	o	Completed
+2. 	Compare growth transitions between assessment and that of MixSan	
+o	MixSan fit better.for sardines.
+
+3. Catch proportions (historical)	
+4.	Evaluate posterior (combined, and separate by stocks)	
+o	a new facility of ADMB for evaluating posterior distributions
+5. Get both anchoveta and sardine data to work in estimation model (em.tpl).	This was completed by specifying timing of spawning and including an initial average weight at age
+6. Test simulation mode
+	This was undertaken with the original dataset and applied with past executables (not currently revised versions of estimation model)
+
+#Future work
+1.	Catch proportions for adjusting quotas (AjusteQuota doc)	
+o	Needs to be reviewed and revised
+
+2. Rectify growth (use time varying as in estimating model?)?
+	Alternative catch histories	?
+3. Get the Length-weight data organized)
+
+4. Growth by season (reclas survey occurs at different time of year than pelaces, and fishery? o Would need different transition matrices for each data source	
+
+# Conclusions
+Notes
+Steps for progress on OM development
+1)	Decide process for two main parts:
+a.	Conditioning the model (fitting to basic data and plausible biological ranges); questions:
+i.	Use mixsan and develop further? Modify to deal w/ different scales? Spatial differences? Minimally update w/ latest data
+ii.	Start w/ different code (SS?)
+iii.	Develop new code?
+b.	Generating data for testing management procedures (e.g., as in mixSan, to test anchoveta.tpl and sardine.tpl)
+2)	OM Scenarios
+a.	Catch history scenarios (official and corrected) 	Parameter to specify
+b.	Growth (IFOP vs Len-age assumed by INPESCA)	Annual and/or period options
+c.	MCMC draws for simulating datasets
+
+Questions
+
+1)	Age-length transitions consistent w/ W-L params (w = aLb) 
+2)	Are LW coefficients (a, b) available (and stable)?
+3)	Implement mixsan modified with updated data
+
+
