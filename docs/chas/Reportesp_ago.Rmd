@@ -1,0 +1,121 @@
+---
+title: Reporte estrategias de explotacion en
+   2017
+author: "Marcos Arteaga Vasquez, Claudio Gatica, Aquiles Sepulveda"
+date: "Agosto 2017"
+output:
+  pdf_document:
+    keep_tex: yes
+  word_document: default
+---
+# Resumen Ejecutivo
+Se desarrolla una "Evaluación de Estrategias de explotación" para la pesquería de pequeños pelágicos de Chile centro Sur. El proyecto consta de 3 etapas: a) diseño modelo operativo; b) Implementación MO; y c) Análisis de Estrategias de explotación. La primera etapa, se inicia con la preparación de información y consolidación de información y modelos en actual uso. Luego, se organiza un sitio para compartir los antecedentes con el experto internacional, Dr. James Ianelli (NOAA, Washington). Se coordina un taller en la ciudad de Seattle, con la participación del experto y el grupo de investigadores de INPESCA. La actividad se desarrolla entre los días 5-10 julio de 2017 en dependencias de la Universidad de Washington. Como resultado, se desarrolla un primer MO para la pesquería de pequeños pelágicos que consta de una retro-alimentación con modelos de estimación de sardina común y anchoveta.
+
+# Metodologia
+La metodología para desarrollar un modelo operativo para la pesquería de pequeños pelágicos se basa en dos enfoques. Un primer enfoque de conocimiento de los recursos, sobre la base de documentos técnicos, publicaciones y conocimiento experto de investigadores a cargo del desarrollo de las evaluaciones de pequeños pelágicos. El segundo enfoque es trabajo directo de desarrollo de modelos de dinámica, modelos operativos y análisis de datos para alimemtar los modelos a implementar. Por lo tanto, se requiere ir avanzando en paralelo entre conocimiento y herramientas avanzadas de análisis. 
+
+## Coordinación y actualización
+La coordinación se verifica utilizando un sition de almacenamientod e información (dropbox) y un sitio de trabajo y actualización de modelos en github (https://github.com/chas-inpesca). En chas-inpesca, se encuentran alojados los modelos de estimación de sardina común y anchoveta y el **modelo operativo**, denominado (**chas**,"Chilean anchovy-sardine").
+Con el objetivo de mantener continuidad en el trabajo, se opta por desarrollar un trabajo semanal, donde los investigadores los días miercole de cada semana se dedican en su totalidad al trabajo, para luego detallar los estados de avance en el trabajo.
+
+## Especificación del modelo Operativo
+
+$$
+C_{i,j} =N_{ij}\frac{F_{i,j}}{Z_{i,j}}[1-e^{-Z_{i,j}}]
+$$
+$$
+N_{ij}= N_{i-1j-1}e^{-Z_{ij}}
+$$
+
+## Estimation model specficiations   
+$$
+C_{ij} =N_{ij}\frac{F_{ij}}{Z_{ij}}[1-e^{Z_{ij}}]
+$$
+# Resultados 
+
+## Referencias de condicionamiento modelo operativo  
+
+## Estimación posterior para el modelo operativo
+
+#Apendice 1, Datos entrada
+## Conclusiones.
+
+Las siguientes conclusiones claves fueron realizadas una vez revisado el material relacionado con el workshop:
+
+1. Se adopa mixsan.tpl codigo como modelo operativo, incluyendo mejores diagnóstico para el condicionamiento (ajuste) dos especies(MCMC).
+
+2. Actualización información (completado).
+
+3. MPH (DEPM) al ser incluido (puede no tener mucho peso)
+
+4. Revisar tratamiento reclutamiento intra-especifíco
+
+5. revisar la proporción de las capturas.
+
+6. Trabajar el modelo de estimación para testear estrategias de manejo.
+
+7. Modificar codigo de tal forma que el mismo codigo trabaje tanto para sardina como para anchoveta (entradas diferentes) o	clarificar aspectos de crecimiento (existen algunas opciones para especificar para especificar diferentes matrices de transicion) o promedios.
+
+8.	No es necesario que el modelo operativo trabaje con el modelo y datos de ifop.
+
+9.  Coordinar documentos y codigos utilizando github, dropbox para documentas e información y github para trabajar con windows/linux y mac.
+
+# Actividades realizadas
+
+Dado un enfoque para el Modelo operativo basado en Mixsan, los siguientes puntos fueron conducidos durante el WS.
+
+1.	Actualización set de datos hasta el 2016 (basado en año calendario).
+
+2. 	Comparar matrices de transición entre evaluaciones y cual mixsan ajusta de mejor forma.
+
+3.  Proporción de capturas (históricas)	
+
+4.	Evaluación posterior (combinada y separada por stocks) o una nueva facilidad de ADMB para evaluación de posterior.
+
+5. Obtener información para sardina y anchoveta para trabajar en el modelo de estimación (em.tpl).	Este fue completado para especificar tiempo de desove e inclusion de peso a la edad promedio.
+
+6. Testeo de modo simulación. Este fue emprendido con el set de datos originales y aplicado con pasos ejecutables (modelo estimación no totalmente revisado y actualizado).
+
+# Trabajo futuro
+
+1.	proporción de captuars para ajuste de capturas (Ajuste de cuota doc) necesita ser revisado.
+
+2. rectificar crecimiento en relación a tiempos variantes.
+
+3. mantener datos longitud-peso organizados y parámetros correspondientes.
+
+4. Crecimiento estacional (cruceros reclas y pelaces se desarrollan en diferentes periodos del año, y la pesquería. Podrían ser necesarias matrices de transición distintas dependiendo de cada fuente de información.	
+
+# Conclusiones
+
+Notas
+
+pasos para progreso modelo operativo
+
+1)	**Proceso de decisión** 
+
+i. Condicionamiento del modelo (ajuste a datos básicos y rangos biológicos plausibles).
+
+ii.	uso de mixsan y desarrollo futuro. Modificar para lidiar don dieferentes escalas temporales, diferencias espaciales, minimizar actualización con menos datos.
+
+iii.	Comenzar con un código nuevo.
+
+iv.	Desarrollo de nuevo código.
+
+v.	Generación de datos para testear procedimientos de manejo (e.g., como en mixsan, para testear anchoveta.tpl y sardine.tpl)
+
+2)	**Escenarios Modelo operativo**
+
+a.	Escenarios capturas históricas (oficial y correguido), parámetros a especificar.
+
+b.	Crecimiento (IFOP vs Longitud edad asumida por Inpesca), anual o por opciones de período.
+
+c.	MCMC sorteados para set de datos de simulación.
+
+Consultas
+
+1)	matriz transición talla-edad consistente con parámetros y relación Longitud-peso. 
+2)	Disponibilidad de parámetros longitud-peso.
+3)	Implementar mixsan modificado con datos actualizados.
+
+
