@@ -1,7 +1,7 @@
 ---
 title: Reporte estrategias de explotacion en
    2017
-author: "Marcos Arteaga Vasquez, Claudio Gatica, Aquiles Sepulveda"
+author: "Marcos Arteaga Vásquez, Claudio Gatica, Aquiles Sepúlveda"
 date: "Agosto 2017"
 output:
   pdf_document:
@@ -9,29 +9,51 @@ output:
   word_document: default
 ---
 # Resumen Ejecutivo
-Se desarrolla una "Evaluación de Estrategias de explotación" para la pesquería de pequeños pelágicos de Chile centro Sur. El proyecto consta de 3 etapas: a) diseño modelo operativo; b) Implementación MO; y c) Análisis de Estrategias de explotación. La primera etapa, se inicia con la preparación de información y consolidación de información y modelos en actual uso. Luego, se organiza un sitio para compartir los antecedentes con el experto internacional, Dr. James Ianelli (NOAA, Washington). Se coordina un taller en la ciudad de Seattle, con la participación del experto y el grupo de investigadores de INPESCA. La actividad se desarrolla entre los días 5-10 julio de 2017 en dependencias de la Universidad de Washington. Como resultado, se desarrolla un primer MO para la pesquería de pequeños pelágicos que consta de una retro-alimentación con modelos de estimación de sardina común y anchoveta.
+Se desarrolla una "Evaluación de Estrategias de explotación" para la pesquería de pequeños pelágicos de Chile centro Sur. El proyecto consta de 3 etapas: a) diseño modelo operativo; b) Implementación MO; y c) Análisis de Estrategias de explotación. La primera etapa, se inicia con la preparación de información y consolidación de información y modelos en actual uso. Luego, se organiza un sitio para compartir los antecedentes con el experto internacional, Dr. James Ianelli (NOAA, Washington). Se coordina un taller en la ciudad de Seattle, con la participación del experto y el grupo de investigadores de INPESCA. La actividad se desarrolla entre los días 5-10 julio de 2017 en dependencias de la Universidad de Washington y la NOAA. Como resultado, se desarrolla un primer MO para la pesquería de pequeños pelágicos que consta de una retro-alimentación con modelos de estimación de sardina común y anchoveta. En forma complementaria se participó en un taller de Stock Synthesis con énfasis en procesos de simulación donde se presentaron por parte de las expertas kelliFaye Johnson -U Washington <Kfjohns@uw.edu> y  Gwladys Lambert - NOAA Affiliate <gwladys.lambert@noaa.gov>, los procesos necesarios para implementar diferentes casos de modelos operativos, haciendo uso de SS3 para la generación de datos simulados y test de modelos de estimación.  
 
 # Metodologia
 La metodología para desarrollar un modelo operativo para la pesquería de pequeños pelágicos se basa en dos enfoques. Un primer enfoque de conocimiento de los recursos, sobre la base de documentos técnicos, publicaciones y conocimiento experto de investigadores a cargo del desarrollo de las evaluaciones de pequeños pelágicos. El segundo enfoque es trabajo directo de desarrollo de modelos de dinámica, modelos operativos y análisis de datos para alimemtar los modelos a implementar. Por lo tanto, se requiere ir avanzando en paralelo entre conocimiento y herramientas avanzadas de análisis. 
 
 ## Coordinación y actualización
-La coordinación se verifica utilizando un sition de almacenamientod e información (dropbox) y un sitio de trabajo y actualización de modelos en github (https://github.com/chas-inpesca). En chas-inpesca, se encuentran alojados los modelos de estimación de sardina común y anchoveta y el **modelo operativo**, denominado (**chas**,"Chilean anchovy-sardine").
-Con el objetivo de mantener continuidad en el trabajo, se opta por desarrollar un trabajo semanal, donde los investigadores los días miercole de cada semana se dedican en su totalidad al trabajo, para luego detallar los estados de avance en el trabajo.
+La coordinación se verifica utilizando un sition de almacenamiento de información (dropbox) y un sitio de trabajo y actualización de modelos en github (https://github.com/chas-inpesca). En chas-inpesca, se encuentran alojados los modelos de estimación de sardina común y anchoveta y el **modelo operativo**, denominado (**chas**,"Chilean anchovy-sardine" model).
+
+Con el objetivo de mantener continuidad en el trabajo, se opta por desarrollar un trabajo quincenal, donde los investigadores nacionales los días miercoles consolidaran los avances en los diferentes tópicos del MO.
 
 ## Especificación del modelo Operativo
+El modelo operativo y modelos de estimación, serán específicos en la descripción de ecuaciones de dinámica, empleando para ellos como estandar RMarkdown para los reportes y presentación de ecuaciones y funciones estadísticas (i.e. distribuciones de probabilidad y máxima verosimilitud). A modo de ejemplo se presentan las ecuaciones de:
 
+Captura
 $$
 C_{i,j} =N_{ij}\frac{F_{i,j}}{Z_{i,j}}[1-e^{-Z_{i,j}}]
 $$
+Decaimiento de la abundancia
 $$
 N_{ij}= N_{i-1j-1}e^{-Z_{ij}}
 $$
-
-## Estimation model specficiations   
-$$
-C_{ij} =N_{ij}\frac{F_{ij}}{Z_{ij}}[1-e^{Z_{ij}}]
-$$
 # Resultados 
+
+## Taller de simulación en stock synthesis
+El primer día de trabajo en Seattle, correspondió en asistir a un WS en las dependencias de la NOAA, a cargo de las investigadoras, kelliFaye Johnson -U Washington <Kfjohns@uw.edu> y  Gwladys Lambert - NOAA Affiliate <gwladys.lambert@noaa.gov>. En este taller, se explicó sobre la base de un sitio en GIT:
+
+**https://github.com/ss3sim/ss3sim**
+
+La forma de instalación de SS3 y sus componentes, para luego proceder a correr casos de estudio sobre un modelo base y diferentes cambios de configuración. Los principales contenidos corresponden a:
+
+a) Instalación de SS3sim R package
+
+b) Configuración de simulación ss3sim 
+
+c) Como trabaja SS3
+
+d) Ejemplos de salidas para simulaciones ss3sim 
+
+e) Publicaciones utilizando ss3sim
+
+Los diferentes casos de ejemplo, y posibilidades dan cuenta de una herramienta viable para testear diferentes configuraciones de modelos con variantes de sexos, flotas y diferentes opciones en los procesos de dinámica (i.e. selectividad, reclutamiento, crecimiento, mortalidad entre otros). 
+
+## Material y documentación
+Como resultado del taller de 1 día, se logro comprender la forma de trabajo con SS3, obtener material de trabajo, ejemplos y contactos con experiencia en el uso de SS3 como herramienta de implementación de modelos, análisis de estrategias y procesos de simulación. Además, de presentaciones de expertos en las posibilidades y características de uso de SS3.
+
 
 ## Referencias de condicionamiento modelo operativo  
 
@@ -115,7 +137,9 @@ c.	MCMC sorteados para set de datos de simulación.
 Consultas
 
 1)	matriz transición talla-edad consistente con parámetros y relación Longitud-peso. 
+
 2)	Disponibilidad de parámetros longitud-peso.
+
 3)	Implementar mixsan modificado con datos actualizados.
 
 
