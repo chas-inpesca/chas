@@ -1,0 +1,351 @@
+\documentclass[]{article}
+\usepackage{lmodern}
+\usepackage{amssymb,amsmath}
+\usepackage{ifxetex,ifluatex}
+\usepackage{fixltx2e} % provides \textsubscript
+\ifnum 0\ifxetex 1\fi\ifluatex 1\fi=0 % if pdftex
+  \usepackage[T1]{fontenc}
+  \usepackage[utf8]{inputenc}
+\else % if luatex or xelatex
+  \ifxetex
+    \usepackage{mathspec}
+  \else
+    \usepackage{fontspec}
+  \fi
+  \defaultfontfeatures{Ligatures=TeX,Scale=MatchLowercase}
+\fi
+% use upquote if available, for straight quotes in verbatim environments
+\IfFileExists{upquote.sty}{\usepackage{upquote}}{}
+% use microtype if available
+\IfFileExists{microtype.sty}{%
+\usepackage{microtype}
+\UseMicrotypeSet[protrusion]{basicmath} % disable protrusion for tt fonts
+}{}
+\usepackage[margin=1in]{geometry}
+\usepackage{hyperref}
+\hypersetup{unicode=true,
+            pdftitle={Reporte estrategias de explotacion en 2017},
+            pdfauthor={Marcos Arteaga Vásquez, Claudio Gatica, Aquiles Sepúlveda},
+            pdfborder={0 0 0},
+            breaklinks=true}
+\urlstyle{same}  % don't use monospace font for urls
+\usepackage{graphicx,grffile}
+\makeatletter
+\def\maxwidth{\ifdim\Gin@nat@width>\linewidth\linewidth\else\Gin@nat@width\fi}
+\def\maxheight{\ifdim\Gin@nat@height>\textheight\textheight\else\Gin@nat@height\fi}
+\makeatother
+% Scale images if necessary, so that they will not overflow the page
+% margins by default, and it is still possible to overwrite the defaults
+% using explicit options in \includegraphics[width, height, ...]{}
+\setkeys{Gin}{width=\maxwidth,height=\maxheight,keepaspectratio}
+\IfFileExists{parskip.sty}{%
+\usepackage{parskip}
+}{% else
+\setlength{\parindent}{0pt}
+\setlength{\parskip}{6pt plus 2pt minus 1pt}
+}
+\setlength{\emergencystretch}{3em}  % prevent overfull lines
+\providecommand{\tightlist}{%
+  \setlength{\itemsep}{0pt}\setlength{\parskip}{0pt}}
+\setcounter{secnumdepth}{0}
+% Redefines (sub)paragraphs to behave more like sections
+\ifx\paragraph\undefined\else
+\let\oldparagraph\paragraph
+\renewcommand{\paragraph}[1]{\oldparagraph{#1}\mbox{}}
+\fi
+\ifx\subparagraph\undefined\else
+\let\oldsubparagraph\subparagraph
+\renewcommand{\subparagraph}[1]{\oldsubparagraph{#1}\mbox{}}
+\fi
+
+%%% Use protect on footnotes to avoid problems with footnotes in titles
+\let\rmarkdownfootnote\footnote%
+\def\footnote{\protect\rmarkdownfootnote}
+
+%%% Change title format to be more compact
+\usepackage{titling}
+
+% Create subtitle command for use in maketitle
+\newcommand{\subtitle}[1]{
+  \posttitle{
+    \begin{center}\large#1\end{center}
+    }
+}
+
+\setlength{\droptitle}{-2em}
+  \title{Reporte estrategias de explotacion en 2017}
+  \pretitle{\vspace{\droptitle}\centering\huge}
+  \posttitle{\par}
+  \author{Marcos Arteaga Vásquez, Claudio Gatica, Aquiles Sepúlveda}
+  \preauthor{\centering\large\emph}
+  \postauthor{\par}
+  \predate{\centering\large\emph}
+  \postdate{\par}
+  \date{Agosto 2017}
+
+
+\begin{document}
+\maketitle
+
+\section{Resumen Ejecutivo}\label{resumen-ejecutivo}
+
+Se desarrolla una ``Evaluación de Estrategias de explotación'' para la
+pesquería de pequeños pelágicos de Chile centro Sur. El proyecto consta
+de 3 etapas: a) diseño modelo operativo; b) Implementación MO; y c)
+Análisis de Estrategias de explotación. La primera etapa, se inicia con
+la preparación de información y consolidación de información y modelos
+en actual uso. Luego, se organiza un sitio para compartir los
+antecedentes con el experto internacional, Dr.~James Ianelli (NOAA,
+Washington). Se coordina un taller en la ciudad de Seattle, con la
+participación del experto y el grupo de investigadores de INPESCA. La
+actividad se desarrolla entre los días 5-10 julio de 2017 en
+dependencias de la Universidad de Washington y la NOAA. Como resultado,
+se desarrolla un primer MO para la pesquería de pequeños pelágicos que
+consta de una retro-alimentación con modelos de estimación de sardina
+común y anchoveta. En forma complementaria se participó en un taller de
+Stock Synthesis con énfasis en procesos de simulación donde se
+presentaron por parte de las expertas kelliFaye Johnson -U Washington
+\href{mailto:Kfjohns@uw.edu}{\nolinkurl{Kfjohns@uw.edu}} y Gwladys
+Lambert - NOAA Affiliate
+\href{mailto:gwladys.lambert@noaa.gov}{\nolinkurl{gwladys.lambert@noaa.gov}},
+los procesos necesarios para implementar diferentes casos de modelos
+operativos, haciendo uso de SS3 para la generación de datos simulados y
+test de modelos de estimación.
+
+\section{Metodologia}\label{metodologia}
+
+La metodología para desarrollar un modelo operativo para la pesquería de
+pequeños pelágicos se basa en dos enfoques. Un primer enfoque de
+conocimiento de los recursos, sobre la base de documentos técnicos,
+publicaciones y conocimiento experto de investigadores a cargo del
+desarrollo de las evaluaciones de pequeños pelágicos. El segundo enfoque
+es trabajo directo de desarrollo de modelos de dinámica, modelos
+operativos y análisis de datos para alimemtar los modelos a implementar.
+Por lo tanto, se requiere ir avanzando en paralelo entre conocimiento y
+herramientas avanzadas de análisis.
+
+\subsection{Coordinación y
+actualización}\label{coordinacion-y-actualizacion}
+
+La coordinación se verifica utilizando un sition de almacenamiento de
+información (dropbox) y un sitio de trabajo y actualización de modelos
+en github (\url{https://github.com/chas-inpesca}). En chas-inpesca, se
+encuentran alojados los modelos de estimación de sardina común y
+anchoveta y el \textbf{modelo operativo}, denominado
+(\textbf{chas},``Chilean anchovy-sardine'' model).
+
+Con el objetivo de mantener continuidad en el trabajo, se opta por
+desarrollar un trabajo quincenal, donde los investigadores nacionales
+los días miercoles consolidaran los avances en los diferentes tópicos
+del MO.
+
+\subsection{Especificación del modelo
+Operativo}\label{especificacion-del-modelo-operativo}
+
+El modelo operativo y modelos de estimación, serán específicos en la
+descripción de ecuaciones de dinámica, empleando para ellos como
+estandar RMarkdown para los reportes y presentación de ecuaciones y
+funciones estadísticas (i.e.~distribuciones de probabilidad y máxima
+verosimilitud). A modo de ejemplo se presentan las ecuaciones de:
+
+Captura \[
+C_{i,j} =N_{ij}\frac{F_{i,j}}{Z_{i,j}}[1-e^{-Z_{i,j}}]
+\] Decaimiento de la abundancia \[
+N_{ij}= N_{i-1j-1}e^{-Z_{ij}}
+\] \# Resultados
+
+\subsection{Taller de simulación en stock
+synthesis}\label{taller-de-simulacion-en-stock-synthesis}
+
+El primer día de trabajo en Seattle, correspondió en asistir a un WS en
+las dependencias de la NOAA, a cargo de las investigadoras, kelliFaye
+Johnson -U Washington
+\href{mailto:Kfjohns@uw.edu}{\nolinkurl{Kfjohns@uw.edu}} y Gwladys
+Lambert - NOAA Affiliate
+\href{mailto:gwladys.lambert@noaa.gov}{\nolinkurl{gwladys.lambert@noaa.gov}}.
+En este taller, se explicó sobre la base de un sitio en GIT:
+
+**\url{https://github.com/ss3sim/ss3sim**}
+
+La forma de instalación de SS3 y sus componentes, para luego proceder a
+correr casos de estudio sobre un modelo base y diferentes cambios de
+configuración. Los principales contenidos corresponden a:
+
+\begin{enumerate}
+\def\labelenumi{\alph{enumi})}
+\item
+  Instalación de SS3sim R package
+\item
+  Configuración de simulación ss3sim
+\item
+  Como trabaja SS3
+\item
+  Ejemplos de salidas para simulaciones ss3sim
+\item
+  Publicaciones utilizando ss3sim
+\end{enumerate}
+
+Los diferentes casos de ejemplo, y posibilidades dan cuenta de una
+herramienta viable para testear diferentes configuraciones de modelos
+con variantes de sexos, flotas y diferentes opciones en los procesos de
+dinámica (i.e.~selectividad, reclutamiento, crecimiento, mortalidad
+entre otros).
+
+\subsection{Material y documentación}\label{material-y-documentacion}
+
+Como resultado del taller de 1 día, se logro comprender la forma de
+trabajo con SS3, obtener material de trabajo, ejemplos y contactos con
+experiencia en el uso de SS3 como herramienta de implementación de
+modelos, análisis de estrategias y procesos de simulación. Además, de
+presentaciones de expertos en las posibilidades y características de uso
+de SS3.
+
+\section{Apendice 1}\label{apendice-1}
+
+\subsection{Conclusiones.}\label{conclusiones.}
+
+Las siguientes conclusiones claves fueron realizadas una vez revisado el
+material relacionado con el workshop:
+
+\begin{enumerate}
+\def\labelenumi{\arabic{enumi}.}
+\item
+  Se adopta mixsan.tpl codigo como modelo operativo, incluyendo mejores
+  diagnóstico para el condicionamiento (ajuste) dos especies(MCMC).
+\item
+  Se realiza la actualización de información para modelos de estimación
+  y operativos (completado).
+\item
+  En relación al MPH (DEPM), se consideera que en caso deser incluido no
+  tendría mucho peso.
+\item
+  Se solicita revisar el tratamiento del reclutamiento intra-especifíco
+\item
+  Se debe revisar la proporción de las capturas y modelo entre-especies.
+\item
+  Se reequiere continuar el trabajo con el modelo de estimación para
+  testear estrategias de manejo.
+\item
+  Se deve modificar codigo de tal forma que el mismo codigo trabaje
+  tanto para sardina como para anchoveta (entradas diferentes) y/o
+  clarificar aspectos de crecimiento (existen algunas opciones para
+  especificar para especificar diferentes matrices de transicion) o
+  promedios.
+\item
+  Concluimos que no es necesario que el modelo operativo trabaje con el
+  modelo y datos de ifop.
+\item
+  Se acuerda coordinar documentos y códigos utilizando github, dropbox
+  para documentas e información y github para trabajar con windows/linux
+  y mac.
+\end{enumerate}
+
+\section{Actividades realizadas}\label{actividades-realizadas}
+
+Dado un enfoque para el Modelo operativo basado en Mixsan y ahora
+demoninado (CHAS), los siguientes puntos fueron trabajados durante el
+WS:
+
+\begin{enumerate}
+\def\labelenumi{\arabic{enumi}.}
+\item
+  Actualización set de datos hasta el 2016 (basado en año calendario).
+\item
+  Comparación de matrices de transición entre evaluaciones y nivel de
+  ajuste.
+\item
+  Revisión proporción de capturas (históricas)
+\item
+  Evaluación posterior (combinada y separada por stocks) y exploración
+  de ADMB para evaluación de posterior.
+\item
+  Obtener información para sardina y anchoveta para trabajar en el
+  modelo de estimación (em.tpl). Este fue completado para especificar
+  tiempo de desove e inclusion de peso a la edad promedio.
+\item
+  Testeo de modo simulación. Este fue emprendido con el set de datos
+  originales y aplicado con pasos ejecutables (modelo estimación no
+  totalmente revisado y actualizado).
+\end{enumerate}
+
+\section{Trabajo a realizar}\label{trabajo-a-realizar}
+
+\begin{enumerate}
+\def\labelenumi{\arabic{enumi}.}
+\item
+  Analizar proporción de capturas para ajuste de cuotas.
+\item
+  Rectificar crecimiento en relación a tiempos variantes (períodos).
+\item
+  Mantener datos longitud-peso organizados y parámetros .
+\item
+  Revisar crecimiento estacional (cruceros reclas y pelaces se
+  desarrollan en diferentes periodos del año, y la pesquería. Podrían
+  ser necesarias matrices de transición distintas dependiendo de cada
+  fuente de información.
+\end{enumerate}
+
+\section{Notas}\label{notas}
+
+Pasos para progreso modelo operativo
+
+\begin{enumerate}
+\def\labelenumi{\arabic{enumi})}
+\tightlist
+\item
+  \textbf{Proceso de decisión}
+\end{enumerate}
+
+\begin{enumerate}
+\def\labelenumi{\roman{enumi}.}
+\item
+  Condicionamiento del modelo (ajuste a datos básicos y rangos
+  biológicos plausibles).
+\item
+  Uso de mixsan y desarrollo futuro. Modificar para lidiar don
+  diferentes escalas temporales, diferencias espaciales, minimizar
+  actualización con menos datos.
+\item
+\begin{verbatim}
+Desarrollo de nuevo código.
+\end{verbatim}
+\item
+  Generación de datos para testear procedimientos de manejo (e.g., como
+  en mixsan, para testear anchoveta.tpl y sardine.tpl)
+\end{enumerate}
+
+\begin{enumerate}
+\def\labelenumi{\arabic{enumi})}
+\setcounter{enumi}{1}
+\tightlist
+\item
+  \textbf{Escenarios Modelo operativo}
+\end{enumerate}
+
+\begin{enumerate}
+\def\labelenumi{\alph{enumi}.}
+\item
+  Escenarios capturas históricas (oficial y correguido), parámetros a
+  especificar.
+\item
+  Crecimiento (IFOP vs Longitud edad asumida por Inpesca), anual o por
+  opciones de período.
+\item
+  MCMC sorteados para set de datos de simulación.
+\end{enumerate}
+
+Consultas
+
+\begin{enumerate}
+\def\labelenumi{\arabic{enumi})}
+\item
+  matriz transición talla-edad consistente con parámetros y relación
+  Longitud-peso.
+\item
+  Disponibilidad de parámetros longitud-peso.
+\item
+  Implementar chas modificado con datos actualizados.
+\end{enumerate}
+
+
+\end{document}

@@ -55,76 +55,69 @@ Los diferentes casos de ejemplo, y posibilidades dan cuenta de una herramienta v
 Como resultado del taller de 1 día, se logro comprender la forma de trabajo con SS3, obtener material de trabajo, ejemplos y contactos con experiencia en el uso de SS3 como herramienta de implementación de modelos, análisis de estrategias y procesos de simulación. Además, de presentaciones de expertos en las posibilidades y características de uso de SS3.
 
 
-## Referencias de condicionamiento modelo operativo  
-
-## Estimación posterior para el modelo operativo
-
-#Apendice 1, Datos entrada
+#Apendice 1
 ## Conclusiones.
 
 Las siguientes conclusiones claves fueron realizadas una vez revisado el material relacionado con el workshop:
 
-1. Se adopa mixsan.tpl codigo como modelo operativo, incluyendo mejores diagnóstico para el condicionamiento (ajuste) dos especies(MCMC).
+1. Se adopta mixsan.tpl codigo como modelo operativo, incluyendo mejores diagnóstico para el condicionamiento (ajuste) dos especies(MCMC).
 
-2. Actualización información (completado).
+2. Se realiza la actualización de información para modelos de estimación y operativos (completado).
 
-3. MPH (DEPM) al ser incluido (puede no tener mucho peso)
+3. En relación al MPH (DEPM), se consideera que en caso deser incluido no tendría mucho peso.
 
-4. Revisar tratamiento reclutamiento intra-especifíco
+4. Se solicita revisar el tratamiento del reclutamiento intra-especifíco
 
-5. revisar la proporción de las capturas.
+5. Se debe revisar la proporción de las capturas y modelo entre-especies.
 
-6. Trabajar el modelo de estimación para testear estrategias de manejo.
+6. Se reequiere continuar el trabajo con el modelo de estimación para testear estrategias de manejo.
 
-7. Modificar codigo de tal forma que el mismo codigo trabaje tanto para sardina como para anchoveta (entradas diferentes) o	clarificar aspectos de crecimiento (existen algunas opciones para especificar para especificar diferentes matrices de transicion) o promedios.
+7. Se deve modificar codigo de tal forma que el mismo codigo trabaje tanto para sardina como para anchoveta (entradas diferentes) y/o	clarificar aspectos de crecimiento (existen algunas opciones para especificar para especificar diferentes matrices de transicion) o promedios.
 
-8.	No es necesario que el modelo operativo trabaje con el modelo y datos de ifop.
+8. Concluimos que no es necesario que el modelo operativo trabaje con el modelo y datos de ifop.
 
-9.  Coordinar documentos y codigos utilizando github, dropbox para documentas e información y github para trabajar con windows/linux y mac.
+9. Se acuerda coordinar documentos y códigos utilizando github, dropbox para documentas e información y github para trabajar con windows/linux y mac.
+
 
 # Actividades realizadas
 
-Dado un enfoque para el Modelo operativo basado en Mixsan, los siguientes puntos fueron conducidos durante el WS.
+Dado un enfoque para el Modelo operativo basado en Mixsan y ahora demoninado (CHAS), los siguientes puntos fueron trabajados durante el WS:
 
 1.	Actualización set de datos hasta el 2016 (basado en año calendario).
 
-2. 	Comparar matrices de transición entre evaluaciones y cual mixsan ajusta de mejor forma.
+2. 	Comparación de matrices de transición entre evaluaciones y nivel de ajuste.
 
-3.  Proporción de capturas (históricas)	
+3.  Revisión proporción de capturas (históricas)	
 
-4.	Evaluación posterior (combinada y separada por stocks) o una nueva facilidad de ADMB para evaluación de posterior.
+4.	Evaluación posterior (combinada y separada por stocks) y exploración de ADMB para evaluación de posterior.
 
-5. Obtener información para sardina y anchoveta para trabajar en el modelo de estimación (em.tpl).	Este fue completado para especificar tiempo de desove e inclusion de peso a la edad promedio.
+5.  Obtener información para sardina y anchoveta para trabajar en el modelo de estimación (em.tpl).	Este fue completado para especificar tiempo de desove e inclusion de peso a la edad promedio.
 
-6. Testeo de modo simulación. Este fue emprendido con el set de datos originales y aplicado con pasos ejecutables (modelo estimación no totalmente revisado y actualizado).
+6.  Testeo de modo simulación. Este fue emprendido con el set de datos originales y aplicado con pasos ejecutables (modelo estimación no totalmente revisado y actualizado).
 
-# Trabajo futuro
+# Trabajo a realizar
 
-1.	proporción de captuars para ajuste de capturas (Ajuste de cuota doc) necesita ser revisado.
+1.	Analizar proporción de capturas para ajuste de cuotas.
 
-2. rectificar crecimiento en relación a tiempos variantes.
+2.  Rectificar crecimiento en relación a tiempos variantes (períodos).
 
-3. mantener datos longitud-peso organizados y parámetros correspondientes.
+3.  Mantener datos longitud-peso organizados y parámetros .
 
-4. Crecimiento estacional (cruceros reclas y pelaces se desarrollan en diferentes periodos del año, y la pesquería. Podrían ser necesarias matrices de transición distintas dependiendo de cada fuente de información.	
+4.  Revisar crecimiento estacional (cruceros reclas y pelaces se desarrollan en diferentes periodos del año, y la pesquería. Podrían ser necesarias matrices de transición distintas dependiendo de cada fuente de información.	
 
-# Conclusiones
+# Notas
 
-Notas
-
-pasos para progreso modelo operativo
+Pasos para progreso modelo operativo
 
 1)	**Proceso de decisión** 
 
-i. Condicionamiento del modelo (ajuste a datos básicos y rangos biológicos plausibles).
+i.  Condicionamiento del modelo (ajuste a datos básicos y rangos biológicos plausibles).
 
-ii.	uso de mixsan y desarrollo futuro. Modificar para lidiar don dieferentes escalas temporales, diferencias espaciales, minimizar actualización con menos datos.
+ii.	Uso de mixsan y desarrollo futuro. Modificar para lidiar don diferentes escalas temporales, diferencias espaciales, minimizar actualización con menos datos.
 
-iii.	Comenzar con un código nuevo.
+iii.	Desarrollo de nuevo código.
 
-iv.	Desarrollo de nuevo código.
-
-v.	Generación de datos para testear procedimientos de manejo (e.g., como en mixsan, para testear anchoveta.tpl y sardine.tpl)
+iv.	Generación de datos para testear procedimientos de manejo (e.g., como en mixsan, para testear anchoveta.tpl y sardine.tpl)
 
 2)	**Escenarios Modelo operativo**
 
@@ -140,6 +133,8 @@ Consultas
 
 2)	Disponibilidad de parámetros longitud-peso.
 
-3)	Implementar mixsan modificado con datos actualizados.
+3)	Implementar chas modificado con datos actualizados.
+
+
 
 
