@@ -1,0 +1,40 @@
+---
+title: Reporte 1 MSE
+author: "Marcos Arteaga , Claudio Gatica"
+date: "17 Agosto 2017"
+output:
+  pdf_document:
+    keep_tex: yes
+  word_document: default
+---
+# Resumen 
+Se desarrolla una reunión de trabajo, con el objeto de priorizar tareas identificadas en WS MSE. Sobre la base del reporte del WS en Seattle. Se revisa la disposición de información, organización de modelos de estimación y operativos. En relación a la información, se genera un listado de datos a actualizar para la evaluación, análisis necesarios y nuevos datos a requerir. 
+
+# Datos
+
+1.	Actualización set de datos hasta el 2016 (basado en año calendario).
+
+1.	Analizar proporción de capturas para ajuste de cuotas.
+
+2.  Rectificar crecimiento en relación a tiempos variantes (períodos).
+
+3.  Mantener datos longitud-peso organizados y parámetros .
+
+4.  Revisar crecimiento estacional (cruceros reclas y pelaces se desarrollan en diferentes periodos del año, y la pesquería. Podrían ser necesarias matrices de transición distintas dependiendo de cada fuente de información.	
+
+# Análisis
+
+1) Se revisara el proceso de reclutamiento por especie, caracterizando tendencias, magnitudes y representacion a partir del Modelo de estimación. (Artega, Gatica)
+
+2) Se debe revisar la proporción de las capturas y modelo entre-especies.
+
+3) Escenarios capturas históricas (oficial y correguido), parámetros a especificar.
+
+4)	matriz transición talla-edad consistente con parámetros y relación Longitud-peso. 
+
+# Codificacion
+
+1. Se deve modificar codigo de tal forma que el mismo codigo trabaje tanto para sardina como para anchoveta (entradas diferentes) y/o	clarificar aspectos de crecimiento (existen algunas opciones para especificar para especificar diferentes matrices de transicion) o promedios.
+
+2)	Disponibilidad de parámetros longitud-peso.
+

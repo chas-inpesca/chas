@@ -1,0 +1,158 @@
+\documentclass[]{article}
+\usepackage{lmodern}
+\usepackage{amssymb,amsmath}
+\usepackage{ifxetex,ifluatex}
+\usepackage{fixltx2e} % provides \textsubscript
+\ifnum 0\ifxetex 1\fi\ifluatex 1\fi=0 % if pdftex
+  \usepackage[T1]{fontenc}
+  \usepackage[utf8]{inputenc}
+\else % if luatex or xelatex
+  \ifxetex
+    \usepackage{mathspec}
+  \else
+    \usepackage{fontspec}
+  \fi
+  \defaultfontfeatures{Ligatures=TeX,Scale=MatchLowercase}
+\fi
+% use upquote if available, for straight quotes in verbatim environments
+\IfFileExists{upquote.sty}{\usepackage{upquote}}{}
+% use microtype if available
+\IfFileExists{microtype.sty}{%
+\usepackage{microtype}
+\UseMicrotypeSet[protrusion]{basicmath} % disable protrusion for tt fonts
+}{}
+\usepackage[margin=1in]{geometry}
+\usepackage{hyperref}
+\hypersetup{unicode=true,
+            pdftitle={Reporte 1 MSE},
+            pdfauthor={Marcos Arteaga , Claudio Gatica},
+            pdfborder={0 0 0},
+            breaklinks=true}
+\urlstyle{same}  % don't use monospace font for urls
+\usepackage{graphicx,grffile}
+\makeatletter
+\def\maxwidth{\ifdim\Gin@nat@width>\linewidth\linewidth\else\Gin@nat@width\fi}
+\def\maxheight{\ifdim\Gin@nat@height>\textheight\textheight\else\Gin@nat@height\fi}
+\makeatother
+% Scale images if necessary, so that they will not overflow the page
+% margins by default, and it is still possible to overwrite the defaults
+% using explicit options in \includegraphics[width, height, ...]{}
+\setkeys{Gin}{width=\maxwidth,height=\maxheight,keepaspectratio}
+\IfFileExists{parskip.sty}{%
+\usepackage{parskip}
+}{% else
+\setlength{\parindent}{0pt}
+\setlength{\parskip}{6pt plus 2pt minus 1pt}
+}
+\setlength{\emergencystretch}{3em}  % prevent overfull lines
+\providecommand{\tightlist}{%
+  \setlength{\itemsep}{0pt}\setlength{\parskip}{0pt}}
+\setcounter{secnumdepth}{0}
+% Redefines (sub)paragraphs to behave more like sections
+\ifx\paragraph\undefined\else
+\let\oldparagraph\paragraph
+\renewcommand{\paragraph}[1]{\oldparagraph{#1}\mbox{}}
+\fi
+\ifx\subparagraph\undefined\else
+\let\oldsubparagraph\subparagraph
+\renewcommand{\subparagraph}[1]{\oldsubparagraph{#1}\mbox{}}
+\fi
+
+%%% Use protect on footnotes to avoid problems with footnotes in titles
+\let\rmarkdownfootnote\footnote%
+\def\footnote{\protect\rmarkdownfootnote}
+
+%%% Change title format to be more compact
+\usepackage{titling}
+
+% Create subtitle command for use in maketitle
+\newcommand{\subtitle}[1]{
+  \posttitle{
+    \begin{center}\large#1\end{center}
+    }
+}
+
+\setlength{\droptitle}{-2em}
+  \title{Reporte 1 MSE}
+  \pretitle{\vspace{\droptitle}\centering\huge}
+  \posttitle{\par}
+  \author{Marcos Arteaga , Claudio Gatica}
+  \preauthor{\centering\large\emph}
+  \postauthor{\par}
+  \predate{\centering\large\emph}
+  \postdate{\par}
+  \date{17 Agosto 2017}
+
+
+\begin{document}
+\maketitle
+
+\section{Resumen}\label{resumen}
+
+Se desarrolla una reunión de trabajo, con el objeto de priorizar tareas
+identificadas en WS MSE. Sobre la base del reporte del WS en Seattle. Se
+revisa la disposición de información, organización de modelos de
+estimación y operativos. En relación a la información, se genera un
+listado de datos a actualizar para la evaluación, análisis necesarios y
+nuevos datos a requerir.
+
+\section{Datos}\label{datos}
+
+\begin{enumerate}
+\def\labelenumi{\arabic{enumi}.}
+\item
+  Actualización set de datos hasta el 2016 (basado en año calendario).
+\item
+  Analizar proporción de capturas para ajuste de cuotas.
+\item
+  Rectificar crecimiento en relación a tiempos variantes (períodos).
+\item
+  Mantener datos longitud-peso organizados y parámetros .
+\item
+  Revisar crecimiento estacional (cruceros reclas y pelaces se
+  desarrollan en diferentes periodos del año, y la pesquería. Podrían
+  ser necesarias matrices de transición distintas dependiendo de cada
+  fuente de información.
+\end{enumerate}
+
+\section{Análisis}\label{analisis}
+
+\begin{enumerate}
+\def\labelenumi{\arabic{enumi})}
+\item
+  Se revisara el proceso de reclutamiento por especie, caracterizando
+  tendencias, magnitudes y representacion a partir del Modelo de
+  estimación. (Artega, Gatica)
+\item
+  Se debe revisar la proporción de las capturas y modelo entre-especies.
+\item
+  Escenarios capturas históricas (oficial y correguido), parámetros a
+  especificar.
+\item
+  matriz transición talla-edad consistente con parámetros y relación
+  Longitud-peso.
+\end{enumerate}
+
+\section{Codificacion}\label{codificacion}
+
+\begin{enumerate}
+\def\labelenumi{\arabic{enumi}.}
+\tightlist
+\item
+  Se deve modificar codigo de tal forma que el mismo codigo trabaje
+  tanto para sardina como para anchoveta (entradas diferentes) y/o
+  clarificar aspectos de crecimiento (existen algunas opciones para
+  especificar para especificar diferentes matrices de transicion) o
+  promedios.
+\end{enumerate}
+
+\begin{enumerate}
+\def\labelenumi{\arabic{enumi})}
+\setcounter{enumi}{1}
+\tightlist
+\item
+  Disponibilidad de parámetros longitud-peso.
+\end{enumerate}
+
+
+\end{document}
