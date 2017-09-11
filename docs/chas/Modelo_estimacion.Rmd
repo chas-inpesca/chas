@@ -1,0 +1,108 @@
+---
+title: "Ecuaciones modelo estimacion sardina y anchoveta MSE Inpesca"
+author: "Artega y asociados"
+date: "Septiembre 2017"
+output:
+  word_document:
+    toc: yes
+    toc_depth: '4'
+  pdf_document:
+    fig_caption: yes
+    keep_tex: yes
+    number_sections: no
+    toc: no
+    toc_depth: 4
+  html_document:
+    toc: no
+    toc_depth: '4'
+header-includes:
+- \usepackage{placeins}
+- \usepackage[utf8]{inputenc}
+- \renewcommand{\contentsname}{Indice documento}
+- \renewcommand{\listfigurename}{Indice de figuras}
+- \renewcommand{\listtablename}{Indice de tablas}
+mainfont: Arial
+monofont: Arial
+fontsize: 18pt
+altfont: Arial
+---
+
+# Indicadores poblacionales por especie
+*Biomasa total*
+$$
+BT_{i,j}^{sard}=w_{i,j}N_{i,j};\hspace{2cm}   BT_{i,j}^{anch}=w_{i,j}N_{i,j}
+$$
+
+*Biomasa adulta*
+$$
+BA_{i,j}^{sard}=w_{i,j}\mu_{i,j}N_{i,j}\hspace{2cm} BA_{i,j}^{anch}=w_{i,j}\mu_{i,j}N_{i,j}
+$$
+Donde $w_{i,j}$  corresponde a peso y  a la madurez $\mu_{i,a}$ correspondiente al año i  y edad j.
+
+*Biomasa desovante sardina*
+$$
+BD_{i,j}^{sard}=w_{i,j}\mu_{i,j}N_{i,j}\exp^{(-(T_{s})Z_{i,j})} \hspace{2cm}BD_{i,j}^{anch}=w_{i,j}\mu_{i,j}N_{i,j}\exp^{(-(T_{s})Z_{i,j})}
+$$
+Donde $w_{i,j}$  corresponde a peso y  a la madurez $\mu_{i,a}$ y $T_s$ la fracción del año correspondiente al período de desove de sardina equivalente a $=2/12$ correspondiente al año i  y edad j, mientras que en anchoveta $T_s$ es $=7/12$.
+
+
+# Matriz de transición por año.
+*Longitud media*
+$$L_{a}=L_{\infty} (1-exp^{-k(a-t_{0})})\sigma_{a}$$,\hspace{2cm} $$\sigma_{j}=CV_{j}L_{j}$$
+*Matriz transición edad y longitud*
+$$
+\psi_{a,l}={\frac{1} {2 \sqrt{{2\pi\sigma_{a}^{2}}}}} exp^{\left(-\frac{1}{2}\sigma_{a}^{2}(L_{l}-L_{a})^2 \right) }
+$$
+
+donde: $L_{l}$ representa la marca de clase del intervalo de longitud $l$ y $L_{a}$La es la longitud media a la edad $a$. 
+
+*Abundancia por longitud*
+
+$$N_{t,l}=\sum_{j=1}\psi_{a,l}N_{t,a}$$
+
+
+Abundancia en cruceros
+$$
+Ns_{i,a}=q_{s}S_{a}N_{i,a}\exp^{(-(Ts)Z_{i,a})}
+$$
+Con $q_{s}$ coeficiente capturabilidad crucero, $S_a$ la selectividad, y $Ts$ la fecha de realización que coincide con el período de desove.
+
+
+*función de Selectividad*
+$$
+sel_fish_j=\frac{1}  {1+exp^{\left({-ln19} {\frac{(a-a50)} {a95}}\right)}}
+$$
+*Mortalidad de pesca*
+$$
+F_{t,a}=F_{t}S_{a}
+$$
+Mortalidad total
+$$
+Z_{a,t}=M+F_{a,t}
+$$
+
+*Abundancia a la edad*
+Con a la edad y t el año, a=[0,1,2,3,4] con 5 edades.
+$$
+N_{a+1,t+1}=N_{a,t}e^{(-Z_{a,t})}
+$$
+En el caso de la última edad $m$ y último año:
+$$
+{N_{t+1,A}={N_{t,A-1}}exp^{-(Z_{t,A})} + {N_{t,A}}exp^{-(Z_{t,A})}}
+$$
+
+
+*Abundancia inicial*
+$$
+N_{a,1}=\left(R_{0}e^{-\sum_{a} aZ_{a,t=1}}\right)e^{\epsilon_a+0.5\sigma^2_R} 
+$$
+*Captura*
+$$
+\widehat{C}_{a,t} = {\frac{F_{a,t}} {Z_{a,t}}} N_{a,t}(1-S_{a,t})
+$$
+
+
+
+
+
+
