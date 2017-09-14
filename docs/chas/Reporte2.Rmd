@@ -25,5 +25,18 @@ El objetivo de los cambios, es tener un solo modelo de estimación que se aplique
   c. Crucero pelaces $pelacesMo_Frac$
 
 
+# Configuracion modelos
+**sardina común**
+
+loo | k |Lt(a=1) | cv (edad) | M
+-- | -- | -- | -- | --
+18.5  | 0.71  | 8.5 |  0.182872 |  0.96
 
 
+**anchoveta**
+
+loo | k |Lt(a=1) | cv (edad) | M
+-- | -- | -- | -- | --
+20.8  | 0.44 |  8.5 | 0.182872 |  0.69
+
+Nota: En el me y ctl se eliminaron los parametros de crecimiento que se repetian, ya que se encuentran declarados en *crecimiento* i.e crecimiento(1), etc
