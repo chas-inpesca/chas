@@ -1,0 +1,29 @@
+---
+title: Reporte 2 MSE
+author: "Marcos Arteaga , Claudio Gatica"
+date: "14 septiembre 2017"
+output:
+  pdf_document:
+    keep_tex: yes
+  word_document: default
+---
+# Resumen 
+En el modelo de estimacion (em) se realizan modificaciones para ajustarlo a datos de entrada por especie, correigiendo expresiones de variables poblacionales (i.e. biomasa desovante). Se describen las ecuaciones del me precisando las expresiones matemáticas y diferencias en parámetros de entrada (documento Modelo Estimacion).
+
+El objetivo de los cambios, es tener un solo modelo de estimación que se aplique a sardina o anchoveta, siendo condicioando por el dato de entrada y archivo ctl, para trabajar por especie.
+
+# Actividades
+
+1. Se eliminan en tpl del me la declaración de parámetros a estimar de crecimiento, ya que estos ingresan como datos de entrada y no son estimados en el modelo.
+
+2. Se corrigen las fracciones temporales de:
+
+  a. Desove $SpawnMo_Frac$
+
+  b. Cruceros reclas $reclasMo_Frac$ 
+
+  c. Crucero pelaces $pelacesMo_Frac$
+
+
+
+
