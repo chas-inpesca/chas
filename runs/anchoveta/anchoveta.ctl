@@ -9,7 +9,7 @@
 #vb
 2
 # n muestral pesquería
-15
+38
 # n muestral crucero reclas
 10
 # n muestral crucero pelaces
@@ -57,10 +57,6 @@
 0.0083	0.0148	0.0258	0.0371	0.0465
 # Month of spawning
 7
-#Month reclas
-1
-#Month pelaces
-5
 #maturity																																
 0.32	1	1	1	1
 #init_int nselagef1 
@@ -72,10 +68,10 @@
 #init_int ph_seldev_f1
 2
 #init_vector lambda(1,3)
-10. 10.0 10.
-#crecimiento silenciados ya estan declarados y to no se usa
-#18
-#0.7
-#-0.5
-#0.5  
-#0.5 
+10.
+#crecimiento
+18
+0.7
+-0.5
+0.5  
+0.5 

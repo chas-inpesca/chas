@@ -98,23 +98,17 @@ DATA_SECTION
 	init_number fecha_desov          //Peak spawning calendar date
 	number      SpawnMo_Frac         // convert to elapse time
 	!! SpawnMo_Frac = fecha_desov / 12;
-	init_number fecha_reclas          //Peak reclas calendar date
-	number      reclasMo_Frac         // convert to elapse time
-	!! reclasMo_Frac = fecha_reclas / 12;
-	init_number fecha_pelaces          //Peak pelaces calendar date
-	number      pelacesMo_Frac         // convert to elapse time
-	!! pelacesMo_Frac = fecha_pelaces / 12;
   init_vector maturity(1,nages)    //madurez promedio stock
   init_int nselagef1               //selectividad  
   init_int group_num_f1;           //selectividad
   init_int ph_sel_fish1            //selectividad
   init_int ph_seldev_f1            //selectividad
   init_vector lambda(1,3)          //selectividad
-  init_number linf;                // CG crecimiento
-  init_number k1;
-  //init_number t0dat;
-  //init_number Cdat;
-  //init_number Tsdat; 
+  init_number Linfdat;                //crecimiento
+  init_number kdat;
+  init_number t0dat;
+  init_number Cdat;
+  init_number Tsdat; 
 
 //####################  
  LOCAL_CALCS
@@ -153,11 +147,11 @@ DATA_SECTION
   ECHO(ph_sel_fish1   );
   ECHO(ph_seldev_f1   );
   ECHO(lambda    );
-  //ECHO(linf);//Linfdat Modificado
-  //ECHO(k);//kdat
-  //ECHO(to)//;t0dat
-  //ECHO();Cdat  // CG eliminado
-  //ECHO();Tsdat 
+  ECHO(Linfdat       );
+  ECHO(kdat);
+  ECHO(t0dat);
+  ECHO(Cdat);
+  ECHO(Tsdat); 
 
   int if1=0;
   for (int i=styr;i<endyr;i++)
@@ -193,9 +187,9 @@ INITIALIZATION_SECTION
   a95 1.8
   a50p .2
   a95p 1.5
-  //linf Linfdat   // CG eliminado
-  //k1 kdat
-  //t0 t0dat
+  linf Linfdat
+  k1 kdat
+  t0 t0dat
 
 //####################  
 PARAMETER_SECTION
@@ -203,9 +197,9 @@ PARAMETER_SECTION
   init_bounded_number M(0.3,1.7,ph_M)                             
   init_bounded_number log_Lo(1,2.1,-1)                           
   init_bounded_number log_cv_edad(-4,-1.8,-1)
-  //init_bounded_number linf(18,21,-1)    CG eliminado                                        
-  //init_bounded_number k1(0.3,1.5,-1)  
-  //init_bounded_number t0(-1,0.0,-1)    
+  init_bounded_number linf(18,21,-1)                                            
+  init_bounded_number k1(0.3,1.5,-1)  
+  init_bounded_number t0(-1,0.0,-1)    
   init_bounded_number C(0.1,1,-1)     
   init_bounded_number Ts(0.1,1.0,-1) 
   init_bounded_number sigr(0.55,1,ph_sigmar) 
@@ -406,10 +400,10 @@ PRELIMINARY_CALCS_SECTION
       }
     }
 //Arreglo parámetros de crecimiento
-  //k1 = kdat; cg eliminado
-  //t0 = t0dat;
-  //C  = Cdat;  //??? se elimina cg
-  //Ts = Tsdat; //??? idem
+  k1 = kdat;
+  t0 = t0dat;
+  C  = Cdat;  //???
+  Ts = Tsdat; //???
   get_agematrix();
 
 //###################
@@ -437,7 +431,7 @@ PROCEDURE_SECTION
 FUNCTION get_agematrix
 //####################
   linf    = crecimiento(1);
-  k1      = crecimiento(2);
+  k       = crecimiento(2);
   if(opt_VB<0)
   {
     Lo      = crecimiento(3);
@@ -452,7 +446,7 @@ FUNCTION get_agematrix
   mu_edad(1)=Lo;
   for (i=2;i<=nages;i++)
   {
-    mu_edad(i) = linf*(1-mfexp(-k1))+exp(-k1)*mu_edad(i-1);  //CG cambio k1 por k
+    mu_edad(i) = linf*(1-mfexp(-k1))+exp(-k1)*mu_edad(i-1);
   }
 
   for (int i=1;i<=nages;i++)
@@ -636,15 +630,15 @@ FUNCTION get_abundancia
 //cpue
 	  pred_cpue(i)+=q_fish*age_sel(i,j)*natage(i,j)*wta(i,j);    
 //crucero reclas
-	  pred_surv(i)+=q_surv*natage(i,j)*wta(i,j)*age_selr(i,j)*exp(-reclasMo_Frac*Z(i,j)); 
-      pred_survnum(i)+=q_surv*natage(i,j)*age_selr(i,j)*exp(-reclasMo_Frac*Z(i,j));
+	  pred_surv(i)+=q_surv*natage(i,j)*wta(i,j)*age_selr(i,j)*exp(-(6/12)*Z(i,j)); 
+      pred_survnum(i)+=q_surv*natage(i,j)*age_selr(i,j)*exp(-(6/12)*Z(i,j));
 //cucero pelaces
-	  pred_survpel(i)+=q_survpel*natage(i,j)*wta(i,j)*age_selp(i,j)*exp(-pelacesMo_Frac*Z(i,j));
-      pred_survnump(i)+=q_survpel*natage(i,j)*age_selp(i,j)*exp(-pelacesMo_Frac*Z(i,j));	  
+	  pred_survpel(i)+=q_survpel*natage(i,j)*wta(i,j)*age_selp(i,j)*exp(-(10/12)*Z(i,j));
+      pred_survnump(i)+=q_survpel*natage(i,j)*age_selp(i,j)*exp(-(10/12)*Z(i,j));	  
 //variables estado
 	  explbiom(i)+=natage(i,j)*age_sel(i,j)*wta(i,j)*(1.-exp(-Z(i,j)))/Z(i,j);
       totbiom(i)+=natage(i,j)*wta(i,j);
-      ssbiom(i)+=natage(i,j)*wta(i,j)*maturity(j)*mfexp(-SpawnMo_Frac*Z(i,j));
+      ssbiom(i)+=natage(i,j)*wta(i,j)*maturity(j)*mfexp(-0.16666667*Z(i,j));
       bioadul(i)+=natage(i,j)*wta(i,j)*maturity(j);
 	  BR(i)=natage(i,1);
 	  RPR(i)=ssbiom(i)/So;
@@ -697,7 +691,7 @@ FUNCTION get_captura
 		ii = yr_fishlenreclas(i);
     for (int j=1;j<=nages;j++)
     {
-      pred_p_agereclas(i,j)=q_surv*natage(ii,j)*age_selr(ii,j)*exp(-reclasMo_Frac*Z(ii,j))/pred_survnum(ii); 
+      pred_p_agereclas(i,j)=q_surv*natage(ii,j)*age_selr(ii,j)*exp(-(6/12)*Z(ii,j))/pred_survnum(ii); 
     }                                    
   }
   for (int i=1;i<=nobs_surv;i++)  
@@ -713,7 +707,7 @@ FUNCTION get_captura
 		ii=yr_fishlenpelaces(i);
     for (int j=1;j<=nages;j++)
     {
-      pred_p_agepelaces(i,j)=q_survpel*natage(ii,j)*age_selp(ii,j)*exp(-pelacesMo_Frac*Z(ii,j))/pred_survnump(ii); 
+      pred_p_agepelaces(i,j)=q_survpel*natage(ii,j)*age_selp(ii,j)*exp(-(10/12)*Z(ii,j))/pred_survnump(ii); 
     }                                    
   }
   for (int i=1;i<=nobs_survpel;i++)  
@@ -745,10 +739,10 @@ FUNCTION spr
 
   for (int j=1;j<=nages;j++)
   {
-    SB0    += Nspr(1,j)*maturity(j)*wt(j)*exp(-SpawnMo_Frac*M);
-    SBF60  += Nspr(2,j)*maturity(j)*wt(j)*exp(-SpawnMo_Frac*(M+F60*age_sel(endyr,j)));
-    SBF40  += Nspr(3,j)*maturity(j)*wt(j)*exp(-SpawnMo_Frac*(M+F40*age_sel(endyr,j)));
-    SBF20  += Nspr(4,j)*maturity(j)*wt(j)*exp(-SpawnMo_Frac*(M+F20*age_sel(endyr,j)));
+    SB0    += Nspr(1,j)*maturity(j)*wt(j)*exp(-0.16666667*M);
+    SBF60  += Nspr(2,j)*maturity(j)*wt(j)*exp(-0.16666667*(M+F60*age_sel(endyr,j)));
+    SBF40  += Nspr(3,j)*maturity(j)*wt(j)*exp(-0.16666667*(M+F40*age_sel(endyr,j)));
+    SBF20  += Nspr(4,j)*maturity(j)*wt(j)*exp(-0.16666667*(M+F20*age_sel(endyr,j)));
    }
    
   sprpen    = 300.*square(SBF60/SB0-0.60);
@@ -801,7 +795,7 @@ FUNCTION proyecciones
      ssbiom_future(styr_fut)=0.;
      for (int j=1;j<=nages;j++)
 	 {
-		 ssbiom_future(styr_fut)+=nage_future(styr_fut,j)*wt(j)*maturity(j)*exp(-SpawnMo_Frac*Z_future(styr_fut,j));
+		 ssbiom_future(styr_fut)+=nage_future(styr_fut,j)*wt(j)*maturity(j)*exp(-0.16666667*Z_future(styr_fut,j));
 	 }
 //año 2
      nage_future(styr_fut+1,1)=(Rmedio+rec_dev_future(styr_fut+1)+0.5*square(sigr));
@@ -814,7 +808,7 @@ FUNCTION proyecciones
       ssbiom_future(styr_fut+1)=0;
       for (int j=1;j<=nages;j++)
        {
-        ssbiom_future(styr_fut+1)+=nage_future(styr_fut+1,j)*wt(j)*maturity(j)*exp(-SpawnMo_Frac*Z_future(styr_fut+1,j));
+        ssbiom_future(styr_fut+1)+=nage_future(styr_fut+1,j)*wt(j)*maturity(j)*exp(-0.16666667*Z_future(styr_fut+1,j));
        }  
 //para los demás años
      for (int i=styr_fut+2;i<=endyr_fut;i++)
@@ -824,10 +818,10 @@ FUNCTION proyecciones
        for (int j=1;j<nages;j++)
        {  
         nage_future(i,j+1)=nage_future(i-1,j)*S_future(i-1,j);
-        ssbiom_future(i)+=nage_future(i,j)*wt(j)*maturity(j)*exp(-SpawnMo_Frac*Z_future(i,j));
+        ssbiom_future(i)+=nage_future(i,j)*wt(j)*maturity(j)*exp(-0.16666667*Z_future(i,j));
        }
        nage_future(i,nages)+=nage_future(i,nages)*S_future(i,nages);
-       ssbiom_future(i)+=nage_future(i,nages)*wt(nages)*maturity(nages)*exp(-SpawnMo_Frac*Z_future(i,nages));
+       ssbiom_future(i)+=nage_future(i,nages)*wt(nages)*maturity(nages)*exp(-0.16666667*Z_future(i,nages));
     }
 	for (int i=styr_fut;i<=endyr_fut;i++)
       {
@@ -900,7 +894,7 @@ FUNCTION Future_projections_fixed_catch
          ssbiom_future(i)=0;
          for (int j=1;j<=nages;j++)
            {
-            ssbiom_future(i)+=nage_future(i,j)*maturity(j)*wt(j)*exp(SpawnMo_Frac*Z_future(i,j));
+            ssbiom_future(i)+=nage_future(i,j)*maturity(j)*wt(j)*exp(0.16666667*Z_future(i,j));
             biomass_future(i)+=nage_future(i,j)*wt(j);
            }
 //Now graduate for the next year....
