@@ -54,6 +54,10 @@
 0.004788	0.012536	0.026716	0.03618
 #Month of spawning
 1
+#Month reclas
+6
+#Month pelaces
+10
 #maturity																																
 0.057	1	1	1
 #init_int nselagef1 
@@ -66,6 +70,6 @@
 -2
 #init_vector lambda(1,3)
 25. 25 25 
-#crecimiento
-18.5  0.71  8.5  0.182872  
+#crecimiento // CG no se usan pk viene arriba en crecimiento
+#18.5  0.71  8.5  0.182872  
 
