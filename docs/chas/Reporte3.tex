@@ -1,0 +1,139 @@
+\documentclass[]{article}
+\usepackage{lmodern}
+\usepackage{amssymb,amsmath}
+\usepackage{ifxetex,ifluatex}
+\usepackage{fixltx2e} % provides \textsubscript
+\ifnum 0\ifxetex 1\fi\ifluatex 1\fi=0 % if pdftex
+  \usepackage[T1]{fontenc}
+  \usepackage[utf8]{inputenc}
+\else % if luatex or xelatex
+  \ifxetex
+    \usepackage{mathspec}
+  \else
+    \usepackage{fontspec}
+  \fi
+  \defaultfontfeatures{Ligatures=TeX,Scale=MatchLowercase}
+\fi
+% use upquote if available, for straight quotes in verbatim environments
+\IfFileExists{upquote.sty}{\usepackage{upquote}}{}
+% use microtype if available
+\IfFileExists{microtype.sty}{%
+\usepackage{microtype}
+\UseMicrotypeSet[protrusion]{basicmath} % disable protrusion for tt fonts
+}{}
+\usepackage[margin=1in]{geometry}
+\usepackage{hyperref}
+\hypersetup{unicode=true,
+            pdftitle={Reporte 3 MSE},
+            pdfauthor={Marcos Arteaga , Claudio Gatica},
+            pdfborder={0 0 0},
+            breaklinks=true}
+\urlstyle{same}  % don't use monospace font for urls
+\usepackage{graphicx,grffile}
+\makeatletter
+\def\maxwidth{\ifdim\Gin@nat@width>\linewidth\linewidth\else\Gin@nat@width\fi}
+\def\maxheight{\ifdim\Gin@nat@height>\textheight\textheight\else\Gin@nat@height\fi}
+\makeatother
+% Scale images if necessary, so that they will not overflow the page
+% margins by default, and it is still possible to overwrite the defaults
+% using explicit options in \includegraphics[width, height, ...]{}
+\setkeys{Gin}{width=\maxwidth,height=\maxheight,keepaspectratio}
+\IfFileExists{parskip.sty}{%
+\usepackage{parskip}
+}{% else
+\setlength{\parindent}{0pt}
+\setlength{\parskip}{6pt plus 2pt minus 1pt}
+}
+\setlength{\emergencystretch}{3em}  % prevent overfull lines
+\providecommand{\tightlist}{%
+  \setlength{\itemsep}{0pt}\setlength{\parskip}{0pt}}
+\setcounter{secnumdepth}{0}
+% Redefines (sub)paragraphs to behave more like sections
+\ifx\paragraph\undefined\else
+\let\oldparagraph\paragraph
+\renewcommand{\paragraph}[1]{\oldparagraph{#1}\mbox{}}
+\fi
+\ifx\subparagraph\undefined\else
+\let\oldsubparagraph\subparagraph
+\renewcommand{\subparagraph}[1]{\oldsubparagraph{#1}\mbox{}}
+\fi
+
+%%% Use protect on footnotes to avoid problems with footnotes in titles
+\let\rmarkdownfootnote\footnote%
+\def\footnote{\protect\rmarkdownfootnote}
+
+%%% Change title format to be more compact
+\usepackage{titling}
+
+% Create subtitle command for use in maketitle
+\newcommand{\subtitle}[1]{
+  \posttitle{
+    \begin{center}\large#1\end{center}
+    }
+}
+
+\setlength{\droptitle}{-2em}
+  \title{Reporte 3 MSE}
+  \pretitle{\vspace{\droptitle}\centering\huge}
+  \posttitle{\par}
+  \author{Marcos Arteaga , Claudio Gatica}
+  \preauthor{\centering\large\emph}
+  \postauthor{\par}
+  \predate{\centering\large\emph}
+  \postdate{\par}
+  \date{28 septiembre 2017}
+
+
+\begin{document}
+\maketitle
+
+\section{Resumen}\label{resumen}
+
+Se realiza un análisis del reclutamiento de sardina común y anchoveta.
+Esto implica revisión de estimaciones, patrones temporales, relación
+entre especies y expresión de reclutamiento.
+
+\section{Actividades}\label{actividades}
+
+\begin{enumerate}
+\def\labelenumi{\arabic{enumi}.}
+\item
+  Revisión de expresiones de reclutamiento modelos de estimación, y
+  modelo operativo.
+\item
+  Análisis de salidas de modelos, confección tablas, gráficos y
+  exploración de patrones (i.e.~alternancia).
+\end{enumerate}
+
+\emph{Modelo estimación} \textbf{codificación admb}
+
+mean\_log\_rec1 18
+
+mean\_log\_rec 18
+
+init\_bounded\_dev\_vector rec\_dev(styr,endyr,-20,20,ph\_recdev)
+
+for (int j=2;j\textless{}=nages;j++) \{natage(styr,j)=
+mfexp(log\_Nini+log\_dev\_ini(j))+0.5*square(sigr);\}
+
+\textbf{Formulación} \emph{Abundancia inicial} \[
+N_{a,1}=\left(R_{0}e^{-\sum_{a} aZ_{a,t=1}}\right)e^{\epsilon_a+0.5\sigma^2_R} 
+\]
+
+Luego, la totalidad de expresiones del modelo de estimación estan en
+reporte:
+
+archivo (Modelo\_estimacion.pdf)
+
+\subsection{Plots de reclutamiento}\label{plots-de-reclutamiento}
+
+\includegraphics[width=0.50000\textwidth]{Figuras/1.png}
+\includegraphics[width=0.50000\textwidth]{Figuras/2.png}
+
+\newpage
+
+Reclutamiento sardina común \input{Figuras/t1.tex} \newpage
+Reclutamiento anchoveta \input{Figuras/t2.tex}
+
+
+\end{document}

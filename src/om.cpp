@@ -1,3 +1,9 @@
+#ifdef DEBUG
+  #ifndef __SUNPRO_C
+    #include <cfenv>
+    #include <cstdlib>
+  #endif
+#endif
   #include <admodel.h> 
   #include <string.h>
   #undef rep
@@ -38,6 +44,7 @@
   ofstream mcout("mcmc.rep");
    
 #include <admodel.h>
+#include <contrib.h>
 
   extern "C"  {
     void ad_boundf(int i);
@@ -1179,12 +1186,18 @@ model_parameters::model_parameters(int sz,int argc,char * argv[]) :
   recruits.allocate(styr,endyr,"recruits");
   biomass.allocate(styr,endyr,"biomass");
   f.allocate("f");
+  prior_function_value.allocate("prior_function_value");
+  likelihood_function_value.allocate("likelihood_function_value");
 }
 
 void model_parameters::preliminary_calculations(void)
 {
 
+#if defined(USE_ADPVM)
+
   admaster_slave_variable_interface(*this);
+
+#endif
   //Datos sardina
   for (i=1;i<=s_nobs_lfdfish;i++)
   {
@@ -1271,6 +1284,7 @@ void model_parameters::set_runtime(void)
 
 void model_parameters::userfunction(void)
 {
+  f =0.0;
   random_number_generator& rng= *pad_rng;
   get_selectivity();
   get_mortality();
@@ -2905,7 +2919,7 @@ void model_parameters::write_mcmc_pars(void)
   mcout<<endl;
 }
 
-void model_parameters::report()
+void model_parameters::report(const dvector& gradients)
 {
  adstring ad_tmp=initial_params::get_reportfile_name();
   ofstream report((char*)(adprogram_name + ad_tmp));
@@ -3022,17 +3036,31 @@ int main(int argc,char * argv[])
 	gradient_structure::set_NUM_DEPENDENT_VARIABLES(5000);
   
     gradient_structure::set_NO_DERIVATIVES();
-    gradient_structure::set_YES_SAVE_VARIABLES_VALUES();
-  #if defined(__GNUDOS__) || defined(DOS386) || defined(__DPMI32__)  || \
-     defined(__MSVC32__)
-      if (!arrmblsize) arrmblsize=150000;
-  #else
-      if (!arrmblsize) arrmblsize=25000;
+#ifdef DEBUG
+  #ifndef __SUNPRO_C
+std::feclearexcept(FE_ALL_EXCEPT);
   #endif
+#endif
+    gradient_structure::set_YES_SAVE_VARIABLES_VALUES();
+    if (!arrmblsize) arrmblsize=15000000;
     model_parameters mp(arrmblsize,argc,argv);
     mp.iprint=10;
     mp.preliminary_calculations();
     mp.computations(argc,argv);
+#ifdef DEBUG
+  #ifndef __SUNPRO_C
+bool failedtest = false;
+if (std::fetestexcept(FE_DIVBYZERO))
+  { cerr << "Error: Detected division by zero." << endl; failedtest = true; }
+if (std::fetestexcept(FE_INVALID))
+  { cerr << "Error: Detected invalid argument." << endl; failedtest = true; }
+if (std::fetestexcept(FE_OVERFLOW))
+  { cerr << "Error: Detected overflow." << endl; failedtest = true; }
+if (std::fetestexcept(FE_UNDERFLOW))
+  { cerr << "Error: Detected underflow." << endl; }
+if (failedtest) { std::abort(); } 
+  #endif
+#endif
     return 0;
 }
 

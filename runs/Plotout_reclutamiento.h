@@ -11,14 +11,17 @@ library(xtable)
 
 dats= readList("sardina/em.rep");
 data= readList("anchoveta/em.rep");
+
 datse= read.table(file = "sardina/em.std", header = T,na.strings = "*")
 datae= read.table(file = "anchoveta/em.std", header = T,na.strings = "*")
+
 ran=data$Reclutamiento/1000 # a miles
 ras=dats$Reclutamiento/1000 #
+
 y=seq(1991,2016,1)
 #####################################################
-dsardi=data.frame(list(year = y,Reclutas=ran))
-dancho=data.frame(list(year = y,Reclutas=ras))
+dsardi=data.frame(list(year = y,Reclutas=ras))
+dancho=data.frame(list(year = y,Reclutas=ran))
 #plotsardina
 png(file=paste("output/1.png"))
 ggplot(data=dsardi,aes(x=year, y=Reclutas,fill=year)) +geom_bar(stat = "identity")+

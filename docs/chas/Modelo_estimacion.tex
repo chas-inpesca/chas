@@ -1,0 +1,160 @@
+\documentclass[18pt,]{article}
+\usepackage{lmodern}
+\usepackage{amssymb,amsmath}
+\usepackage{ifxetex,ifluatex}
+\usepackage{fixltx2e} % provides \textsubscript
+\ifnum 0\ifxetex 1\fi\ifluatex 1\fi=0 % if pdftex
+  \usepackage[T1]{fontenc}
+  \usepackage[utf8]{inputenc}
+\else % if luatex or xelatex
+  \ifxetex
+    \usepackage{mathspec}
+  \else
+    \usepackage{fontspec}
+  \fi
+  \defaultfontfeatures{Ligatures=TeX,Scale=MatchLowercase}
+    \setmainfont[]{Arial}
+    \setmonofont[Mapping=tex-ansi]{Arial}
+\fi
+% use upquote if available, for straight quotes in verbatim environments
+\IfFileExists{upquote.sty}{\usepackage{upquote}}{}
+% use microtype if available
+\IfFileExists{microtype.sty}{%
+\usepackage{microtype}
+\UseMicrotypeSet[protrusion]{basicmath} % disable protrusion for tt fonts
+}{}
+\usepackage[margin=1in]{geometry}
+\usepackage{hyperref}
+\hypersetup{unicode=true,
+            pdftitle={Ecuaciones modelo estimacion sardina y anchoveta MSE Inpesca},
+            pdfauthor={Artega y asociados},
+            pdfborder={0 0 0},
+            breaklinks=true}
+\urlstyle{same}  % don't use monospace font for urls
+\usepackage{graphicx,grffile}
+\makeatletter
+\def\maxwidth{\ifdim\Gin@nat@width>\linewidth\linewidth\else\Gin@nat@width\fi}
+\def\maxheight{\ifdim\Gin@nat@height>\textheight\textheight\else\Gin@nat@height\fi}
+\makeatother
+% Scale images if necessary, so that they will not overflow the page
+% margins by default, and it is still possible to overwrite the defaults
+% using explicit options in \includegraphics[width, height, ...]{}
+\setkeys{Gin}{width=\maxwidth,height=\maxheight,keepaspectratio}
+\IfFileExists{parskip.sty}{%
+\usepackage{parskip}
+}{% else
+\setlength{\parindent}{0pt}
+\setlength{\parskip}{6pt plus 2pt minus 1pt}
+}
+\setlength{\emergencystretch}{3em}  % prevent overfull lines
+\providecommand{\tightlist}{%
+  \setlength{\itemsep}{0pt}\setlength{\parskip}{0pt}}
+\setcounter{secnumdepth}{0}
+% Redefines (sub)paragraphs to behave more like sections
+\ifx\paragraph\undefined\else
+\let\oldparagraph\paragraph
+\renewcommand{\paragraph}[1]{\oldparagraph{#1}\mbox{}}
+\fi
+\ifx\subparagraph\undefined\else
+\let\oldsubparagraph\subparagraph
+\renewcommand{\subparagraph}[1]{\oldsubparagraph{#1}\mbox{}}
+\fi
+
+%%% Use protect on footnotes to avoid problems with footnotes in titles
+\let\rmarkdownfootnote\footnote%
+\def\footnote{\protect\rmarkdownfootnote}
+
+%%% Change title format to be more compact
+\usepackage{titling}
+
+% Create subtitle command for use in maketitle
+\newcommand{\subtitle}[1]{
+  \posttitle{
+    \begin{center}\large#1\end{center}
+    }
+}
+
+\setlength{\droptitle}{-2em}
+  \title{Ecuaciones modelo estimacion sardina y anchoveta MSE Inpesca}
+  \pretitle{\vspace{\droptitle}\centering\huge}
+  \posttitle{\par}
+  \author{Artega y asociados}
+  \preauthor{\centering\large\emph}
+  \postauthor{\par}
+  \predate{\centering\large\emph}
+  \postdate{\par}
+  \date{Septiembre 2017}
+
+\usepackage{placeins}
+\usepackage[utf8]{inputenc}
+\renewcommand{\contentsname}{Indice documento}
+\renewcommand{\listfigurename}{Indice de figuras}
+\renewcommand{\listtablename}{Indice de tablas}
+
+\begin{document}
+\maketitle
+
+\section{Indicadores poblacionales por
+especie}\label{indicadores-poblacionales-por-especie}
+
+\emph{Biomasa total} \[
+BT_{i,j}^{sard}=w_{i,j}N_{i,j};\hspace{2cm}   BT_{i,j}^{anch}=w_{i,j}N_{i,j}
+\]
+
+\emph{Biomasa adulta} \[
+BA_{i,j}^{sard}=w_{i,j}\mu_{i,j}N_{i,j}\hspace{2cm} BA_{i,j}^{anch}=w_{i,j}\mu_{i,j}N_{i,j}
+\] Donde \(w_{i,j}\) corresponde a peso y a la madurez \(\mu_{i,a}\)
+correspondiente al año i y edad j.
+
+\emph{Biomasa desovante sardina} \[
+BD_{i,j}^{sard}=w_{i,j}\mu_{i,j}N_{i,j}\exp^{(-(T_{s})Z_{i,j})} \hspace{2cm}BD_{i,j}^{anch}=w_{i,j}\mu_{i,j}N_{i,j}\exp^{(-(T_{s})Z_{i,j})}
+\] Donde \(w_{i,j}\) corresponde a peso y a la madurez \(\mu_{i,a}\) y
+\(T_s\) la fracción del año correspondiente al período de desove de
+sardina equivalente a \(=2/12\) correspondiente al año i y edad j,
+mientras que en anchoveta \(T_s\) es \(=7/12\).
+
+\section{Matriz de transición por
+año.}\label{matriz-de-transicion-por-ano.}
+
+\emph{Longitud media}
+\[L_{a}=L_{\infty} (1-exp^{-k(a-t_{0})})\sigma_{a}\],\hspace{2cm}
+\[\sigma_{j}=CV_{j}L_{j}\] \emph{Matriz transición edad y longitud} \[
+\psi_{a,l}={\frac{1} {2 \sqrt{{2\pi\sigma_{a}^{2}}}}} exp^{\left(-\frac{1}{2}\sigma_{a}^{2}(L_{l}-L_{a})^2 \right) }
+\]
+
+donde: \(L_{l}\) representa la marca de clase del intervalo de longitud
+\(l\) y \(L_{a}\)La es la longitud media a la edad \(a\).
+
+\emph{Abundancia por longitud}
+
+\[N_{t,l}=\sum_{j=1}\psi_{a,l}N_{t,a}\]
+
+Abundancia en cruceros \[
+Ns_{i,a}=q_{s}S_{a}N_{i,a}\exp^{(-(Ts)Z_{i,a})}
+\] Con \(q_{s}\) coeficiente capturabilidad crucero, \(S_a\) la
+selectividad, y \(Ts\) la fecha de realización que coincide con el
+período de desove.
+
+\emph{función de Selectividad} \[
+sel_fish_j=\frac{1}  {1+exp^{\left({-ln19} {\frac{(a-a50)} {a95}}\right)}}
+\] \emph{Mortalidad de pesca} \[
+F_{t,a}=F_{t}S_{a}
+\] Mortalidad total \[
+Z_{a,t}=M+F_{a,t}
+\]
+
+\emph{Abundancia a la edad} Con a la edad y t el año, a={[}0,1,2,3,4{]}
+con 5 edades. \[
+N_{a+1,t+1}=N_{a,t}e^{(-Z_{a,t})}
+\] En el caso de la última edad \(m\) y último año: \[
+{N_{t+1,A}={N_{t,A-1}}exp^{-(Z_{t,A})} + {N_{t,A}}exp^{-(Z_{t,A})}}
+\]
+
+\emph{Abundancia inicial} \[
+N_{a,1}=\left(R_{0}e^{-\sum_{a} aZ_{a,t=1}}\right)e^{\epsilon_a+0.5\sigma^2_R} 
+\] \emph{Captura} \[
+\widehat{C}_{a,t} = {\frac{F_{a,t}} {Z_{a,t}}} N_{a,t}(1-S_{a,t})
+\]
+
+
+\end{document}

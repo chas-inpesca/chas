@@ -171,6 +171,10 @@ public:
     return (initial_params::current_phase
       >=initial_params::max_number_phases);
   }
+  static prevariable current_feval(void)
+  {
+    return *objective_function_value::pobjfun;
+  }
 private:
   ivector integer_control_flags;
   dvector double_control_flags;
@@ -425,10 +429,12 @@ private:
   param_likeprof_number a_endbio;
   param_stddev_vector recruits;
   param_stddev_vector biomass;
+  param_number prior_function_value;
+  param_number likelihood_function_value;
   objective_function_value f;
 public:
   virtual void userfunction(void);
-  virtual void report(void);
+  virtual void report(const dvector& gradients);
   virtual void final_calcs(void);
   model_parameters(int sz,int argc, char * argv[]);
   virtual void initializationfunction(void);
