@@ -3,9 +3,6 @@ title: "Ecuaciones modelo estimacion sardina y anchoveta MSE Inpesca"
 author: "Artega y asociados"
 date: "Septiembre 2017"
 output:
-  word_document:
-    toc: yes
-    toc_depth: '4'
   pdf_document:
     fig_caption: yes
     keep_tex: yes
@@ -14,6 +11,9 @@ output:
     toc_depth: 4
   html_document:
     toc: no
+    toc_depth: '4'
+  word_document:
+    toc: yes
     toc_depth: '4'
 header-includes:
 - \usepackage{placeins}
