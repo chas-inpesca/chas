@@ -1,0 +1,53 @@
+---
+title: Reporte 3 MSE
+author: "Marcos Arteaga , Claudio Gatica"
+date: "28 septiembre 2017"
+output:
+  pdf_document:
+    keep_tex: yes
+  word_document: default
+---
+# Resumen 
+Se realiza un análisis del reclutamiento de sardina común y anchoveta. Esto implica revisión de estimaciones, patrones temporales, relación entre especies y expresión de reclutamiento.
+
+# Actividades
+
+1. Revisión de expresiones de reclutamiento modelos de estimación, y modelo operativo.
+
+2. Análisis de salidas de modelos, confección tablas, gráficos y exploración de patrones (i.e. alternancia). 
+
+*Modelo estimación*
+**codificación admb**
+
+mean_log_rec1 18
+
+mean_log_rec 18
+
+init_bounded_dev_vector rec_dev(styr,endyr,-20,20,ph_recdev)
+
+for (int j=2;j<=nages;j++)
+{natage(styr,j)= mfexp(log_Nini+log_dev_ini(j))+0.5*square(sigr);}
+    
+**Formulación**
+*Abundancia inicial*
+$$
+N_{a,1}=\left(R_{0}e^{-\sum_{a} aZ_{a,t=1}}\right)e^{\epsilon_a+0.5\sigma^2_R} 
+$$
+
+Luego, la totalidad de expresiones del modelo de estimación estan en reporte:
+
+archivo (Modelo_estimacion.pdf)
+
+## Plots de reclutamiento
+
+
+![Reclutamiento sardina](Figuras/1.png){width=50%}
+![Reclutamiento anchoveta](Figuras/2.png){width=50%}
+
+\newpage
+
+Reclutamiento sardina común
+\input{Figuras/t1.tex}
+\newpage
+Reclutamiento anchoveta
+\input{Figuras/t2.tex}
