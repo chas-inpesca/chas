@@ -4,7 +4,7 @@ library(lattice)
 library(reshape)
 library(RColorBrewer)
 #DATA_SECTION
-setwd("~/ADMwork/MOSAN/Mixed/DataMix")
+setwd("/Users/marteaga/Documents/MSECHAS/chas/docs/AjustQuota/DataMix")
 dir()
 dat = read.csv("ctpinitial.csv")
 names(dat)
