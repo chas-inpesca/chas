@@ -1,4 +1,7 @@
 *cor
+*.exe
+*.htp
+*.cpp
 *.mcmc
 *.eva
 *std
