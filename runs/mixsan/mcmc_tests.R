@@ -3,10 +3,10 @@
 
 ## Cole Monnahan 6/2017.
 
-library(adnuts)
 #install.packages("snowfall")
 #install.packages("shinystan")
 #install.packages("R2admb")
+library(adnuts)
 library(R2admb)
 library(snowfall)
 library(shinystan)
@@ -42,6 +42,7 @@ fit.rwm <-
               parallel=TRUE, chains=reps, warmup=thin*warmup,
               dir=d, cores=reps, control=list(metric=NULL),
               algorithm='RWM')
+launch_shinyadmb(fit.rwm)
 thin <- 1 # thin rate
 fit.nuts <-
   sample_admb(model=m, iter=thin*iter, init=inits, thin=thin,
@@ -49,7 +50,7 @@ fit.nuts <-
               parallel=TRUE, chains=reps, warmup=thin*warmup,
               dir=d, cores=reps, control=list(metric=NULL),
               algorithm='NUTS')
-launch_shinyadmb(fit.rwm)
+launch_shinyadmb(fit.nuts)
 names(fit.rwm$mle$nopar )
 (fit.rwm$mle$nopar )
 (fit.rwm$mle$fit )

@@ -763,7 +763,7 @@ PROCEDURE_SECTION
   if (mceval_phase())
   {
     write_mcmc_pars();
-    // Oper_Model();
+    Oper_Model();
   }
 
 FUNCTION S_R_parameters
