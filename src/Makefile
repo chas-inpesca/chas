@@ -1,22 +1,22 @@
 ifdef ComSpec
     RM=del /F /Q
     COPY=copy
+		admb = C:\programs\ADMB\bin\admb.cmd
 else
     RM=rm -rf
     COPY=cp
+		admb = admb
 endif
 
 all: build/em build/om
 
 build/em: build em.tpl 
-	@admb -g em.tpl $(LIB)
-	@$(COPY) em build/
-	@$(RM) em
+	@$(admb) -g em.tpl $(LIB)
+#@$(COPY) em build/ @$(RM) em
 
 build/om: build om.tpl
-	@admb -g om.tpl $(LIB)
-	@$(COPY) om build/
-	@$(RM) om
+	@$(admb) -g om.tpl $(LIB)
+	#@$(COPY) om build/ @$(RM) om
 
 
 build:
