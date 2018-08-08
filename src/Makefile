@@ -11,12 +11,14 @@ endif
 all: build/em build/om
 
 build/em: build em.tpl 
-	@$(admb) -g em.tpl $(LIB)
-#@$(COPY) em build/ @$(RM) em
+	@$(admb) -g em.tpl $(LIB) 
+	@$(COPY) em build/ 
+	@$(RM) em
 
 build/om: build om.tpl
 	@$(admb) -g om.tpl $(LIB)
-	#@$(COPY) om build/ @$(RM) om
+	@$(COPY) om build/ 
+	@$(RM) om
 
 
 build:
