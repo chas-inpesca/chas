@@ -983,26 +983,26 @@ FUNCTION Oper_Model
 				if(catch_future(l,i)!=0)
 				{
 					//Sardina 
-					dvariable s_ffpen=0.0;
-					dvariable s_SK=posfun((s_expl_biom(i)-s_catch_future(l,i))/s_expl_biom(i),0.05,s_ffpen);
-					s_Kobs_tot_catch=s_expl_biom(i)-s_SK*s_expl_biom(i);
-					do_Newton_Raphson_for_mortality1(i);					
-					//Anchoveta
-					dvariable a_ffpen=0.0;
-					dvariable a_SK=posfun((a_expl_biom(i)-a_catch_future(l,i))/a_expl_biom(i),0.05,a_ffpen);
-					a_Kobs_tot_catch=a_expl_biom(i)-a_SK*a_expl_biom(i);
-					do_Newton_Raphson_for_mortality2(i);
-					//Efecto total					
-					dvariable ffpen=0.0;
-					dvariable SK=posfun((expl_biom(i)-catch_future(l,i))/expl_biom(i),0.05,ffpen);
-					Kobs_tot_catch=expl_biom(i)-SK*expl_biom(i);
-					do_Newton_Raphson_for_mortality(i);					
+          dvariable s_ffpen =0.0;
+          dvariable s_SK    =posfun((s_expl_biom(i)-s_catch_future(l,i))/s_expl_biom(i),0.05,s_ffpen);
+          s_Kobs_tot_catch  =s_expl_biom(i)-s_SK*s_expl_biom(i);
+          do_Newton_Raphson_for_mortality1(i);					
+          //Anchoveta
+          dvariable a_ffpen =0.0;
+          dvariable a_SK    =posfun((a_expl_biom(i)-a_catch_future(l,i))/a_expl_biom(i),0.05,a_ffpen);
+          a_Kobs_tot_catch  =a_expl_biom(i)-a_SK*a_expl_biom(i);
+          do_Newton_Raphson_for_mortality2(i);
+          //Efecto total					
+          dvariable ffpen   =0.0;
+          dvariable SK      =posfun((expl_biom(i)-catch_future(l,i))/expl_biom(i),0.05,ffpen);
+          Kobs_tot_catch    =expl_biom(i)-SK*expl_biom(i);
+          do_Newton_Raphson_for_mortality(i);					
 				}
 				else
 				{
-					s_F_future(i)=0.;
-					a_F_future(i)=0.;
-					F_future(i)=0.;
+          s_F_future(i) =0.;
+          a_F_future(i) =0.;
+          F_future(i)   =0.;
 				}				
 
 	            //cout << "s_F_future:"<< s_F_future <<endl;
@@ -1010,74 +1010,74 @@ FUNCTION Oper_Model
 				//exit(1);
 
 
-				s_Z_future(i)=s_F_future(i)+s_natmort;
-				s_S_future(i)=exp(-1.*s_Z_future(i));
-				s_Fyr_future(l,i)=max(s_F_future(i));
-				a_Z_future(i)=a_F_future(i)+a_natmort;
-				a_S_future(i)=exp(-1.*a_Z_future(i));
-				a_Fyr_future(l,i)=max(a_F_future(i));
-				Z_future(i)=F_future(i)+natmort;
-				S_future(i)=exp(-1.*Z_future(i));
-				Fyr_future(l,i)=max(F_future(i));				
-				s_Sv_future(i)=mfexp(-1.*s_natmort);
-				a_Sv_future(i)=mfexp(-1.*a_natmort);
-				
-				future_biomass(l,i)=0;
-				future_ssbiom(l,i)=0;
-				s_future_biomass(l,i)=0;
-				s_future_ssbiom(l,i)=0;
-				a_future_biomass(l,i)=0;
-				a_future_ssbiom(l,i)=0;
+        s_Z_future(i)         =s_F_future(i)+s_natmort;
+        s_S_future(i)         =exp(-1.*s_Z_future(i));
+        s_Fyr_future(l,i)     =max(s_F_future(i));
+        a_Z_future(i)         =a_F_future(i)+a_natmort;
+        a_S_future(i)         =exp(-1.*a_Z_future(i));
+        a_Fyr_future(l,i)     =max(a_F_future(i));
+        Z_future(i)           =F_future(i)+natmort;
+        S_future(i)           =exp(-1.*Z_future(i));
+        Fyr_future(l,i)       =max(F_future(i));				
+        s_Sv_future(i)        =mfexp(-1.*s_natmort);
+        a_Sv_future(i)        =mfexp(-1.*a_natmort);
+        
+        future_biomass(l,i)   =0;
+        future_ssbiom(l,i)    =0;
+        s_future_biomass(l,i) =0;
+        s_future_ssbiom(l,i)  =0;
+        a_future_biomass(l,i) =0;
+        a_future_ssbiom(l,i)  =0;
 								
 				for(j=1;j<=nages;j++)
 				{
-					s_future_biomass(l,i)+=s_wt(j)*s_natage_future(i,j);
-					s_future_ssbiom(l,i)+=s_natage_future(i,j)*s_wt(j)*s_mat(j)*mfexp(-.583*s_Z_future(i,j));
-					a_future_biomass(l,i)+=a_wt(j)*a_natage_future(i,j);
-					a_future_ssbiom(l,i)+=a_natage_future(i,j)*a_wt(j)*a_mat(j)*mfexp(-.583*a_Z_future(i,j));
-					future_biomass(l,i)+=s_future_biomass(l,i)+a_future_biomass(l,i);
-					future_ssbiom(l,i)+=s_future_ssbiom(l,i)+a_future_ssbiom(l,i);
+          s_future_biomass(l,i) +=s_wt(j)*s_natage_future(i,j);
+          s_future_ssbiom(l,i)  +=s_natage_future(i,j)*s_wt(j)*s_mat(j)*mfexp(-.583*s_Z_future(i,j));
+          a_future_biomass(l,i) +=a_wt(j)*a_natage_future(i,j);
+          a_future_ssbiom(l,i)  +=a_natage_future(i,j)*a_wt(j)*a_mat(j)*mfexp(-.583*a_Z_future(i,j));
+          future_biomass(l,i)   +=s_future_biomass(l,i)+a_future_biomass(l,i);
+          future_ssbiom(l,i)    +=s_future_ssbiom(l,i)+a_future_ssbiom(l,i);
 				}
-				s_ssb1_ratio(l,i)=s_future_ssbiom(l,i)/s_ssb(endyr);
-				s_ssb2_ratio(l,i)=s_future_ssbiom(l,i)/s_avgssb;
-				s_ssb3_ratio(l,i)=s_future_ssbiom(l,i)/s_S0;
-				a_ssb1_ratio(l,i)=a_future_ssbiom(l,i)/a_ssb(endyr);
-				a_ssb2_ratio(l,i)=a_future_ssbiom(l,i)/a_avgssb;
-				a_ssb3_ratio(l,i)=a_future_ssbiom(l,i)/a_S0;
-				ssb1_ratio(l,i)=future_ssbiom(l,i)/ssb(endyr);
-				ssb2_ratio(l,i)=future_ssbiom(l,i)/avgssb;
-				ssb3_ratio(l,i)=future_ssbiom(l,i)/(s_S0+a_S0);				
-				s_rprp(l,i)=s_future_ssbiom(l,i)/s_ssbv_future(i);
-				a_rprp(l,i)=a_future_ssbiom(l,i)/a_ssbv_future(i);
-				rprp(l,i)=future_ssbiom(l,i)/(s_ssbv_future(i)+a_ssbv_future(i));
-				
-				//Recalcula los indices faltantes despues de la mortalidad por pesca generada por la CTP
-				s_ssbiom_future(i)=0.;
-				a_ssbiom_future(i)=0.;
-				ssbiom_future(i)=0.;
-				s_sim_HB2(i)=0.;
-				a_sim_HB2(i)=0.;
+        s_ssb1_ratio(l,i)  =s_future_ssbiom(l,i)/s_ssb(endyr);
+        s_ssb2_ratio(l,i)  =s_future_ssbiom(l,i)/s_avgssb;
+        s_ssb3_ratio(l,i)  =s_future_ssbiom(l,i)/s_S0;
+        a_ssb1_ratio(l,i)  =a_future_ssbiom(l,i)/a_ssb(endyr);
+        a_ssb2_ratio(l,i)  =a_future_ssbiom(l,i)/a_avgssb;
+        a_ssb3_ratio(l,i)  =a_future_ssbiom(l,i)/a_S0;
+        ssb1_ratio(l,i)    =future_ssbiom(l,i)/ssb(endyr);
+        ssb2_ratio(l,i)    =future_ssbiom(l,i)/avgssb;
+        ssb3_ratio(l,i)    =future_ssbiom(l,i)/(s_S0+a_S0);				
+        s_rprp(l,i)        =s_future_ssbiom(l,i)/s_ssbv_future(i);
+        a_rprp(l,i)        =a_future_ssbiom(l,i)/a_ssbv_future(i);
+        rprp(l,i)          =future_ssbiom(l,i)/(s_ssbv_future(i)+a_ssbv_future(i));
+        
+        //Recalcula los indices faltantes despues de la mortalidad por pesca generada por la CTP
+        s_ssbiom_future(i) =0.;
+        a_ssbiom_future(i) =0.;
+        ssbiom_future(i)   =0.;
+        s_sim_HB2(i)       =0.;
+        a_sim_HB2(i)       =0.;
 
 				for(j=1;j<=nages;j++)
 				{
-					s_sim_p_fishage(i,j)=s_F_future(i,j)*s_natage_future(i,j)*(1-exp(-1.*s_Z_future(i,j)))/s_Z_future(i,j);
-					a_sim_p_fishage(i,j)=a_F_future(i,j)*a_natage_future(i,j)*(1-exp(-1.*a_Z_future(i,j)))/a_Z_future(i,j);
-					s_sim_p_pelage(i,j)=s_sel_pelaces(j)*s_natage_future(i,j)*mfexp(-0.375*s_Z_future(i,j));
-					a_sim_p_pelage(i,j)=a_sel_pelaces(j)*a_natage_future(i,j)*mfexp(-0.375*a_Z_future(i,j));
-					s_ssbiom_future(i)+=s_natage_future(i,j)*s_wt(j)*s_mat(j)*mfexp(-.583*s_Z_future(i,j));
-					a_ssbiom_future(i)+=a_natage_future(i,j)*a_wt(j)*a_mat(j)*mfexp(-.583*a_Z_future(i,j));
-					ssbiom_future(i)+=s_ssbiom_future(i)+a_ssbiom_future(i);
-					s_sim_HB2(i)+=s_q_pelaces*s_sel_pelaces(j)*s_wt(j)*s_natage_future(i,j)*mfexp(-0.375*s_Z_future(i,j))*s_pelaces_epsilon(i);
-					a_sim_HB2(i)+=a_q_pelaces*a_sel_pelaces(j)*a_wt(j)*a_natage_future(i,j)*mfexp(-0.375*a_Z_future(i,j))*a_pelaces_epsilon(i);
+          s_sim_p_fishage(i,j) =s_F_future(i,j)*s_natage_future(i,j)*(1-exp(-1.*s_Z_future(i,j)))/s_Z_future(i,j);
+          a_sim_p_fishage(i,j) =a_F_future(i,j)*a_natage_future(i,j)*(1-exp(-1.*a_Z_future(i,j)))/a_Z_future(i,j);
+          s_sim_p_pelage(i,j)  =s_sel_pelaces(j)*s_natage_future(i,j)*mfexp(-0.375*s_Z_future(i,j));
+          a_sim_p_pelage(i,j)  =a_sel_pelaces(j)*a_natage_future(i,j)*mfexp(-0.375*a_Z_future(i,j));
+          s_ssbiom_future(i)   +=s_natage_future(i,j)*s_wt(j)*s_mat(j)*mfexp(-.583*s_Z_future(i,j));
+          a_ssbiom_future(i)   +=a_natage_future(i,j)*a_wt(j)*a_mat(j)*mfexp(-.583*a_Z_future(i,j));
+          ssbiom_future(i)     +=s_ssbiom_future(i)+a_ssbiom_future(i);
+          s_sim_HB2(i)         +=s_q_pelaces*s_sel_pelaces(j)*s_wt(j)*s_natage_future(i,j)*mfexp(-0.375*s_Z_future(i,j))*s_pelaces_epsilon(i);
+          a_sim_HB2(i)         +=a_q_pelaces*a_sel_pelaces(j)*a_wt(j)*a_natage_future(i,j)*mfexp(-0.375*a_Z_future(i,j))*a_pelaces_epsilon(i);
 				}
 				s_freq.initialize();
 				a_freq.initialize();
 				//ivector bin(1,100);
-				s_sim_p_pelage(i)=s_sim_p_pelage(i)/sum(s_sim_p_pelage(i));
-				s_sim_p_pellen(i)=s_sim_p_pelage(i)*s_alk;
-				a_sim_p_pelage(i)=a_sim_p_pelage(i)/sum(a_sim_p_pelage(i));
-				a_sim_p_pellen(i)=a_sim_p_pelage(i)*a_alk;
-				//sardina
+        s_sim_p_pelage(i) =s_sim_p_pelage(i)/sum(s_sim_p_pelage(i));
+        s_sim_p_pellen(i) =s_sim_p_pelage(i)*s_alk;
+        a_sim_p_pelage(i) =a_sim_p_pelage(i)/sum(a_sim_p_pelage(i));
+        a_sim_p_pellen(i) =a_sim_p_pelage(i)*a_alk;
+        //sardina
 				/*
 				s_p = value(s_sim_p_pellen(i));
 				s_p /=sum(s_p);
@@ -1095,28 +1095,28 @@ FUNCTION Oper_Model
 				*/
 
 				//simula MPH			
-				s_sim_MPH(i)=s_q_mph*s_ssbiom_future(i)*s_mph_epsilon(i);
-				a_sim_MPH(i)=a_q_mph*a_ssbiom_future(i)*a_mph_epsilon(i);
-				//simula CPUE
-				s_sim_cpue(i)=s_q_cpue*s_expl_biom(i)*s_cpue_epsilon(i);
-				a_sim_cpue(i)=a_q_cpue*a_expl_biom(i)*a_cpue_epsilon(i);
-
-				//catch at length 
-				s_freq.initialize();
-				a_freq.initialize();
-				//ivector bin(1,100);
-				s_sim_p_fishage(i)=s_sim_p_fishage(i)/sum(s_sim_p_fishage(i));
-				s_sim_p_fishlen(i)=s_sim_p_fishage(i)*s_alk;
-				//s_p = value(s_sim_p_fishlen(i));
-				//s_p /=sum(s_p);
+        s_sim_MPH(i)       =s_q_mph*s_ssbiom_future(i)*s_mph_epsilon(i);
+        a_sim_MPH(i)       =a_q_mph*a_ssbiom_future(i)*a_mph_epsilon(i);
+        //simula CPUE
+        s_sim_cpue(i)      =s_q_cpue*s_expl_biom(i)*s_cpue_epsilon(i);
+        a_sim_cpue(i)      =a_q_cpue*a_expl_biom(i)*a_cpue_epsilon(i);
+        
+        //catch at length 
+        s_freq.initialize();
+        a_freq.initialize();
+        //ivector bin(1,100);
+        s_sim_p_fishage(i) =s_sim_p_fishage(i)/sum(s_sim_p_fishage(i));
+        s_sim_p_fishlen(i) =s_sim_p_fishage(i)*s_alk;
+        //s_p              = value(s_sim_p_fishlen(i));
+        //s_p              /=sum(s_p);
 				//s_bin.fill_multinomial(rng,s_p);
 				//for(j=1;j<=100;j++){s_freq(s_bin(j))++;}
 				//s_p = s_freq/sum(s_freq);
 				//s_sim_p_fishlen(i)=s_p;
 				//anchoveta
-				a_sim_p_fishage(i)=a_sim_p_fishage(i)/sum(a_sim_p_fishage(i));
-				a_sim_p_fishlen(i)=a_sim_p_fishage(i)*a_alk;
-				//a_p = value(a_sim_p_fishlen(i));
+        a_sim_p_fishage(i) =a_sim_p_fishage(i)/sum(a_sim_p_fishage(i));
+        a_sim_p_fishlen(i) =a_sim_p_fishage(i)*a_alk;
+        //a_p              = value(a_sim_p_fishlen(i));
 				//a_p /=sum(a_p);
 				//a_bin.fill_multinomial(rng,a_p);
 				//for(j=1;j<=100;j++){a_freq(a_bin(j))++;}
@@ -1432,72 +1432,72 @@ FUNCTION Oper_Model
 
 				for(j=1;j<=nages;j++)
 				{
-					s_sim_p_fishage(i,j)=s_F_future(i,j)*s_natage_future(i,j)*(1-exp(-1.*s_Z_future(i,j)))/s_Z_future(i,j);
-					a_sim_p_fishage(i,j)=a_F_future(i,j)*a_natage_future(i,j)*(1-exp(-1.*a_Z_future(i,j)))/a_Z_future(i,j);
-					s_sim_p_pelage(i,j)=s_sel_pelaces(j)*s_natage_future(i,j)*mfexp(-0.375*s_Z_future(i,j));
-					a_sim_p_pelage(i,j)=a_sel_pelaces(j)*a_natage_future(i,j)*mfexp(-0.375*a_Z_future(i,j));
-					s_ssbiom_future(i)+=s_natage_future(i,j)*s_wt(j)*s_mat(j)*mfexp(-.583*s_Z_future(i,j));
-					a_ssbiom_future(i)+=a_natage_future(i,j)*a_wt(j)*a_mat(j)*mfexp(-.583*a_Z_future(i,j));
-					ssbiom_future(i)+=s_ssbiom_future(i)+a_ssbiom_future(i);
-					s_sim_HB2(i)+=s_q_pelaces*s_sel_pelaces(j)*s_wt(j)*s_natage_future(i,j)*mfexp(-0.375*s_Z_future(i,j))*s_pelaces_epsilon(i);
-					a_sim_HB2(i)+=a_q_pelaces*a_sel_pelaces(j)*a_wt(j)*a_natage_future(i,j)*mfexp(-0.375*a_Z_future(i,j))*a_pelaces_epsilon(i);
+          s_sim_p_fishage(i,j) =s_F_future(i,j)*s_natage_future(i,j)*(1-exp(-1.*s_Z_future(i,j)))/s_Z_future(i,j);
+          a_sim_p_fishage(i,j) =a_F_future(i,j)*a_natage_future(i,j)*(1-exp(-1.*a_Z_future(i,j)))/a_Z_future(i,j);
+          s_sim_p_pelage(i,j)  =s_sel_pelaces(j)*s_natage_future(i,j)*mfexp(-0.375*s_Z_future(i,j));
+          a_sim_p_pelage(i,j)  =a_sel_pelaces(j)*a_natage_future(i,j)*mfexp(-0.375*a_Z_future(i,j));
+          s_ssbiom_future(i)   +=s_natage_future(i,j)*s_wt(j)*s_mat(j)*mfexp(-.583*s_Z_future(i,j));
+          a_ssbiom_future(i)   +=a_natage_future(i,j)*a_wt(j)*a_mat(j)*mfexp(-.583*a_Z_future(i,j));
+          ssbiom_future(i)     +=s_ssbiom_future(i)+a_ssbiom_future(i);
+          s_sim_HB2(i)         +=s_q_pelaces*s_sel_pelaces(j)*s_wt(j)*s_natage_future(i,j)*mfexp(-0.375*s_Z_future(i,j))*s_pelaces_epsilon(i);
+          a_sim_HB2(i)         +=a_q_pelaces*a_sel_pelaces(j)*a_wt(j)*a_natage_future(i,j)*mfexp(-0.375*a_Z_future(i,j))*a_pelaces_epsilon(i);
 				}
 				s_freq.initialize();
 				a_freq.initialize();
 				//ivector bin(1,100);
-				s_sim_p_pelage(i)=s_sim_p_pelage(i)/sum(s_sim_p_pelage(i));
-				s_sim_p_pellen(i)=s_sim_p_pelage(i)*s_alk;
-				a_sim_p_pelage(i)=a_sim_p_pelage(i)/sum(a_sim_p_pelage(i));
-				a_sim_p_pellen(i)=a_sim_p_pelage(i)*a_alk;
+        s_sim_p_pelage(i) =s_sim_p_pelage(i)/sum(s_sim_p_pelage(i));
+        s_sim_p_pellen(i) =s_sim_p_pelage(i)*s_alk;
+        a_sim_p_pelage(i) =a_sim_p_pelage(i)/sum(a_sim_p_pelage(i));
+        a_sim_p_pellen(i) =a_sim_p_pelage(i)*a_alk;
 				//sardina
-				s_p = value(s_sim_p_pellen(i));
-				s_p /=sum(s_p);
-				s_bin.fill_multinomial(rng,s_p);
-				for(j=1;j<=100;j++){s_freq(s_bin(j))++;}
-				s_p = s_freq/sum(s_freq);
-				s_sim_p_pellen(i)=s_p;
-				//anchoveta
-				a_p = value(a_sim_p_pellen(i));
-				a_p /=sum(a_p);
-				a_bin.fill_multinomial(rng,a_p);
-				for(j=1;j<=100;j++){a_freq(a_bin(j))++;}
-				a_p = a_freq/sum(a_freq);
-				a_sim_p_pellen(i)=a_p;
-
-				//simula MPH			
-				s_sim_MPH(i)=s_q_mph*s_ssbiom_future(i)*s_mph_epsilon(i);
-				a_sim_MPH(i)=a_q_mph*a_ssbiom_future(i)*a_mph_epsilon(i);
-				//simula CPUE
-				s_sim_cpue(i)=s_q_cpue*s_expl_biom(i)*s_cpue_epsilon(i);
-				a_sim_cpue(i)=a_q_cpue*a_expl_biom(i)*a_cpue_epsilon(i);
-
-				//catch at length 
-				s_freq.initialize();
-				a_freq.initialize();
-				//ivector bin(1,100);
-				s_sim_p_fishage(i)=s_sim_p_fishage(i)/sum(s_sim_p_fishage(i));
-				s_sim_p_fishlen(i)=s_sim_p_fishage(i)*s_alk;
-				s_p = value(s_sim_p_fishlen(i));
-				s_p /=sum(s_p);
-				s_bin.fill_multinomial(rng,s_p);
-				for(j=1;j<=100;j++){s_freq(s_bin(j))++;}
-				s_p = s_freq/sum(s_freq);
-				s_sim_p_fishlen(i)=s_p;
-				//anchoveta
-				a_sim_p_fishage(i)=a_sim_p_fishage(i)/sum(a_sim_p_fishage(i));
-				a_sim_p_fishlen(i)=a_sim_p_fishage(i)*a_alk;
-				a_p = value(a_sim_p_fishlen(i));
-				a_p /=sum(a_p);
-				a_bin.fill_multinomial(rng,a_p);
-				for(j=1;j<=100;j++){a_freq(a_bin(j))++;}
-				a_p = a_freq/sum(a_freq);
-				a_sim_p_fishlen(i)=a_p;		
-				//Ahora actualiza la evaluacion de sardina
-				yrs(i)=i;
-				upk = i;
-				//numyear = yrs(i)-s_ystr+1;
-				sim_num_obs = yrs(i)-styr_fut+1;
-				opt=1;
+        s_p                = value(s_sim_p_pellen(i));
+        s_p                /=sum(s_p);
+        s_bin.fill_multinomial(rng,s_p);
+        for(j              =1;j<=100;j++){s_freq(s_bin(j))++;}
+        s_p                = s_freq/sum(s_freq);
+        s_sim_p_pellen(i)  =s_p;
+        //anchoveta
+        a_p                = value(a_sim_p_pellen(i));
+        a_p                /=sum(a_p);
+        a_bin.fill_multinomial(rng,a_p);
+        for(j              =1;j<=100;j++){a_freq(a_bin(j))++;}
+        a_p                = a_freq/sum(a_freq);
+        a_sim_p_pellen(i)  =a_p;
+        
+        //simula MPH			
+        s_sim_MPH(i)       =s_q_mph*s_ssbiom_future(i)*s_mph_epsilon(i);
+        a_sim_MPH(i)       =a_q_mph*a_ssbiom_future(i)*a_mph_epsilon(i);
+        //simula CPUE
+        s_sim_cpue(i)      =s_q_cpue*s_expl_biom(i)*s_cpue_epsilon(i);
+        a_sim_cpue(i)      =a_q_cpue*a_expl_biom(i)*a_cpue_epsilon(i);
+        
+        //catch at length 
+        s_freq.initialize();
+        a_freq.initialize();
+        //ivector bin(1,100);
+        s_sim_p_fishage(i) =s_sim_p_fishage(i)/sum(s_sim_p_fishage(i));
+        s_sim_p_fishlen(i) =s_sim_p_fishage(i)*s_alk;
+        s_p                = value(s_sim_p_fishlen(i));
+        s_p                /=sum(s_p);
+        s_bin.fill_multinomial(rng,s_p);
+        for(j              =1;j<=100;j++){s_freq(s_bin(j))++;}
+        s_p                = s_freq/sum(s_freq);
+        s_sim_p_fishlen(i) =s_p;
+        //anchoveta
+        a_sim_p_fishage(i) =a_sim_p_fishage(i)/sum(a_sim_p_fishage(i));
+        a_sim_p_fishlen(i) =a_sim_p_fishage(i)*a_alk;
+        a_p                = value(a_sim_p_fishlen(i));
+        a_p                /=sum(a_p);
+        a_bin.fill_multinomial(rng,a_p);
+        for(j              =1;j<=100;j++){a_freq(a_bin(j))++;}
+        a_p                = a_freq/sum(a_freq);
+        a_sim_p_fishlen(i) =a_p;		
+        //Ahora actualiza la evaluacion de sardina
+        yrs(i)             =i;
+        upk                = i;
+        //numyear          = yrs(i)-s_ystr+1;
+        sim_num_obs        = yrs(i)-styr_fut+1;
+        opt                =1;
 				ofstream ssimdata(s_simname);
 				ssimdata << "#Datos simulados para el estimador de sardina-INPESCA"<<endl;
 				ssimdata << "#Inicial yr"<<endl;
@@ -1647,8 +1647,8 @@ FUNCTION Oper_Model
 				asimdata.close();
 				
 				//ahora corre el estimador para dejar preparada la con styr_fut
-				rv=system("sardina -nox -nohess -iprint 200");
-				rv=system("anchoveta -nox -nohess -iprint 200");								
+        rv =system("sardina -nox -nohess -iprint 200");
+        rv =system("anchoveta -nox -nohess -iprint 200");								
 			}
 		}
 	}
@@ -1691,22 +1691,22 @@ FUNCTION get_selectivity
      s_log_sel_f(styr,j)=s_log_selcoffs_f(j);
     }
   for (j=s_nselagef+1;j<=nages;j++)
-    {
+  {
      s_log_sel_f(styr,j)=s_log_sel_f(styr,j-1);
-    }
+  }
   s_log_sel_f(styr)-=log(mean(exp(s_log_sel_f(styr))));
 
   //==+==+==+==+Selectividad Pesq Anchoveta
   a_avgsel_fish=log(mean(exp(a_log_selcoffs_f)));
 
   for (j=1;j<=a_nselagef;j++)
-    {
+  {
      a_log_sel_f(styr,j)=a_log_selcoffs_f(j);
-    }
+  }
   for (j=a_nselagef+1;j<=nages;j++)
-    {
+  {
      a_log_sel_f(styr,j)=a_log_sel_f(styr,j-1);
-    }
+  }
   a_log_sel_f(styr)-=log(mean(exp(a_log_sel_f(styr))));
 
   //==+==+==+==+==+==+==+==+Selectividad Sardina==+==+==+==+==+==+==+==+==+==+==+==+
@@ -1880,23 +1880,23 @@ FUNCTION get_selectivity
 
 FUNCTION get_mortality
 
-  s_Fmort=mfexp(s_log_avg_fmort+s_fmort_dev);
-  a_Fmort=mfexp(a_log_avg_fmort+a_fmort_dev);
+  s_Fmort =mfexp(s_log_avg_fmort+s_fmort_dev);
+  a_Fmort =mfexp(a_log_avg_fmort+a_fmort_dev);
   for (i=styr;i<=endyr;i++)
   {
      for (j=1;j<=nages;j++)
      {
-      s_F(i,j)=s_Fmort(i)*s_sel_f(i,j);
-      a_F(i,j)=a_Fmort(i)*a_sel_f(i,j);
+      s_F(i,j) =s_Fmort(i)*s_sel_f(i,j);
+      a_F(i,j) =a_Fmort(i)*a_sel_f(i,j);
      }
   }
-  s_Z=s_F+s_natmort;
-  a_Z=a_F+a_natmort;
-
-  s_S=mfexp(-1.*s_Z);
-  a_S=mfexp(-1.*a_Z);
-  s_Sv=mfexp(-1.*s_natmort);
-  a_Sv=mfexp(-1.*a_natmort);
+  s_Z  =s_F+s_natmort;
+  a_Z  =a_F+a_natmort;
+  
+  s_S  =mfexp(-1.*s_Z);
+  a_S  =mfexp(-1.*a_Z);
+  s_Sv =mfexp(-1.*s_natmort);
+  a_Sv =mfexp(-1.*a_natmort);
 
   //cout << a_Fmort << endl;
  //==+==+==+==+==+==+==+==+==+==+==+==+==+==+==+==+==+==+==+==+==+==+==+==+==+==+==+==+
@@ -1951,76 +1951,74 @@ FUNCTION get_numbers_at_age
      a_ssb(i)=0.;
      for (j=1;j<=nages;j++)
        {
-        s_biomad(i)+=s_natage(i,j)*s_wt(j)*s_mat(j);
-        s_ssb(i)+=s_natage(i,j)*s_wt(j)*s_mat(j)*mfexp(-.583*s_Z(i,j));
-        a_biomad(i)+=a_natage(i,j)*a_wt(j)*a_mat(j);
-        a_ssb(i)+=a_natage(i,j)*a_wt(j)*a_mat(j)*mfexp(-.583*a_Z(i,j));
+        s_biomad(i) +=s_natage(i,j)*s_wt(j)*s_mat(j);
+        s_ssb(i)    +=s_natage(i,j)*s_wt(j)*s_mat(j)*mfexp(-.583*s_Z(i,j));
+        a_biomad(i) +=a_natage(i,j)*a_wt(j)*a_mat(j);
+        a_ssb(i)    +=a_natage(i,j)*a_wt(j)*a_mat(j)*mfexp(-.583*a_Z(i,j));
        }
     }
 
-  s_natsize=s_natage*s_alk;
-  a_natsize=a_natage*a_alk;
-  natsize = s_natsize+a_natsize;
+  s_natsize =s_natage*s_alk;
+  a_natsize =a_natage*a_alk;
+  natsize   = s_natsize+a_natsize;
 
   for (i=styr;i<=endyr;i++)
   {
-   recruits(i)=natage(i,1);
-   s_biom(i)=0.;
-   a_biom(i)=0.;
+   recruits(i) =natage(i,1);
+   s_biom(i)   =0.;
+   a_biom(i)   =0.;
    for (j=1;j<=nages;j++)
     {
-     s_biom(i)+=s_natage(i,j)*s_wt(j);
-     a_biom(i)+=a_natage(i,j)*a_wt(j);
+     s_biom(i) +=s_natage(i,j)*s_wt(j);
+     a_biom(i) +=a_natage(i,j)*a_wt(j);
     }
   }
-   biomass=s_biom+a_biom;
-   ssb=s_ssb+a_ssb;
-   endbiom=biomass(endyr);
-   s_endbio=s_ssb(endyr);
-   a_endbio=a_ssb(endyr);
+   biomass  =s_biom+a_biom;
+   ssb      =s_ssb+a_ssb;
+   endbiom  =biomass(endyr);
+   s_endbio =s_ssb(endyr);
+   a_endbio =a_ssb(endyr);
   //cout << "biomass " << biomass << endl;
   //cout << "s_biom " << s_biom << endl;
   //cout << "a_biom " << a_biom << endl;
 
   //==+==+==+==SELECTIVIDAD TOTAL BASADA EN F ponderado
   for (i=styr;i<=endyr;i++)
+  {
+    for (j=1;j<=nages;j++)
     {
-     for (j=1;j<=nages;j++)
-       {
-        Ft(i,j)=(s_F(i,j)*s_natage(i,j)+a_F(i,j)*a_natage(i,j))/natage(i,j);
-       }
-     sel_fish(i)=Ft(i)/max(Ft(i));
-    }  
+      Ft(i,j)=(s_F(i,j)*s_natage(i,j)+a_F(i,j)*a_natage(i,j))/natage(i,j);
+    }
+    sel_fish(i)=Ft(i)/max(Ft(i));
+  }  
    //cout << "sel_fish "<< sel_fish << endl;
-   for (i=styr;i<endyr;i++)
-     {
-      for (j=1;j<nages;j++)
-        {
-         S(i,j)=natage(i,j)/natage(i+1,j+1);
-		 Z(i,j)=log(S(i,j));
-        }
-     }  
-
+  for (i=styr;i<endyr;i++)
+  {
+    for (j=1;j<nages;j++)
+    {
+      S(i,j)=natage(i,j)/natage(i+1,j+1);
+		  Z(i,j)=log(S(i,j));
+    }
+  }  
   //==+==+==+==+==+==+==+==+==+==+==+==+==+==+==+==+==+==+==+==+==+==+==+==+==+==+==+==+
 
 FUNCTION get_catch_at_age
-
   for (int i=styr;i<=endyr;i++)
-   {
+  {
     s_pred_catch(i)=0.;
     a_pred_catch(i)=0.;
     //Baranov equation
     for (j=1;j<=nages;j++)
     {
-     s_catage(i,j)=s_natage(i,j)*s_F(i,j)*(1.-s_S(i,j))/s_Z(i,j);
-     a_catage(i,j)=a_natage(i,j)*a_F(i,j)*(1.-a_S(i,j))/a_Z(i,j);
-     catage(i,j)=s_catage(i,j)+a_catage(i,j);
-     s_pred_catch(i)+=s_catage(i,j)*s_wt(j);
-     a_pred_catch(i)+=a_catage(i,j)*a_wt(j);
+      s_catage(i,j)=s_natage(i,j)*s_F(i,j)*(1.-s_S(i,j))/s_Z(i,j);
+      a_catage(i,j)=a_natage(i,j)*a_F(i,j)*(1.-a_S(i,j))/a_Z(i,j);
+      catage(i,j)=s_catage(i,j)+a_catage(i,j);
+      s_pred_catch(i)+=s_catage(i,j)*s_wt(j);
+      a_pred_catch(i)+=a_catage(i,j)*a_wt(j);
     }
-   pred_catch(i)=s_pred_catch(i)+a_pred_catch(i);
-   }
-   //cout << "pred_catch"<<pred_catch << endl;
+    pred_catch(i)=s_pred_catch(i)+a_pred_catch(i);
+  }
+  //cout << "pred_catch"<<pred_catch << endl;
 
 FUNCTION get_predicted_values
   int ii;
@@ -2038,14 +2036,14 @@ FUNCTION get_predicted_values
   //cout << "qs "<< q_reclas << q_pelaces << q_mph << endl;
   for (i=1;i<=nobs_reclas;i++)
   {
-   ii                   =yrs_reclas(i);
-   s_pred_reclas(i)     =0.;
-   s_pred_num_reclas(i) =0.;
-   a_pred_reclas(i)     =0.;
-   a_pred_num_reclas(i) =0.;
-   t_pred_reclas(i)     =0.;
-   for (j=1;j<=nages;j++)
-   {
+    ii                   =yrs_reclas(i);
+    s_pred_reclas(i)     =0.;
+    s_pred_num_reclas(i) =0.;
+    a_pred_reclas(i)     =0.;
+    a_pred_num_reclas(i) =0.;
+    t_pred_reclas(i)     =0.;
+    for (j=1;j<=nages;j++)
+    {
       s_pred_num_reclas(i) +=s_sel_reclas(j)*s_natage(ii,j);
       a_pred_num_reclas(i) +=a_sel_reclas(j)*a_natage(ii,j);
       s_pred_reclas(i)     +=s_q_reclas*(s_sel_reclas(j)*s_natage(ii,j)*s_wt(j));
