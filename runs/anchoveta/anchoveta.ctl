@@ -11,11 +11,11 @@
 #vb
 2
 # n muestral pesquería
-100
-# n muestral crucero reclas
-50
-# n muestral crucero pelaces
 20
+# n muestral crucero reclas
+10
+# n muestral crucero pelaces
+5
 #coef. var PARA el crucerO reclas
 0.3
 #coef. var PARA el crucerO pelaces
@@ -27,7 +27,7 @@
 #Fase para estimar M
 -6
 #Fase sigmar
-1
+-1
 #Fase Fdev
 2
 #Fase rec_dev
