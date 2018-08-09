@@ -4,22 +4,24 @@
 2
 #h
 0.75
-#Loo, k, Lt(a=1), cv(edad),  M
-20.8  0.44  8.5  0.182872  0.69
+#Loo, k, Lt(a=1), cv(edad),  
+20.8  0.44  8.5  0.182872  
+#M
+0.69
 #vb
 2
 # n muestral pesquería
-15
+100
 # n muestral crucero reclas
-10
+50
 # n muestral crucero pelaces
-5
+20
 #coef. var PARA el crucerO reclas
 0.3
 #coef. var PARA el crucerO pelaces
 0.2
 #coef. var para capturas
-0.1
+0.01
 #coef. var cpue
 0.4
 #Fase para estimar M

@@ -4,8 +4,10 @@
 2
 #h
 0.75
-#Loo, k, Lt(a=1), cv(edad),  M
-18.5  0.71  8.5  0.182872  0.96
+#Loo, k, Lt(a=1), cv(edad)  
+18.5  0.71  8.5  0.182872  
+#M
+0.96
 #vb
 -2
 # n muestral pesquería

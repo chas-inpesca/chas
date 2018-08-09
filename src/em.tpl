@@ -70,7 +70,8 @@ DATA_SECTION
   init_int ph_sel_fish             //selectividad
   init_number shif_r               //selectividad
   init_number h                    //escarpamiento
-  init_vector crecimiento(1,5)     //parámetros de crecimiento
+  init_vector crecimiento(1,4)     //parámetros de crecimiento
+  init_number M_prior     //parámetros de crecimiento
   init_int opt_VB                  //opcion para estimar o no el crecimiento
   init_int nlen_fish               //n muestreal para longitudes pesqueria
   init_int nlen_fishr              //n muestreal para longitudes reclas
@@ -180,7 +181,7 @@ DATA_SECTION
 //####################
 INITIALIZATION_SECTION
 //####################
-  M 0.96
+  M M_prior
   mean_log_rec1 18
   mean_log_rec 18
   log_Nini 15; 
@@ -371,7 +372,7 @@ PRELIMINARY_CALCS_SECTION
 //Calcula offset para el multinomial pesquería
     for (int i=1; i<= nobs_fishlen; i++)
    {
-      obs_p_len(i)=obs_p_len(i);
+      obs_p_len(i)/=sum(obs_p_len(i));
       for (int j=1;j <= nlenbins; j++)
       {
         if (obs_p_len(i,j)>0.0)
@@ -384,7 +385,7 @@ PRELIMINARY_CALCS_SECTION
 //Calcula offset para el multinomial Reclas
     for (int i=1; i<= nobs_surv; i++)
    {
-      obs_p_lenreclas(i)=obs_p_lenreclas(i);
+      obs_p_lenreclas(i)/=sum(obs_p_lenreclas(i));
       for (int j=1;j <= nlenbins; j++)
       {
         if (obs_p_lenreclas(i,j)>0.0)
@@ -397,7 +398,7 @@ PRELIMINARY_CALCS_SECTION
 //Calcula offset para el multinomial Pelaces
     for (int i=1; i<= nobs_survpel; i++)
    {
-      obs_p_lenpelaces(i)=obs_p_lenpelaces(i);
+      obs_p_lenpelaces(i)/=sum(obs_p_lenpelaces(i));
       for (int j=1;j <= nlenbins; j++)
       {
         if (obs_p_lenpelaces(i,j)>0.0)
