@@ -863,30 +863,30 @@ FUNCTION Oper_Model
 	    for(i=styr_fut;i<=endyr_fut;i++)
 		{
 			//Desviaciones aleatorias log-normal para los indices
-			new_rec_epsilon(i)=(mfexp(ran_rec_vect(i)*sigr)); //sigr asumiendo 
-			new_prop(i)=mfexp(ran_prop_vect(i))/(1+exp(ran_prop_vect(i))); //proporcion logit
-			s_reclas_epsilon(i)=(mfexp(s_ran_reclas(i)*CV_r));
-			s_pelaces_epsilon(i)=(mfexp(s_ran_pelaces(i)*CV_p));
-			s_mph_epsilon(i)=(mfexp(s_ran_mph(i)*CV_d));
-			s_cpue_epsilon(i)=(mfexp(s_ran_cpue(i)*CV_cpue)); //Asume un CV=0.2 para la cpue
-
-
-			a_reclas_epsilon(i)=(mfexp(a_ran_reclas(i)*CV_r));
-			a_pelaces_epsilon(i)=(mfexp(a_ran_pelaces(i)*CV_p));
-			a_mph_epsilon(i)=(mfexp(a_ran_mph(i)*CV_d));
-			a_cpue_epsilon(i)=(mfexp(a_ran_cpue(i)*CV_cpue)); //Asume un CV=0.2 para la cpue
-
-			//Lee la captura biologicamente aceptable de sardina
-			ifstream s_CTP_tmp("sctpinit.dat");
-			s_CTP_tmp >> s_CatchNow;
-			s_CTP_tmp.close();
-			s_catch_future(l,i)=s_CatchNow(l);
-			//lee la estimacion de cuota de anchoveta
-			ifstream a_CTP_tmp("actpinit.dat");
-			a_CTP_tmp >> a_CatchNow;
-			a_CTP_tmp.close();
-			a_catch_future(l,i)=a_CatchNow(l);
-			//Juntamos la cuota segun enfoque de Pesca Mixta
+      new_rec_epsilon(i)   =(mfexp(ran_rec_vect(i)*sigr)); //sigr asumiendo 
+      new_prop(i)          =mfexp(ran_prop_vect(i))/(1+exp(ran_prop_vect(i))); //proporcion logit
+      s_reclas_epsilon(i)  =(mfexp(s_ran_reclas(i)*CV_r));
+      s_pelaces_epsilon(i) =(mfexp(s_ran_pelaces(i)*CV_p));
+      s_mph_epsilon(i)     =(mfexp(s_ran_mph(i)*CV_d));
+      s_cpue_epsilon(i)    =(mfexp(s_ran_cpue(i)*CV_cpue)); //Asume un CV=0.2 para la cpue
+      
+      
+      a_reclas_epsilon(i)  =(mfexp(a_ran_reclas(i)*CV_r));
+      a_pelaces_epsilon(i) =(mfexp(a_ran_pelaces(i)*CV_p));
+      a_mph_epsilon(i)     =(mfexp(a_ran_mph(i)*CV_d));
+      a_cpue_epsilon(i)    =(mfexp(a_ran_cpue(i)*CV_cpue)); //Asume un CV=0.2 para la cpue
+      
+      //Lee la captura biologicamente aceptable de sardina
+      ifstream s_CTP_tmp("sctpinit.dat");
+      s_CTP_tmp >> s_CatchNow;
+      s_CTP_tmp.close();
+      s_catch_future(l,i)  =s_CatchNow(l);
+      //lee la estimacion de cuota de anchoveta
+      ifstream a_CTP_tmp("actpinit.dat");
+      a_CTP_tmp >> a_CatchNow;
+      a_CTP_tmp.close();
+      a_catch_future(l,i)  =a_CatchNow(l);
+      //Juntamos la cuota segun enfoque de Pesca Mixta
 			//Ejemplo con cuota conjunta, la suma de las dos
 			catch_future(l,i)=s_catch_future(l,i)+a_catch_future(l,i);
 			//TODO: seleccion de criterio 
@@ -1195,7 +1195,7 @@ FUNCTION Oper_Model
 					ssimdata << " " <<yrs(k) << endl; //Agrega
 				}
 				ssimdata << "#Obs prop talla en la captura:"<<endl;
-				ssimdata << " "<< s_obs_p_len << endl;
+				ssimdata << " "<< s_obs_p_len_fish << endl;
 				for(k=styr_fut;k<=upk;k++)
 				{
 					ssimdata << s_sim_p_fishlen(k)<<endl;
@@ -1563,7 +1563,7 @@ FUNCTION Oper_Model
 					ssimdata << " "<< yrs(k) << endl; //Agrega
 				}
 				ssimdata << "#Obs prop talla en la captura:"<<endl;
-				ssimdata << s_obs_p_len << endl;
+				ssimdata << s_obs_p_len_fish << endl;
 				for(k=styr_fut;k<=upk;k++)
 				{
 					ssimdata << " " <<s_sim_p_fishlen(k)<<endl;
