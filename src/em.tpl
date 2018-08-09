@@ -209,15 +209,15 @@ PARAMETER_SECTION
   //init_bounded_number t0(-1,0.0,-1)    
   init_bounded_number C(0.1,1,-1)     
   init_bounded_number Ts(0.1,1.0,-1) 
-  init_bounded_number sigr(0.55,1,ph_sigmar) 
+  init_bounded_number sigr(0.05,1,ph_sigmar) 
   init_bounded_number log_P(-4,0,-2)    // OjO not really used
   init_bounded_number a50(-4,4,ph_sel_fish) 
   init_bounded_number a95(0.1,7.,ph_sel_fish) 
   init_bounded_number a50p(-4,4,ph_sel_fish)
   init_bounded_number a95p(0.1,7,ph_sel_fish)
-  init_bounded_number F60(.01,2.,phase_F40)
-  init_bounded_number F40(.01,2.,phase_F40)
-  init_bounded_number F20(.01,2.,phase_F40)
+  init_bounded_number F60(.01,7.,phase_F40)
+  init_bounded_number F40(.01,7.,phase_F40)
+  init_bounded_number F20(.01,7.,-phase_F40)
   init_bounded_number log_Bo(4,12,-2)    // OjO not really used
   init_bounded_vector rec_dev_future(styr_fut,endyr_fut,-20.,20.,ph_recdev);
   init_bounded_vector cv_age(1,nages,0.02,0.18,-1)  
@@ -601,11 +601,11 @@ FUNCTION get_abundancia
     {
       natage(styr,j)= mfexp(log_Nini+log_dev_ini(j))+0.5*square(sigr);
     }
-    for (int i=styr;i<=106;i++) 
+    for (int i=styr;i<=2006;i++) 
     {
       natage(i,1)=mfexp(mean_log_rec+rec_dev(i))+0.5*square(sigr);
     }
-    for (int i=107;i<=endyr;i++)
+    for (int i=2007;i<=endyr;i++)
     {
       natage(i,1)=mfexp(mean_log_rec1+rec_dev(i))+0.5*square(sigr);
     }
@@ -958,11 +958,11 @@ FUNCTION get_stock_recluta
   rbmsylast=endssb/bmsy;
   Rpred(styr)= mfexp(mean_log_rec);
   
-  for(int i=styr+1;i<=106;i++)
+  for(int i=styr+1;i<=2006;i++)
   {
 	Rpred(i)=ssbiom(i-1)/(alfa+beta1*ssbiom(i-1));
     }
-  for(int i=107;i<=endyr;i++)
+  for(int i=2007;i<=endyr;i++)
   {
 	Rpred(i)=ssbiom(i-1)/(alfa+beta2*ssbiom(i-1));
     }
@@ -980,12 +980,9 @@ FUNCTION evaluate_the_objective_function
    rec_like=norm2(rec_dev)/(2*square(sigr))+size_count(rec_dev)*log(sigr);
    if (active(rec_dev_future))
    {
-     if (active(rec_dev_future))
-      {
-       sigmar_fut=sigr;
-       rec_like+=norm2(rec_dev_future)/(2*square(sigmar_fut))+size_count(rec_dev_future)*log(sigmar_fut);
-      }
-    }
+      sigmar_fut=sigr;
+      rec_like+=norm2(rec_dev_future)/(2*square(sigmar_fut))+size_count(rec_dev_future)*log(sigmar_fut);
+   }
 //-Likelihhod composicion por talla pesquería
    age_like=0.;
     for (int i=1; i<=nobs_fishlen; i++)
@@ -1207,7 +1204,7 @@ FUNCTION MCWrite
 //###############  
 REPORT_SECTION
 //###############
-
+ if(last_phase()) save_gradients(gradients);
     report << "$So" << endl;
     report << So << endl;
     report << "$F60" << endl;
