@@ -83,7 +83,7 @@ yfishp<- c(1991,1992,1993,1994,1995,1996,1997,1998,1999,2000,2001,2002,2003,2004
 
 
 ###################GRAFICO QQ-PLOT
-x11()
+# x11()
 par(mfrow=c(4,2))
 par(mar=c(3.5,3.5,1,1),mgp=c(2,0.7,0),xaxs="i",yaxs="i");
 qqnorm(rescap,main = "Capturas",cex.main=1,ylab="Residual predicho",xlab="Residual teórico");
@@ -115,7 +115,7 @@ powr = 1 # tamaño a los bubbles
 x <- as.numeric(dimnames(ResPesq)[[2]]); xlim <- range(x) + c(-.5,.5);
 y <- as.numeric(dimnames(ResPesq)[[1]]); ylim <- range(y) + c(-1,1);
 #expandGraph(mgp=c(2,.5,0),las=1)
-x11()
+# # x11()
 par(mfrow=c(1,1)) 
 par(mar=c(3.5,3.5,1,1),mgp=c(2,0.7,0),xaxs="r",yaxs="r")
 plotBubbles(ResPesq,xval=x,yval=y,powr=powr,cex.axis=0.7,size=0.25,xlim=xlim,ylim=ylim,xlab="Longitud (cms)",ylab="Años Pesquería",cex.lab=0.8,clrs=c("black","red","blue"),main="",hide0=TRUE,lab=c(10, 10, 15),cex=1,cpro=0, lwd=1.5,frange=1.5, prettyaxis=TRUE)
@@ -127,7 +127,7 @@ powr = 1 #tamaño a los bubbles
 x <- as.numeric(dimnames(ResRec)[[2]]); xlim <- range(x) + c(-.5,.5);
 y <- as.numeric(dimnames(ResRec)[[1]]); ylim <- range(y) + c(-1,1);
 #expandGraph(mgp=c(2,.5,0),las=1)
-x11()
+# x11()
 par(mfrow=c(1,1))
 par(mar=c(3.5,3.5,1,1),mgp=c(2,0.7,0),xaxs="r",yaxs="r")
 plotBubbles(ResRec,xval=x,yval=y,powr=powr,cex.axis=0.7,size=0.25,xlim=xlim,ylim=ylim,xlab="Longitud (cms)",ylab="Años Crucero Reclas",cex.lab=0.8,clrs=c("black","red","blue"),main="",hide0=TRUE,lab=c(10, 10, 15),cex=1,cpro=0, lwd=1.5,frange=1.5, prettyaxis=TRUE)
@@ -138,7 +138,7 @@ powr = 1 #tamaño a los bubbles
 x <- as.numeric(dimnames(ResPel)[[2]]); xlim <- range(x) + c(-.5,.5);
 y <- as.numeric(dimnames(ResPel)[[1]]); ylim <- range(y) + c(-1,1);
 #expandGraph(mgp=c(2,.5,0),las=1)
-x11()
+# x11()
 par(mfrow=c(1,1))
 par(mar=c(3.5,3.5,1,1),mgp=c(2,0.7,0),xaxs="r",yaxs="r")
 plotBubbles(ResPel,xval=x,yval=y,powr=powr,cex.axis=0.7,size=0.25,xlim=xlim,ylim=ylim,xlab="Longitud (cms)",ylab="Años Crucero Pelaces",cex.lab=0.8,clrs=c("black","red","blue"),main="",hide0=TRUE,lab=c(10, 10, 15),cex=1,cpro=0, lwd=1.5,frange=1.5, prettyaxis=TRUE)
@@ -149,7 +149,7 @@ variable <-  M8$Propobservada
 dimnames(variable) <- list(c("1991","1992", "1993", "1994", "1995", "1996", "1997", "1998", "1999", "2000", "2001", "2002", "2003", "2004", "2005",
                        "2006", "2007","2008","2009","2010","2011","2012","2013","2014","2015","2016"),c("3", "3.5", "4", "4.5","5","5.5","6","6.5","7","7.5","8","8.5","9","9.5","10","10.5","11","11.5","12","12.5","13","13.5","14","14.5","15","15.5","16","16.5","17","17.5","18","18.5","19"))
 # plotea la estructura de tamaños
-x11()
+# x11()
 plot.N(variable, ratio.bars = 10, col.bars = "white","y",tick.number = 4,  ylab = "Proporción", xlab = "Longitud (cms)",cex.lab=0.9,tcl=-0.25,cex.axis=0.7)
 
 ################### COMPOSICIONES POR EDAD RECLAS
@@ -159,7 +159,7 @@ dimnames(variable) <- list(c("2000", "2001", "2002", "2003", "2004", "2005",
                        "2006", "2007","2008","2009","2010","2011","2012","2013","2014","2015","2016"),c("3", "3.5", "4", "4.5","5","5.5","6","6.5","7","7.5","8","8.5","9","9.5","10","10.5","11","11.5","12","12.5","13","13.5","14","14.5","15","15.5","16","16.5","17","17.5","18","18.5","19"))
 
 # plotea la estructura de tamaños
-x11()
+# x11()
 plot.N(variable, ratio.bars = 10, col.bars = "grey", "y",tick.number = 4, ylab = "Proporción", xlab = "Longitud (cms)",cex.lab=0.9,tcl=-0.25,cex.axis=0.7)
 
 ################### COMPOSICIONES POR EDAD PELACES
@@ -168,7 +168,7 @@ variable <-  M8$Propobservadap
 dimnames(variable) <- list(c("2003", "2005", "2006", "2007", "2009", "2010", "2011", "2012", "2013", "2014","2015","2016"),c("3", "3.5", "4", "4.5","5","5.5","6","6.5","7","7.5","8","8.5","9","9.5","10","10.5","11","11.5","12","12.5","13","13.5","14","14.5","15","15.5","16","16.5","17","17.5","18","18.5","19"))
 
 # plotea la estructura de tamaños
-x11()
+# x11()
 plot.N(variable, ratio.bars = 10, col.bars = "grey", "y",tick.number = 4, ylab = "Proporción", xlab = "Longitud (cms)",cex.lab=0.9,tcl=-0.25,cex.axis=0.7)
 
 ################### AJUSTES DE COMPOSICION PESQUERÍA
@@ -184,7 +184,7 @@ dimnames(Pobs) <-     list(c("1991","1992", "1993", "1994", "1995", "1996", "199
                        "2006", "2007","2008","2009","2010","2011","2012","2013","2014","2015","2016"),c("3", "3.5", "4", "4.5","5","5.5","6","6.5","7","7.5","8","8.5","9","9.5","10","10.5","11","11.5","12","12.5","13","13.5","14","14.5","15","15.5","16","16.5","17","17.5","18","18.5","19"))
 
 modelo <- list(Pobs = Pobs, Pest = Pest)
-x11()  
+# x11()  
 plot.ca(modelo, col.lines = c("black"),cex.lab=0.9,tcl=-0.25,cex.axis=0.7,lty.grid = 0,lty.lines = 1,tick.number = 3, lwd.lines = 2,pch = 1,col.bars="blue",xlab="Longitud (cms)",ylab="Proporción",ratio.bars = 10, col.bars = "white",)
 
 ##################### AJUSTES DE COMPOSICION RECLAS
@@ -197,7 +197,7 @@ dimnames(Pobsr) <- list(c("2000", "2001", "2002", "2003", "2004", "2005",
                        "2006", "2007","2008","2009","2010","2011","2012","2013","2014","2015","2016"),c("3", "3.5", "4", "4.5","5","5.5","6","6.5","7","7.5","8","8.5","9","9.5","10","10.5","11","11.5","12","12.5","13","13.5","14","14.5","15","15.5","16","16.5","17","17.5","18","18.5","19"))
 
 modelo <- list(Pobsr = Pobsr, Pestr = Pestr)
-x11()  ## puntos son datos y linea ajuste
+# # x11()  ## puntos son datos y linea ajuste
 plot.ca(modelo, col.lines = c("red"),lty.grid = 0, col.grid = "red",tick.number = 4, pch = 1, cex.points = 1,
 col.points = "red", lty.lines = 1,cex.lab=0.9,tcl=-0.25,cex.axis=0.7, lwd.lines = 2, xlab = "Longitud (cms)", ylab = "Proporción Reclas")
 
@@ -209,13 +209,13 @@ Pobsp  <-  M8$Propobservadap
 dimnames(Pobsp) <- list(c("2003","2005", "2006","2007","2009","2010","2011","2012","2013","2014","2015","2016"),c("3", "3.5", "4", "4.5","5","5.5","6","6.5","7","7.5","8","8.5","9","9.5","10","10.5","11","11.5","12","12.5","13","13.5","14","14.5","15","15.5","16","16.5","17","17.5","18","18.5","19"))
 
 modelo <- list(Pobsp = Pobsp, Pestp = Pestp)
-x11()  ## puntos son datos y linea ajuste
+# x11()  ## puntos son datos y linea ajuste
 plot.ca(modelo, col.lines = c("red"),lty.grid = 0, col.grid = "red",tick.number = 4, pch = 1, cex.points = 1,
 col.points = "red", lty.lines = 1,cex.lab=0.9,tcl=-0.25,cex.axis=0.7, lwd.lines = 2, xlab = "Longitud (cms)", ylab = "Proporción Pelaces")
 
 
 #################INDICES OBSERVADOS
-x11()
+# x11()
 par(mfrow=c(2,2))
 par(mar=c(3.5,3.5,1,1),mgp=c(2,0.7,0),xaxs="i",yaxs="i");
 par(mar=c(3.5,3.5,1,1),mgp=c(2,0.7,0),xaxs="r",yaxs="r")
@@ -233,7 +233,7 @@ xyplot(N ~ Ages | factor(Year) , data =selpesq, type = "l", ylab=" Selectividad 
 tcl=-5.55,cex.axis=0.001,cex.lab=0.1, col="black", lwd=2, as.table=TRUE,strip = strip.custom(bg ="grey"))
 
 ###################CAPTURAS, RENDIMIENTOS, ACUSTICA Y F (CASO BASE)###
-x11()
+# x11()
 par(mfrow=c(2,2))
 par(mar=c(3.5,3.5,1,1),mgp=c(2,0.7,0),xaxs="i",yaxs="i");
 plot(yfish,Y_obs,type="p",lwd=1.5,cex.lab=0.9,tcl=-0.25,cex.axis=0.8,xlab="Año biológico", ylim=c(0,1000000),ylab="Capturas (ton)",lab=c(10, 10, 10), cex=1.5);
@@ -246,7 +246,7 @@ plot(ysurvpel,surv_obspel,type="p",cex.lab=0.9,tcl=-0.25,cex.axis=0.8,lwd=1.5,xl
 lines(ysurvpel,surv_estpel,type="l",cex.lab=0.9,tcl=-0.25,cex.axis=0.8,lwd=1.5,xlab="Años",col="black",ylim=c(0,2500000),cex=1.5);   
 
 ###################CAPTURAS, RENDIMIENTOS, ACUSTICA Y F (CASO BASE 2)###
-x11()
+# x11()
 par(mfrow=c(2,2))
 par(mar=c(3.5,3.5,1,1),mgp=c(2,0.7,0),xaxs="i",yaxs="i");
 plot(yfish,Y_obs,type="p",lwd=1.5,cex.lab=0.9,tcl=-0.25,cex.axis=0.8,xlab="Año biológico", ylim=c(0,1000000),ylab="Capturas (ton)",lab=c(10, 10, 10), cex=1.5);
@@ -259,7 +259,7 @@ plot(ysurvpel,surv_obspel,type="p",cex.lab=0.9,tcl=-0.25,cex.axis=0.8,lwd=1.5,xl
 lines(ysurvpel,surv_estpel2,type="l",cex.lab=0.9,tcl=-0.25,cex.axis=0.8,lwd=1.5,xlab="Años",col="black",ylim=c(0,2500000),cex=1.5);   
 
 ###################CAPTURAS, RENDIMIENTOS, ACUSTICA Y F (CASO BASE 3)###
-x11()
+# x11()
 par(mfrow=c(2,2))
 par(mar=c(3.5,3.5,1,1),mgp=c(2,0.7,0),xaxs="i",yaxs="i");
 plot(yfish,Y_obs,type="p",lwd=1.5,cex.lab=0.9,tcl=-0.25,cex.axis=0.8,xlab="Año biológico", ylim=c(0,1000000),ylab="Capturas (ton)",lab=c(10, 10, 10), cex=1.5);
@@ -272,7 +272,7 @@ plot(ysurvpel,surv_obspel,type="p",cex.lab=0.9,tcl=-0.25,cex.axis=0.8,lwd=1.5,xl
 lines(ysurvpel,surv_estpel3,type="l",cex.lab=0.9,tcl=-0.25,cex.axis=0.8,lwd=1.5,xlab="Años",col="black",ylim=c(0,2500000),cex=1.5);   
 
 ###################CAPTURAS, RENDIMIENTOS, ACUSTICA Y F (CASO BASE 4)###
-x11()
+# x11()
 par(mfrow=c(2,2))
 par(mar=c(3.5,3.5,1,1),mgp=c(2,0.7,0),xaxs="i",yaxs="i");
 plot(yfish,Y_obs,type="p",lwd=1.5,cex.lab=0.9,tcl=-0.25,cex.axis=0.8,xlab="Año biológico", ylim=c(0,1000000),ylab="Capturas (ton)",lab=c(10, 10, 10), cex=1.5);
@@ -300,7 +300,7 @@ text(1991,1995, "Rec 2008-2016", col = "green", adj = c(-0.5, -22))
 legend(1993,385500000,cex=1,legend=c("Reclutamiento estimado"),lty=c(1),lwd=c(1.75),col=c("black"),bty="n")
 
 #BIOMASAS 
-x11()
+# x11()
 par(mfrow=c(3,1))
 par(mar=c(3.5,3.5,1,1),mgp=c(2,0.7,0),xaxs="i",yaxs="i");
 plot(yfish,bt,type="l",lty=1,xlab="Años",cex.lab=1.3,tcl=-0.25,cex.axis=1,ylim=c(0,4500000), lwd=1.5, ylab="Biomasa total (ton)",lab=c(15, 15, 10));
@@ -336,7 +336,7 @@ Fmrs<-0.49177
 B<-bd/Bmrs
 F<-Fy/Fmrs
 
-x11()
+# x11()
 par(mfrow=c(1,1))
 par(mar=c(3.5,3.5,2,1),mgp=c(2,0.7,0),xaxt="t");
 plot(B,F,type="l",lty=1,lwd=1.5,col="black",pch=c(20),tck=-0.015,xlab="B/Bmrs",xlim=c(0,3.5),ylim=c(0,3.5),ylab="F/Fmrs",lab=c(5, 5, 10));
@@ -363,7 +363,7 @@ legend(-0.35,0.7,legend=c("Colapso"),bty="n",cex=1.2)
 legend(1.5,2.5,legend=c("Sobrepesca"),bty="n",cex=1.5) 
 
 #####################BIOMASAS Y CAPTURAS PROYECTADOS
-x11()
+# x11()
 par(mfrow=c(2,1))
 par(mar=c(3.5,3.5,1,1),mgp=c(2,0.7,0),xaxs="i",yaxs="i");
 plot(yfishp,bdp,type="l",lty=1,xlab="Años",cex.lab=0.9,tcl=-0.25,cex.axis=0.7,ylim=c(0,2000000), lwd=1.5, ylab="Biomasa desovante (ton)",lab=c(15, 15, 10));
@@ -476,7 +476,7 @@ yfish<-  c(2003, 2005, 2006, 2007, 2009, 2010, 2011, 2012,2013,2014,2015,2016)
 Data13 <- data.frame(list(year = yfish, media = media13,error=error13,sup=sup13, inf=inf13))
 
 #########################BIOMASA TOTAL Y DESOVANTE
-x11()
+# x11()
 options(scipen = 10)
 par(mfrow=c(2,1))
 
@@ -504,7 +504,7 @@ legend(1999,900000,legend=c("Brms"),cex=0.8, col=c("green"),bty="n")
 legend(1999,540125,legend=c("Blim"),cex=0.8, col=c("red"),bty="n")
 
 ###############################INDICADORES
-x11()
+# x11()
 par(mfrow=c(2,2))
 par(mar=c(3,4.9,2,0),mgp=c(3.7,1,0),xaxs="i",yaxs="i");
 plot(Data10[,1],Data10[,2],las=1,ylim=c(0,1e6),cex=1.5,cex.lab=0.9,tcl=-0.25,cex.axis=0.8,lab=c(10, 5, 10),type="l",lwd=2,ylab="Capturas (ton)")
@@ -543,7 +543,7 @@ lines(ysurvpel,surv_obspel,type="p",lwd=1.5,cex.lab=0.9,tcl=-0.25,cex.axis=0.8,x
 #lines(ysurvpel,surv_estpel,type="l",cex.lab=0.9,tcl=-0.25,cex.axis=0.8,lwd=1.5,xlab="Años",col="black",ylim=c(0,2500000),cex=1.5);   
 
 ########################RPR VIRGINAL y F
-x11()
+# x11()
 options(scipen = 10)
 par(mfrow=c(2,1))
 

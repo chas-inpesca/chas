@@ -238,13 +238,15 @@
              	{
 	               obs <- repObj$s_obs_p_len_fish
     	           pre <- repObj$s_pred_p_len_fish 
-    	           yrs <- seq(repObj$styr+1,repObj$endyr,1)            		
+    	           #yrs <- seq(repObj$styr+1,repObj$endyr,1)            		
+    	           yrs <- seq(repObj$styr,repObj$endyr,1)            		
              	}
              	if(spp=="Anchoveta")
              	{
 	               obs <- repObj$a_obs_p_len_fish
     	           pre <- repObj$a_pred_p_len_fish
-    	           yrs <- seq(repObj$styr+1,repObj$endyr,1)             		            
+    	           #yrs <- seq(repObj$styr+1,repObj$endyr,1)             		            
+    	           yrs <- seq(repObj$styr,repObj$endyr,1)             		            
              	}
              }
            if (type=='Reclas')
