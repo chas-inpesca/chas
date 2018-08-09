@@ -23,8 +23,7 @@ run: $(EXEC)
 plot:
 	R CMD BATCH plot.R
 mcmc: $(EXEC)
-	./$(EXEC) -mcmc 10000 -nox -mcsave 10 
-mceval: $(EXEC)
+	./$(EXEC) -mcmc 10000 -nox -mcsave 1000
 	./$(EXEC) -mceval
 	
 

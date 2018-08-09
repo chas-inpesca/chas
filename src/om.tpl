@@ -1342,38 +1342,42 @@ FUNCTION Oper_Model
 				a_freq.initialize();
 				ivector s_bin(1,100);
 				ivector a_bin(1,100);
-        s_sim_p_recage(i) =s_sim_p_recage(i)/sum(s_sim_p_recage(i));
-        a_sim_p_recage(i) =a_sim_p_recage(i)/sum(a_sim_p_recage(i));
-        s_sim_p_reclen(i) =s_sim_p_recage(i)*s_alk;
-        a_sim_p_reclen(i) =a_sim_p_recage(i)*a_alk;
+        s_sim_p_recage(i) = s_sim_p_recage(i)/sum(s_sim_p_recage(i));
+        a_sim_p_recage(i) = a_sim_p_recage(i)/sum(a_sim_p_recage(i));
+        s_sim_p_reclen(i) = s_sim_p_recage(i)*s_alk;
+        a_sim_p_reclen(i) = a_sim_p_recage(i)*a_alk;
         s_p               = value(s_sim_p_reclen(i));
         a_p               = value(a_sim_p_reclen(i));
-        s_p               /=sum(s_p);
-        a_p               /=sum(a_p);
+        s_p               /= sum(s_p);
+        a_p               /= sum(a_p);
         s_bin.fill_multinomial(rng,s_p);
         a_bin.fill_multinomial(rng,a_p);
-        for(j             =1;j<=100;j++){s_freq(s_bin(j))++;a_freq(a_bin(j))++;}
+        for(j=1;j<=100;j++)
+        {
+          s_freq(s_bin(j))++;
+          a_freq(a_bin(j))++;
+        }
         s_p               = s_freq/sum(s_freq);
         a_p               = a_freq/sum(a_freq);
-        s_sim_p_reclen(i) =s_p; //Composicion por tallas reclas
-        a_sim_p_reclen(i) =a_p;				
+        s_sim_p_reclen(i) = s_p; //Composicion por tallas reclas
+        a_sim_p_reclen(i) = a_p;				
 				
 				if(catch_future(l,i)!=0)
 				{
 					//Sardina 
-          dvariable s_ffpen =0.0;
-          dvariable s_SK    =posfun((s_expl_biom(i)-s_catch_future(l,i))/s_expl_biom(i),0.05,s_ffpen);
-          s_Kobs_tot_catch  =s_expl_biom(i)-s_SK*s_expl_biom(i);
+          dvariable s_ffpen = 0.0;
+          dvariable s_SK    = posfun((s_expl_biom(i)-s_catch_future(l,i))/s_expl_biom(i),0.05,s_ffpen);
+          s_Kobs_tot_catch  = s_expl_biom(i)-s_SK*s_expl_biom(i);
           do_Newton_Raphson_for_mortality1(i);					
           //Anchoveta
-          dvariable a_ffpen =0.0;
-          dvariable a_SK    =posfun((a_expl_biom(i)-a_catch_future(l,i))/a_expl_biom(i),0.05,a_ffpen);
-          a_Kobs_tot_catch  =a_expl_biom(i)-a_SK*a_expl_biom(i);
+          dvariable a_ffpen = 0.0;
+          dvariable a_SK    = posfun((a_expl_biom(i)-a_catch_future(l,i))/a_expl_biom(i),0.05,a_ffpen);
+          a_Kobs_tot_catch  = a_expl_biom(i)-a_SK*a_expl_biom(i);
           do_Newton_Raphson_for_mortality2(i);
           //Efecto total					
-          dvariable ffpen   =0.0;
-          dvariable SK      =posfun((expl_biom(i)-catch_future(l,i))/expl_biom(i),0.05,ffpen);
-          Kobs_tot_catch    =expl_biom(i)-SK*expl_biom(i);
+          dvariable ffpen   = 0.0;
+          dvariable SK      = posfun((expl_biom(i)-catch_future(l,i))/expl_biom(i),0.05,ffpen);
+          Kobs_tot_catch    = expl_biom(i)-SK*expl_biom(i);
           do_Newton_Raphson_for_mortality(i);					
 				}
 				else
@@ -1474,30 +1478,35 @@ FUNCTION Oper_Model
         //catch at length 
         s_freq.initialize();
         a_freq.initialize();
-        //ivector bin(1,100);
+
+        //Sardina
         s_sim_p_fishage(i) =s_sim_p_fishage(i)/sum(s_sim_p_fishage(i));
         s_sim_p_fishlen(i) =s_sim_p_fishage(i)*s_alk;
         s_p                = value(s_sim_p_fishlen(i));
         s_p                /=sum(s_p);
         s_bin.fill_multinomial(rng,s_p);
-        for(j              =1;j<=100;j++){s_freq(s_bin(j))++;}
+        for(j=1;j<=100;j++)
+          s_freq(s_bin(j))++;
         s_p                = s_freq/sum(s_freq);
         s_sim_p_fishlen(i) =s_p;
+
         //anchoveta
         a_sim_p_fishage(i) =a_sim_p_fishage(i)/sum(a_sim_p_fishage(i));
         a_sim_p_fishlen(i) =a_sim_p_fishage(i)*a_alk;
         a_p                = value(a_sim_p_fishlen(i));
         a_p                /=sum(a_p);
         a_bin.fill_multinomial(rng,a_p);
-        for(j              =1;j<=100;j++){a_freq(a_bin(j))++;}
+        for(j=1;j<=100;j++)
+          a_freq(a_bin(j))++;
         a_p                = a_freq/sum(a_freq);
-        a_sim_p_fishlen(i) =a_p;		
+        a_sim_p_fishlen(i) = a_p;		
+
         //Ahora actualiza la evaluacion de sardina
-        yrs(i)             =i;
+        yrs(i)             = i;
         upk                = i;
         //numyear          = yrs(i)-s_ystr+1;
         sim_num_obs        = yrs(i)-styr_fut+1;
-        opt                =1;
+        opt                = 1;
 				ofstream ssimdata(s_simname);
 				ssimdata << "#Datos simulados para el estimador de sardina-INPESCA"<<endl;
 				ssimdata << "#Inicial yr"<<endl;
