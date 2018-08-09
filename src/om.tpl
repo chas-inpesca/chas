@@ -1581,6 +1581,21 @@ FUNCTION Oper_Model
 				{
 					ssimdata << " " <<s_sim_p_fishlen(k)<<endl;
 				}
+        ssimdata << "#Obs prop talla en reclas:"<<endl;
+        ssimdata << s_obs_p_len_rec << endl;
+        for(k=styr_fut;k<=upk;k++)
+          ssimdata << " " <<s_sim_p_reclen(k)<<endl;
+
+        ssimdata << "#Obs prop talla en pelaces:"<<endl;
+        ssimdata << s_obs_p_len_pel << endl;
+        for(k=styr_fut;k<=upk;k++)
+          ssimdata << " " <<s_sim_p_pellen(k)<<endl;
+          
+        ssimdata << "# peso a la edad :"<<endl;
+        ssimdata << s_wt << endl;
+        // for(k=styr_fut;k<=upk;k++)
+          // ssimdata << s_wt(endyr) << endl;
+
 				ssimdata << "#Opts_proy" << endl;
 				ssimdata << opt << endl;
 				ssimdata.close();
@@ -1655,6 +1670,18 @@ FUNCTION Oper_Model
 				{
 					asimdata << " " <<a_sim_p_fishlen(k)<<endl;
 				}
+        asimdata << "#Obs prop talla en reclas:"<<endl;
+        asimdata << a_obs_p_len_rec << endl;
+        for(k=styr_fut;k<=upk;k++)
+          asimdata << " " <<a_sim_p_reclen(k)<<endl;
+
+        asimdata << "#Obs prop talla en pelaces:"<<endl;
+        asimdata << a_obs_p_len_pel << endl;
+        for(k=styr_fut;k<=upk;k++)
+          asimdata << " " <<a_sim_p_pellen(k)<<endl;
+          
+        asimdata << "# peso a la edad :"<<endl;
+        asimdata << a_wt << endl;
 				asimdata << "#Opts_proy" << endl;
 				asimdata << opt << endl;
 				asimdata.close();

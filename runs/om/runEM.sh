@@ -1,2 +1,1 @@
-#!bash
 echo "Hi there"
