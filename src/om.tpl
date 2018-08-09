@@ -853,8 +853,8 @@ FUNCTION Oper_Model
 	
 
     //int rm=system("./RunOM.sh")
-	int rv=system("sardina -nox -nohess -iprint 200");
-	    rv=system("anchoveta -nox -nohess -iprint 200");
+	// int rv=system("sardina -nox -nohess -iprint 200");
+	    // rv=system("anchoveta -nox -nohess -iprint 200");
 			
 	//***** CICLO PARA EVALUAR n estrategias
 	for(l=1;l<=num_str;l++)
@@ -954,10 +954,10 @@ FUNCTION Oper_Model
 				}
 				
 				
-				//s_freq.initialize();
-				//a_freq.initialize();
-				//ivector s_bin(1,100);
-				//ivector a_bin(1,100);
+				s_freq.initialize();
+				a_freq.initialize();
+				ivector s_bin(1,100);
+				ivector a_bin(1,100);
 
 				s_sim_p_recage(i)=s_sim_p_recage(i)/sum(s_sim_p_recage(i));
 				a_sim_p_recage(i)=a_sim_p_recage(i)/sum(a_sim_p_recage(i));
@@ -1105,23 +1105,27 @@ FUNCTION Oper_Model
         s_freq.initialize();
         a_freq.initialize();
         //ivector bin(1,100);
-        s_sim_p_fishage(i) =s_sim_p_fishage(i)/sum(s_sim_p_fishage(i));
-        s_sim_p_fishlen(i) =s_sim_p_fishage(i)*s_alk;
-        //s_p              = value(s_sim_p_fishlen(i));
-        //s_p              /=sum(s_p);
-				//s_bin.fill_multinomial(rng,s_p);
-				//for(j=1;j<=100;j++){s_freq(s_bin(j))++;}
-				//s_p = s_freq/sum(s_freq);
-				//s_sim_p_fishlen(i)=s_p;
-				//anchoveta
+        s_sim_p_fishage(i) = s_sim_p_fishage(i)/sum(s_sim_p_fishage(i));
+        s_sim_p_fishlen(i) = s_sim_p_fishage(i)*s_alk;
+        s_p                = value(s_sim_p_fishlen(i));
+        s_p               /= sum(s_p);
+				s_bin.fill_multinomial(rng,s_p);
+				for(j=1;j<=100;j++)
+          s_freq(s_bin(j))++;
+        s_p                = s_freq/sum(s_freq);
+        s_sim_p_fishlen(i) =s_p;
+
+        //anchoveta
         a_sim_p_fishage(i) =a_sim_p_fishage(i)/sum(a_sim_p_fishage(i));
         a_sim_p_fishlen(i) =a_sim_p_fishage(i)*a_alk;
-        //a_p              = value(a_sim_p_fishlen(i));
-				//a_p /=sum(a_p);
-				//a_bin.fill_multinomial(rng,a_p);
-				//for(j=1;j<=100;j++){a_freq(a_bin(j))++;}
-				//a_p = a_freq/sum(a_freq);
-				//a_sim_p_fishlen(i)=a_p;		
+        a_p              = value(a_sim_p_fishlen(i));
+				a_p /=sum(a_p);
+				a_bin.fill_multinomial(rng,a_p);
+				for(j=1;j<=100;j++)
+          a_freq(a_bin(j))++;
+				a_p = a_freq/sum(a_freq);
+				a_sim_p_fishlen(i)=a_p;		
+
 				//Ahora actualiza la evaluacion de sardina
 				yrs(i)=i;
 				upk = i;
@@ -1279,8 +1283,8 @@ FUNCTION Oper_Model
 				asimdata.close();
 				
 				//ahora corre el estimador para dejar preparada la con styr_fut
-				rv=system("sardina -nox -nohess -iprint 200"); //// probar con anchoveta.exe
-				rv=system("anchoveta -nox -nohess -iprint 200");//// probar con anchoveta.exe								
+				//rv=system("sardina -nox -nohess -iprint 200"); //// probar con anchoveta.exe
+				int rv=system("runEM.sh");//// probar con anchoveta.exe								
 			}
 			else
 			{
@@ -1656,8 +1660,8 @@ FUNCTION Oper_Model
 				asimdata.close();
 				
 				//ahora corre el estimador para dejar preparada la con styr_fut
-        rv =system("sardina -nox -nohess -iprint 200");
-        rv =system("anchoveta -nox -nohess -iprint 200");								
+        // rv =system("sardina -nox -nohess -iprint 200");
+        int rv =system("runEM.sh");								
 			}
 		}
 	}
