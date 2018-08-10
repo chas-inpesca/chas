@@ -186,11 +186,11 @@ DATA_SECTION
   //init_matrix MLE_catch(1,5,styr_fut,endyr_fut);
   //!!cout << MLE_catch << endl;
  LOCAL_CALCS
-   styr_rec=styr-nages+1;
-   styr_fut=endyr+1;
-   endyr_fut=styr_fut+5;
-   phase_F40=5;
-   num_str=3;
+   styr_rec  = styr-nages+1;
+   styr_fut  = endyr+1;
+   endyr_fut = styr_fut+5;
+   phase_F40 = 5;
+   num_str   = 1;
  END_CALCS
 
 
@@ -860,29 +860,29 @@ FUNCTION Oper_Model
 	for(l=1;l<=num_str;l++)
 	{
 		//==== CICLO PARA CAPTURA INICIAL
-	    for(i=styr_fut;i<=endyr_fut;i++)
+	  for(i=styr_fut;i<=endyr_fut;i++)
 		{
 			//Desviaciones aleatorias log-normal para los indices
-      new_rec_epsilon(i)   =(mfexp(ran_rec_vect(i)*sigr)); //sigr asumiendo 
-      new_prop(i)          =mfexp(ran_prop_vect(i))/(1+exp(ran_prop_vect(i))); //proporcion logit
-      s_reclas_epsilon(i)  =(mfexp(s_ran_reclas(i)*CV_r));
-      s_pelaces_epsilon(i) =(mfexp(s_ran_pelaces(i)*CV_p));
-      s_mph_epsilon(i)     =(mfexp(s_ran_mph(i)*CV_d));
-      s_cpue_epsilon(i)    =(mfexp(s_ran_cpue(i)*CV_cpue)); //Asume un CV=0.2 para la cpue
+      new_rec_epsilon(i)   = mfexp(ran_rec_vect(i)*sigr); //sigr asumiendo 
+      new_prop(i)          = mfexp(ran_prop_vect(i))/(1+exp(ran_prop_vect(i))); //proporcion logit
+      s_reclas_epsilon(i)  = mfexp(s_ran_reclas(i)*CV_r);
+      s_pelaces_epsilon(i) = mfexp(s_ran_pelaces(i)*CV_p);
+      s_mph_epsilon(i)     = mfexp(s_ran_mph(i)*CV_d);
+      s_cpue_epsilon(i)    = mfexp(s_ran_cpue(i)*CV_cpue); //Asume un CV=0.2 para la cpue
       
       
-      a_reclas_epsilon(i)  =(mfexp(a_ran_reclas(i)*CV_r));
-      a_pelaces_epsilon(i) =(mfexp(a_ran_pelaces(i)*CV_p));
-      a_mph_epsilon(i)     =(mfexp(a_ran_mph(i)*CV_d));
-      a_cpue_epsilon(i)    =(mfexp(a_ran_cpue(i)*CV_cpue)); //Asume un CV=0.2 para la cpue
+      a_reclas_epsilon(i)  = (mfexp(a_ran_reclas(i)*CV_r));
+      a_pelaces_epsilon(i) = (mfexp(a_ran_pelaces(i)*CV_p));
+      a_mph_epsilon(i)     = (mfexp(a_ran_mph(i)*CV_d));
+      a_cpue_epsilon(i)    = (mfexp(a_ran_cpue(i)*CV_cpue)); //Asume un CV=0.2 para la cpue
       
       //Lee la captura biologicamente aceptable de sardina
-      ifstream s_CTP_tmp("sctpinit.dat");
+      ifstream s_CTP_tmp("s_abc.dat");
       s_CTP_tmp >> s_CatchNow;
       s_CTP_tmp.close();
       s_catch_future(l,i)  =s_CatchNow(l);
       //lee la estimacion de cuota de anchoveta
-      ifstream a_CTP_tmp("actpinit.dat");
+      ifstream a_CTP_tmp("a_abc.dat");
       a_CTP_tmp >> a_CatchNow;
       a_CTP_tmp.close();
       a_catch_future(l,i)  =a_CatchNow(l);
@@ -891,8 +891,9 @@ FUNCTION Oper_Model
 			catch_future(l,i)=s_catch_future(l,i)+a_catch_future(l,i);
 			//TODO: seleccion de criterio 
 			prop_fin_scatch_est_future(l,i)=s_catch_future(l,i)/catch_future(l,i);
+      cout <<s_CatchNow<<endl<<a_CatchNow<<endl;
 
-	        if(i<styr_fut+1)
+	    if(i<styr_fut+1)
 			{
 				//Se proyecta la condicion inicial sin reclutamiento de sardina
 				s_natage_future(i)(2,nages)=++elem_prod(s_natage(i-1)(1,nages-1),s_S(i-1)(1,nages-1));
@@ -908,13 +909,9 @@ FUNCTION Oper_Model
 				//TODO: modelar S-R proporcion asignada!!
 				/*
 			    if(SrType==1)
-			    {  
-			       natage_future(i,1)=(ssbiom(i-1)/(alpha + beta*ssbiom(i-1)))*new_ind(i);
-			    }
+			      natage_future(i,1)=(ssbiom(i-1)/(alpha + beta*ssbiom(i-1)))*new_ind(i);
 			    else
-			    {  
-					natage_future(i,1)=(alpha*ssbiom(i-1)*mfexp(-beta*ssbiom(i-1)))*new_ind(i);
-			    }
+				   	natage_future(i,1)=(alpha*ssbiom(i-1)*mfexp(-beta*ssbiom(i-1)))*new_ind(i);
 				*/
 				//Guarda la proporcion de reclutamiento de sardina del Modelo Operativo
 				prop_srecl_mop_future(l,i)=new_prop(i);
@@ -932,359 +929,6 @@ FUNCTION Oper_Model
 					a_expl_biom(i)+=a_sel_f(endyr,j)*a_wt(j)*a_natage_future(i,j);
 					expl_biom(i)+=a_expl_biom(i)+s_expl_biom(i);
 				}
-				
-				//Simulacion de nuevos datos considerando la Mortalidad por Pesca generada por la captura
-
-				s_biomass_future(i)=0.;
-				a_biomass_future(i)=0.;
-				s_sim_HB(i)=0.;		
-				a_sim_HB(i)=0.;
-				s_ssbv_future(i)=0.;
-				a_ssbv_future(i)=0.;
-				for(j=1;j<=nages;j++)
-				{
-					s_sim_p_recage(i,j)=s_sel_reclas(j)*s_natage_future(i,j); //Solucion exacta
-					a_sim_p_recage(i,j)=a_sel_reclas(j)*a_natage_future(i,j); //Solucion exacta
-					s_biomass_future(i)+=s_wt(j)*s_natage_future(i,j);  //biomasa
-					a_biomass_future(i)+=a_wt(j)*a_natage_future(i,j);  //biomasa
-					s_sim_HB(i)+=s_sel_reclas(j)*s_wt(j)*s_natage_future(i,j);//*s_reclas_epsilon(i);
-					a_sim_HB(i)+=a_sel_reclas(j)*a_wt(j)*a_natage_future(i,j);//*a_reclas_epsilon(i);
-					s_ssbv_future(i)+=s_natagev_fut(i,j)*s_wt(j)*s_mat(j)*mfexp(-.583*s_natmort);
-					a_ssbv_future(i)+=a_natagev_fut(i,j)*a_wt(j)*a_mat(j)*mfexp(-.583*a_natmort);
-				}
-				
-				
-				s_freq.initialize();
-				a_freq.initialize();
-				ivector s_bin(1,100);
-				ivector a_bin(1,100);
-
-				s_sim_p_recage(i)=s_sim_p_recage(i)/sum(s_sim_p_recage(i));
-				a_sim_p_recage(i)=a_sim_p_recage(i)/sum(a_sim_p_recage(i));
-								
-				s_sim_p_reclen(i)=s_sim_p_recage(i)*s_alk;
-				a_sim_p_reclen(i)=a_sim_p_recage(i)*a_alk;
-
-				
-				//s_p = value(s_sim_p_reclen(i));
-				// = value(a_sim_p_reclen(i));
-				//s_p /=sum(s_p);
-				//a_p /=sum(a_p);
-				//s_bin.fill_multinomial(rng,s_p);
-				//a_bin.fill_multinomial(rng,a_p);
-				//for(j=1;j<=100;j++){s_freq(s_bin(j))++;a_freq(a_bin(j))++;}
-				//s_p = s_freq/sum(s_freq);
-				//a_p = a_freq/sum(a_freq);
-				//s_sim_p_reclen(i)=s_p; //Composicion por tallas reclas
-				//a_sim_p_reclen(i)=a_p;
-				
-							
-				
-				if(catch_future(l,i)!=0)
-				{
-					//Sardina 
-          dvariable s_ffpen =0.0;
-          dvariable s_SK    =posfun((s_expl_biom(i)-s_catch_future(l,i))/s_expl_biom(i),0.05,s_ffpen);
-          s_Kobs_tot_catch  =s_expl_biom(i)-s_SK*s_expl_biom(i);
-          do_Newton_Raphson_for_mortality1(i);					
-          //Anchoveta
-          dvariable a_ffpen =0.0;
-          dvariable a_SK    =posfun((a_expl_biom(i)-a_catch_future(l,i))/a_expl_biom(i),0.05,a_ffpen);
-          a_Kobs_tot_catch  =a_expl_biom(i)-a_SK*a_expl_biom(i);
-          do_Newton_Raphson_for_mortality2(i);
-          //Efecto total					
-          dvariable ffpen   =0.0;
-          dvariable SK      =posfun((expl_biom(i)-catch_future(l,i))/expl_biom(i),0.05,ffpen);
-          Kobs_tot_catch    =expl_biom(i)-SK*expl_biom(i);
-          do_Newton_Raphson_for_mortality(i);					
-				}
-				else
-				{
-          s_F_future(i) =0.;
-          a_F_future(i) =0.;
-          F_future(i)   =0.;
-				}				
-
-	            //cout << "s_F_future:"<< s_F_future <<endl;
-	            //cout << "a_F_future:"<< a_F_future <<endl;
-				//exit(1);
-
-
-        s_Z_future(i)         =s_F_future(i)+s_natmort;
-        s_S_future(i)         =exp(-1.*s_Z_future(i));
-        s_Fyr_future(l,i)     =max(s_F_future(i));
-        a_Z_future(i)         =a_F_future(i)+a_natmort;
-        a_S_future(i)         =exp(-1.*a_Z_future(i));
-        a_Fyr_future(l,i)     =max(a_F_future(i));
-        Z_future(i)           =F_future(i)+natmort;
-        S_future(i)           =exp(-1.*Z_future(i));
-        Fyr_future(l,i)       =max(F_future(i));				
-        s_Sv_future(i)        =mfexp(-1.*s_natmort);
-        a_Sv_future(i)        =mfexp(-1.*a_natmort);
-        
-        future_biomass(l,i)   =0;
-        future_ssbiom(l,i)    =0;
-        s_future_biomass(l,i) =0;
-        s_future_ssbiom(l,i)  =0;
-        a_future_biomass(l,i) =0;
-        a_future_ssbiom(l,i)  =0;
-								
-				for(j=1;j<=nages;j++)
-				{
-          s_future_biomass(l,i) +=s_wt(j)*s_natage_future(i,j);
-          s_future_ssbiom(l,i)  +=s_natage_future(i,j)*s_wt(j)*s_mat(j)*mfexp(-.583*s_Z_future(i,j));
-          a_future_biomass(l,i) +=a_wt(j)*a_natage_future(i,j);
-          a_future_ssbiom(l,i)  +=a_natage_future(i,j)*a_wt(j)*a_mat(j)*mfexp(-.583*a_Z_future(i,j));
-          future_biomass(l,i)   +=s_future_biomass(l,i)+a_future_biomass(l,i);
-          future_ssbiom(l,i)    +=s_future_ssbiom(l,i)+a_future_ssbiom(l,i);
-				}
-        s_ssb1_ratio(l,i)  =s_future_ssbiom(l,i)/s_ssb(endyr);
-        s_ssb2_ratio(l,i)  =s_future_ssbiom(l,i)/s_avgssb;
-        s_ssb3_ratio(l,i)  =s_future_ssbiom(l,i)/s_S0;
-        a_ssb1_ratio(l,i)  =a_future_ssbiom(l,i)/a_ssb(endyr);
-        a_ssb2_ratio(l,i)  =a_future_ssbiom(l,i)/a_avgssb;
-        a_ssb3_ratio(l,i)  =a_future_ssbiom(l,i)/a_S0;
-        ssb1_ratio(l,i)    =future_ssbiom(l,i)/ssb(endyr);
-        ssb2_ratio(l,i)    =future_ssbiom(l,i)/avgssb;
-        ssb3_ratio(l,i)    =future_ssbiom(l,i)/(s_S0+a_S0);				
-        s_rprp(l,i)        =s_future_ssbiom(l,i)/s_ssbv_future(i);
-        a_rprp(l,i)        =a_future_ssbiom(l,i)/a_ssbv_future(i);
-        rprp(l,i)          =future_ssbiom(l,i)/(s_ssbv_future(i)+a_ssbv_future(i));
-        
-        //Recalcula los indices faltantes despues de la mortalidad por pesca generada por la CTP
-        s_ssbiom_future(i) =0.;
-        a_ssbiom_future(i) =0.;
-        ssbiom_future(i)   =0.;
-        s_sim_HB2(i)       =0.;
-        a_sim_HB2(i)       =0.;
-
-				for(j=1;j<=nages;j++)
-				{
-          s_sim_p_fishage(i,j) =s_F_future(i,j)*s_natage_future(i,j)*(1-exp(-1.*s_Z_future(i,j)))/s_Z_future(i,j);
-          a_sim_p_fishage(i,j) =a_F_future(i,j)*a_natage_future(i,j)*(1-exp(-1.*a_Z_future(i,j)))/a_Z_future(i,j);
-          s_sim_p_pelage(i,j)  =s_sel_pelaces(j)*s_natage_future(i,j)*mfexp(-0.375*s_Z_future(i,j));
-          a_sim_p_pelage(i,j)  =a_sel_pelaces(j)*a_natage_future(i,j)*mfexp(-0.375*a_Z_future(i,j));
-          s_ssbiom_future(i)   +=s_natage_future(i,j)*s_wt(j)*s_mat(j)*mfexp(-.583*s_Z_future(i,j));
-          a_ssbiom_future(i)   +=a_natage_future(i,j)*a_wt(j)*a_mat(j)*mfexp(-.583*a_Z_future(i,j));
-          ssbiom_future(i)     +=s_ssbiom_future(i)+a_ssbiom_future(i);
-          s_sim_HB2(i)         +=s_q_pelaces*s_sel_pelaces(j)*s_wt(j)*s_natage_future(i,j)*mfexp(-0.375*s_Z_future(i,j))*s_pelaces_epsilon(i);
-          a_sim_HB2(i)         +=a_q_pelaces*a_sel_pelaces(j)*a_wt(j)*a_natage_future(i,j)*mfexp(-0.375*a_Z_future(i,j))*a_pelaces_epsilon(i);
-				}
-				s_freq.initialize();
-				a_freq.initialize();
-				//ivector bin(1,100);
-        s_sim_p_pelage(i) =s_sim_p_pelage(i)/sum(s_sim_p_pelage(i));
-        s_sim_p_pellen(i) =s_sim_p_pelage(i)*s_alk;
-        a_sim_p_pelage(i) =a_sim_p_pelage(i)/sum(a_sim_p_pelage(i));
-        a_sim_p_pellen(i) =a_sim_p_pelage(i)*a_alk;
-        //sardina
-				/*
-				s_p = value(s_sim_p_pellen(i));
-				s_p /=sum(s_p);
-				s_bin.fill_multinomial(rng,s_p);
-				for(j=1;j<=100;j++){s_freq(s_bin(j))++;}
-				s_p = s_freq/sum(s_freq);
-				s_sim_p_pellen(i)=s_p;
-				//anchoveta
-				a_p = value(a_sim_p_pellen(i));
-				a_p /=sum(a_p);
-				a_bin.fill_multinomial(rng,a_p);
-				for(j=1;j<=100;j++){a_freq(a_bin(j))++;}
-				a_p = a_freq/sum(a_freq);
-				a_sim_p_pellen(i)=a_p;
-				*/
-
-				//simula MPH			
-        s_sim_MPH(i)       =s_q_mph*s_ssbiom_future(i)*s_mph_epsilon(i);
-        a_sim_MPH(i)       =a_q_mph*a_ssbiom_future(i)*a_mph_epsilon(i);
-        //simula CPUE
-        s_sim_cpue(i)      =s_q_cpue*s_expl_biom(i)*s_cpue_epsilon(i);
-        a_sim_cpue(i)      =a_q_cpue*a_expl_biom(i)*a_cpue_epsilon(i);
-        
-        //catch at length 
-        s_freq.initialize();
-        a_freq.initialize();
-        //ivector bin(1,100);
-        s_sim_p_fishage(i) = s_sim_p_fishage(i)/sum(s_sim_p_fishage(i));
-        s_sim_p_fishlen(i) = s_sim_p_fishage(i)*s_alk;
-        s_p                = value(s_sim_p_fishlen(i));
-        s_p               /= sum(s_p);
-				s_bin.fill_multinomial(rng,s_p);
-				for(j=1;j<=100;j++)
-          s_freq(s_bin(j))++;
-        s_p                = s_freq/sum(s_freq);
-        s_sim_p_fishlen(i) =s_p;
-
-        //anchoveta
-        a_sim_p_fishage(i) =a_sim_p_fishage(i)/sum(a_sim_p_fishage(i));
-        a_sim_p_fishlen(i) =a_sim_p_fishage(i)*a_alk;
-        a_p              = value(a_sim_p_fishlen(i));
-				a_p /=sum(a_p);
-				a_bin.fill_multinomial(rng,a_p);
-				for(j=1;j<=100;j++)
-          a_freq(a_bin(j))++;
-				a_p = a_freq/sum(a_freq);
-				a_sim_p_fishlen(i)=a_p;		
-
-				//Ahora actualiza la evaluacion de sardina
-				yrs(i)=i;
-				upk = i;
-				//numyear = yrs(i)-s_ystr+1;
-				sim_num_obs = yrs(i)-styr_fut+1;
-				
-				//cout << "sim_num_obs"<< sim_num_obs << endl;
-				
-				opt=1;
-				ofstream ssimdata(s_simname);
-				ssimdata << "#Datos simulados para el estimador de sardina-INPESCA" <<endl;
-				ssimdata << "#Inicial yr"<<endl;
-				ssimdata << s_styr  << endl;
-				ssimdata << "#Final yr"<<endl;
-				ssimdata << yrs(i)  << endl;
-				ssimdata << "#numages"<<endl;
-				ssimdata << s_nages <<endl;
-				ssimdata << "#Captura anual" <<endl;
-				ssimdata << s_catch_bio <<endl; //Los datos historicos 1990-2010
-                //agrega la captura next yr
-				for(k=styr_fut;k<=upk;k++){
-					ssimdata << " "<< s_catch_future(l,k) << endl; //Agrega la captura
-				}				
-				//agrega la cpue no actualizada
-				ssimdata << "#Nobs_cpue"<< endl;
-				ssimdata << s_nobs_cpue+sim_num_obs << endl;
-				ssimdata << "#yrs con datos de cpue"<<endl;
-				ssimdata << s_yr_cpue << endl;
-				for(k=styr_fut;k<=upk;k++){
-					ssimdata << " " <<yrs(k) << endl; //Agrega y resta un yr
-				}				
-				ssimdata << "#CPUE"<<endl;
-				ssimdata << s_obs_cpue << endl;
-				for(k=styr_fut;k<=upk;k++){
-					ssimdata << " "<< s_sim_cpue(k) << endl; //Agrega y resta un yr
-				}
-				//agrega la biomasa de reclas
-				ssimdata << "#Nobs_survey"<< endl;
-				ssimdata << s_nobs_surv+sim_num_obs << endl;
-				ssimdata << "#yrs con datos de cpue"<<endl;
-				ssimdata << s_yr_surv << endl;
-				for(k=styr_fut;k<=upk;k++){
-					ssimdata << " "<< yrs(k) << endl; //Agrega y resta un yr
-				}				
-				ssimdata << "#Biomasa acustica reclas"<<endl;
-				ssimdata << s_obs_surv << endl;
-				for(k=styr_fut;k<=upk;k++){
-					ssimdata << " "<< s_sim_HB(k) << endl; //Agrega
-				}
-				//agrega la biomasa de pelaces
-				ssimdata << "#Nobs_survey_pelaces"<< endl;
-				ssimdata << s_nobs_survpel+sim_num_obs << endl;
-				ssimdata << "#yrs con datos de cpue"<<endl;
-				ssimdata << s_yr_survpel << endl;
-				for(k=styr_fut;k<=upk;k++){
-					ssimdata << " " <<yrs(k) << endl; //Agrega
-				}				
-				ssimdata << "#Biomasa acustica pelaces"<<endl;
-				ssimdata << s_obs_survpel << endl;
-				for(k=styr_fut;k<=upk;k++){
-					ssimdata << " " << s_sim_HB2(k) << endl; //Agrega
-				}
-				//agrega los datos de compocisión por tallas
-				ssimdata <<"#Num tallas"<<endl;
-				ssimdata << s_nlenbins <<endl;
-				ssimdata << "#Nobs comp tallas"<<endl;
-				ssimdata << s_nobs_fishlen+sim_num_obs <<endl;
-				ssimdata << "#yrs con lenfreq"<<endl;
-				ssimdata << s_yr_fishlen << endl;
-				for(k=styr_fut;k<=upk;k++){
-					ssimdata << " " <<yrs(k) << endl; //Agrega
-				}
-				ssimdata << "#Obs prop talla en la captura:"<<endl;
-				ssimdata << " "<< s_obs_p_len_fish << endl;
-				for(k=styr_fut;k<=upk;k++)
-				{
-					ssimdata << s_sim_p_fishlen(k)<<endl;
-				}
-				ssimdata << "#Opts_proy" << endl;
-				ssimdata << opt << endl;
-				ssimdata.close();
-				//AHORA escribe los datos para anchoveta
-				ofstream asimdata(a_simname);
-				asimdata << "#Datos simulados para el estimador de sardina-INPESCA"<<endl;
-				asimdata << "#Inicial yr"<<endl;
-				asimdata << a_styr  << endl;
-				asimdata << "#Final yr"<<endl;
-				asimdata << yrs(i)  << endl;
-				asimdata << "#numages"<<endl;
-				asimdata << a_nages <<endl;
-				
-				asimdata << "#Captura anual" <<endl;
-				asimdata << a_catch_bio <<endl; //Los datos historicos 1990-2010
-                //agrega la captura next yr
-				for(k=styr_fut;k<=upk;k++){
-					asimdata << " " << a_catch_future(l,k) << endl; //Agrega la captura
-				}				
-				//agrega la cpue no actualizada
-				asimdata << "#Nobs_cpue"<< endl;
-				asimdata << a_nobs_cpue+sim_num_obs << endl;
-				asimdata << "#yrs con datos de cpue"<<endl;
-				asimdata << a_yr_cpue << endl;
-				for(k=styr_fut;k<=upk;k++){
-					asimdata << " "<< yrs(k) << endl; //Agrega y resta un yr
-				}				
-				asimdata << "#CPUE"<<endl;
-				asimdata << a_obs_cpue << endl;
-				for(k=styr_fut;k<=upk;k++){
-					asimdata << " " <<a_sim_cpue(k) << endl; //Agrega y resta un yr
-				}
-				//agrega la biomasa de reclas
-				asimdata << "#Nobs_survey"<< endl;
-				asimdata << a_nobs_surv+sim_num_obs << endl;
-				asimdata << "#yrs con datos de cpue"<<endl;
-				asimdata << a_yr_surv << endl;
-				for(k=styr_fut;k<=upk;k++){
-					asimdata << yrs(k) << endl; //Agrega y resta un yr
-				}				
-				asimdata << "#Biomasa acustica reclas"<<endl;
-				asimdata << a_obs_surv << endl;
-				for(k=styr_fut;k<=upk;k++){
-					asimdata << " " <<a_sim_HB(k) << endl; //Agrega
-				}
-				//agrega la biomasa de pelaces
-				asimdata << "#Nobs_survey_pelaces"<< endl;
-				asimdata << a_nobs_survpel+sim_num_obs << endl;
-				asimdata << "#yrs con datos de cpue"<<endl;
-				asimdata << a_yr_survpel << endl;
-				for(k=styr_fut;k<=upk;k++){
-					asimdata << " "<<yrs(k) << endl; //Agrega
-				}				
-				asimdata << "#Biomasa acustica pelaces"<<endl;
-				asimdata << a_obs_survpel << endl;
-				for(k=styr_fut;k<=upk;k++){
-					asimdata << " "<<a_sim_HB2(k) << endl; //Agrega
-				}
-				//agrega los datos de compocisión por tallas
-				asimdata <<"#Num tallas"<<endl;
-				asimdata << a_nlenbins <<endl;
-				asimdata << "#Nobs comp tallas"<<endl;
-				asimdata << a_nobs_fishlen+sim_num_obs <<endl;
-				asimdata << "#yrs con lenfreq"<<endl;
-				asimdata << a_yr_fishlen << endl;
-				for(k=styr_fut;k<=upk;k++){
-					asimdata << " "<<yrs(k) << endl; //Agrega
-				}
-				asimdata << "#Obs prop talla en la captura:"<<endl;
-				asimdata << a_obs_p_len << endl;
-				for(k=styr_fut;k<=upk;k++)
-				{
-					asimdata << " "<<a_sim_p_fishlen(k)<<endl;
-				}
-				asimdata << "#Opts_proy" << endl;
-				asimdata << opt << endl;
-				asimdata.close();
-				
-				//ahora corre el estimador para dejar preparada la con styr_fut
-				//rv=system("sardina -nox -nohess -iprint 200"); //// probar con anchoveta.exe
-				int rv=system("runEM.sh");//// probar con anchoveta.exe								
 			}
 			else
 			{
@@ -1300,13 +944,9 @@ FUNCTION Oper_Model
 				
 				/*
 			    if(SrType==1)
-			    {
-					natage_future(i,1)=((ssbiom_future(i-1)/(alpha + beta*ssbiom_future(i-1))))*new_ind(i);
-			    }
+					  natage_future(i,1)=((ssbiom_future(i-1)/(alpha + beta*ssbiom_future(i-1))))*new_ind(i);
 			    else
-			    {  
-					natage_future(i,1)=(alpha*ssbiom_future(i-1)*mfexp(-beta*ssbiom_future(i-1)))*new_ind(i);
-			    }
+					  natage_future(i,1)=(alpha*ssbiom_future(i-1)*mfexp(-beta*ssbiom_future(i-1)))*new_ind(i);
 				*/
 				//Guarda la proporcion de reclutamiento de sardina del Modelo Operativo
 				prop_srecl_mop_future(l,i)=new_prop(i);
@@ -1322,374 +962,382 @@ FUNCTION Oper_Model
           a_expl_biom(i) +=a_sel_f(endyr,j)*a_wt(j)*a_natage_future(i,j);
           expl_biom(i)   +=a_expl_biom(i)+s_expl_biom(i);
 				}
-				
-				//Simulacion de nuevos datos considerando la Mortalidad por Pesca generada por la captura
-
-				s_biomass_future(i)=0.;
-				a_biomass_future(i)=0.;
-				s_sim_HB(i)=0.;		
-				a_sim_HB(i)=0.;
-				s_ssbv_future(i)=0.;
-				a_ssbv_future(i)=0.;
-				for(j=1;j<=nages;j++)
-				{
-          s_sim_p_recage(i,j) =s_sel_reclas(j)*s_natage_future(i,j); //Solucion exacta
-          a_sim_p_recage(i,j) =a_sel_reclas(j)*a_natage_future(i,j); //Solucion exacta
-          s_biomass_future(i) +=s_wt(j)*s_natage_future(i,j);  //biomasa
-          a_biomass_future(i) +=a_wt(j)*a_natage_future(i,j);  //biomasa
-          s_sim_HB(i)         +=s_sel_reclas(j)*s_wt(j)*s_natage_future(i,j)*s_reclas_epsilon(i);
-          a_sim_HB(i)         +=a_sel_reclas(j)*a_wt(j)*a_natage_future(i,j)*a_reclas_epsilon(i);
-          s_ssbv_future(i)    +=s_natagev_fut(i,j)*s_wt(j)*s_mat(j)*mfexp(-.583*s_natmort);
-          a_ssbv_future(i)    +=a_natagev_fut(i,j)*a_wt(j)*a_mat(j)*mfexp(-.583*a_natmort);
-				}
-				s_freq.initialize();
-				a_freq.initialize();
-				ivector s_bin(1,100);
-				ivector a_bin(1,100);
-        s_sim_p_recage(i) = s_sim_p_recage(i)/sum(s_sim_p_recage(i));
-        a_sim_p_recage(i) = a_sim_p_recage(i)/sum(a_sim_p_recage(i));
-        s_sim_p_reclen(i) = s_sim_p_recage(i)*s_alk;
-        a_sim_p_reclen(i) = a_sim_p_recage(i)*a_alk;
-        s_p               = value(s_sim_p_reclen(i));
-        a_p               = value(a_sim_p_reclen(i));
-        s_p               /= sum(s_p);
-        a_p               /= sum(a_p);
-        s_bin.fill_multinomial(rng,s_p);
-        a_bin.fill_multinomial(rng,a_p);
-        for(j=1;j<=100;j++)
-        {
-          s_freq(s_bin(j))++;
-          a_freq(a_bin(j))++;
-        }
-        s_p               = s_freq/sum(s_freq);
-        a_p               = a_freq/sum(a_freq);
-        s_sim_p_reclen(i) = s_p; //Composicion por tallas reclas
-        a_sim_p_reclen(i) = a_p;				
-				
-				if(catch_future(l,i)!=0)
-				{
-					//Sardina 
-          dvariable s_ffpen = 0.0;
-          dvariable s_SK    = posfun((s_expl_biom(i)-s_catch_future(l,i))/s_expl_biom(i),0.05,s_ffpen);
-          s_Kobs_tot_catch  = s_expl_biom(i)-s_SK*s_expl_biom(i);
-          do_Newton_Raphson_for_mortality1(i);					
-          //Anchoveta
-          dvariable a_ffpen = 0.0;
-          dvariable a_SK    = posfun((a_expl_biom(i)-a_catch_future(l,i))/a_expl_biom(i),0.05,a_ffpen);
-          a_Kobs_tot_catch  = a_expl_biom(i)-a_SK*a_expl_biom(i);
-          do_Newton_Raphson_for_mortality2(i);
-          //Efecto total					
-          dvariable ffpen   = 0.0;
-          dvariable SK      = posfun((expl_biom(i)-catch_future(l,i))/expl_biom(i),0.05,ffpen);
-          Kobs_tot_catch    = expl_biom(i)-SK*expl_biom(i);
-          do_Newton_Raphson_for_mortality(i);					
-				}
-				else
-				{
-					s_F_future(i)=0.;
-					a_F_future(i)=0.;
-					F_future(i)=0.;
-				}				
-        
-        s_Z_future(i)         =s_F_future(i)+s_natmort;
-        s_S_future(i)         =exp(-1.*s_Z_future(i));
-        s_Fyr_future(l,i)     =max(s_F_future(i));
-        a_Z_future(i)         =a_F_future(i)+a_natmort;
-        a_S_future(i)         =exp(-1.*a_Z_future(i));
-        a_Fyr_future(l,i)     =max(a_F_future(i));
-        Z_future(i)           =F_future(i)+natmort;
-        S_future(i)           =exp(-1.*Z_future(i));
-        Fyr_future(l,i)       =max(F_future(i));				
-        s_Sv_future(i)        =mfexp(-1.*s_natmort);
-        a_Sv_future(i)        =mfexp(-1.*a_natmort);
-        future_biomass(l,i)   =0;
-        future_ssbiom(l,i)    =0;
-        s_future_biomass(l,i) =0;
-        s_future_ssbiom(l,i)  =0;
-        a_future_biomass(l,i) =0;
-        a_future_ssbiom(l,i)  =0;
-								
-				for(j=1;j<=nages;j++)
-				{
-          s_future_biomass(l,i) +=s_wt(j)*s_natage_future(i,j);
-          s_future_ssbiom(l,i)  +=s_natage_future(i,j)*s_wt(j)*s_mat(j)*mfexp(-.583*s_Z_future(i,j));
-          a_future_biomass(l,i) +=a_wt(j)*a_natage_future(i,j);
-          a_future_ssbiom(l,i)  +=a_natage_future(i,j)*a_wt(j)*a_mat(j)*mfexp(-.583*a_Z_future(i,j));
-          future_biomass(l,i)   +=s_future_biomass(l,i)+a_future_biomass(l,i);
-          future_ssbiom(l,i)    +=s_future_ssbiom(l,i)+a_future_ssbiom(l,i);
-				}
-				s_ssb1_ratio(l,i)=s_future_ssbiom(l,i)/s_ssb(endyr);
-				s_ssb2_ratio(l,i)=s_future_ssbiom(l,i)/s_avgssb;
-				s_ssb3_ratio(l,i)=s_future_ssbiom(l,i)/s_S0;
-				a_ssb1_ratio(l,i)=a_future_ssbiom(l,i)/a_ssb(endyr);
-				a_ssb2_ratio(l,i)=a_future_ssbiom(l,i)/a_avgssb;
-				a_ssb3_ratio(l,i)=a_future_ssbiom(l,i)/a_S0;
-				ssb1_ratio(l,i)=future_ssbiom(l,i)/ssb(endyr);
-				ssb2_ratio(l,i)=future_ssbiom(l,i)/avgssb;
-				ssb3_ratio(l,i)=future_ssbiom(l,i)/(s_S0+a_S0);				
-				s_rprp(l,i)=s_future_ssbiom(l,i)/s_ssbv_future(i);
-				a_rprp(l,i)=a_future_ssbiom(l,i)/a_ssbv_future(i);
-				rprp(l,i)=future_ssbiom(l,i)/(s_ssbv_future(i)+a_ssbv_future(i));
-				
-				//Recalcula los indices faltantes despues de la mortalidad por pesca generada por la CTP
-				s_ssbiom_future(i)=0.;
-				a_ssbiom_future(i)=0.;
-				ssbiom_future(i)=0.;
-				s_sim_HB2(i)=0.;
-				a_sim_HB2(i)=0.;
-
-				for(j=1;j<=nages;j++)
-				{
-          s_sim_p_fishage(i,j) =s_F_future(i,j)*s_natage_future(i,j)*(1-exp(-1.*s_Z_future(i,j)))/s_Z_future(i,j);
-          a_sim_p_fishage(i,j) =a_F_future(i,j)*a_natage_future(i,j)*(1-exp(-1.*a_Z_future(i,j)))/a_Z_future(i,j);
-          s_sim_p_pelage(i,j)  =s_sel_pelaces(j)*s_natage_future(i,j)*mfexp(-0.375*s_Z_future(i,j));
-          a_sim_p_pelage(i,j)  =a_sel_pelaces(j)*a_natage_future(i,j)*mfexp(-0.375*a_Z_future(i,j));
-          s_ssbiom_future(i)   +=s_natage_future(i,j)*s_wt(j)*s_mat(j)*mfexp(-.583*s_Z_future(i,j));
-          a_ssbiom_future(i)   +=a_natage_future(i,j)*a_wt(j)*a_mat(j)*mfexp(-.583*a_Z_future(i,j));
-          ssbiom_future(i)     +=s_ssbiom_future(i)+a_ssbiom_future(i);
-          s_sim_HB2(i)         +=s_q_pelaces*s_sel_pelaces(j)*s_wt(j)*s_natage_future(i,j)*mfexp(-0.375*s_Z_future(i,j))*s_pelaces_epsilon(i);
-          a_sim_HB2(i)         +=a_q_pelaces*a_sel_pelaces(j)*a_wt(j)*a_natage_future(i,j)*mfexp(-0.375*a_Z_future(i,j))*a_pelaces_epsilon(i);
-				}
-				s_freq.initialize();
-				a_freq.initialize();
-				//ivector bin(1,100);
-        s_sim_p_pelage(i) =s_sim_p_pelage(i)/sum(s_sim_p_pelage(i));
-        s_sim_p_pellen(i) =s_sim_p_pelage(i)*s_alk;
-        a_sim_p_pelage(i) =a_sim_p_pelage(i)/sum(a_sim_p_pelage(i));
-        a_sim_p_pellen(i) =a_sim_p_pelage(i)*a_alk;
-				//sardina
-        s_p                = value(s_sim_p_pellen(i));
-        s_p                /=sum(s_p);
-        s_bin.fill_multinomial(rng,s_p);
-        for(j              =1;j<=100;j++){s_freq(s_bin(j))++;}
-        s_p                = s_freq/sum(s_freq);
-        s_sim_p_pellen(i)  =s_p;
-        //anchoveta
-        a_p                = value(a_sim_p_pellen(i));
-        a_p                /=sum(a_p);
-        a_bin.fill_multinomial(rng,a_p);
-        for(j              =1;j<=100;j++){a_freq(a_bin(j))++;}
-        a_p                = a_freq/sum(a_freq);
-        a_sim_p_pellen(i)  =a_p;
-        
-        //simula MPH			
-        s_sim_MPH(i)       =s_q_mph*s_ssbiom_future(i)*s_mph_epsilon(i);
-        a_sim_MPH(i)       =a_q_mph*a_ssbiom_future(i)*a_mph_epsilon(i);
-        //simula CPUE
-        s_sim_cpue(i)      =s_q_cpue*s_expl_biom(i)*s_cpue_epsilon(i);
-        a_sim_cpue(i)      =a_q_cpue*a_expl_biom(i)*a_cpue_epsilon(i);
-        
-        //catch at length 
-        s_freq.initialize();
-        a_freq.initialize();
-
-        //Sardina
-        s_sim_p_fishage(i) =s_sim_p_fishage(i)/sum(s_sim_p_fishage(i));
-        s_sim_p_fishlen(i) =s_sim_p_fishage(i)*s_alk;
-        s_p                = value(s_sim_p_fishlen(i));
-        s_p                /=sum(s_p);
-        s_bin.fill_multinomial(rng,s_p);
-        for(j=1;j<=100;j++)
-          s_freq(s_bin(j))++;
-        s_p                = s_freq/sum(s_freq);
-        s_sim_p_fishlen(i) =s_p;
-
-        //anchoveta
-        a_sim_p_fishage(i) =a_sim_p_fishage(i)/sum(a_sim_p_fishage(i));
-        a_sim_p_fishlen(i) =a_sim_p_fishage(i)*a_alk;
-        a_p                = value(a_sim_p_fishlen(i));
-        a_p                /=sum(a_p);
-        a_bin.fill_multinomial(rng,a_p);
-        for(j=1;j<=100;j++)
-          a_freq(a_bin(j))++;
-        a_p                = a_freq/sum(a_freq);
-        a_sim_p_fishlen(i) = a_p;		
-
-        //Ahora actualiza la evaluacion de sardina
-        yrs(i)             = i;
-        upk                = i;
-        //numyear          = yrs(i)-s_ystr+1;
-        sim_num_obs        = yrs(i)-styr_fut+1;
-        opt                = 1;
-				ofstream ssimdata(s_simname);
-				ssimdata << "#Datos simulados para el estimador de sardina-INPESCA"<<endl;
-				ssimdata << "#Inicial yr"<<endl;
-				ssimdata << s_styr  << endl;
-				ssimdata << "#Final yr"<<endl;
-				ssimdata << yrs(i)  << endl;
-				ssimdata << "#numages"<<endl;
-				ssimdata << s_nages <<endl;
-				
-				ssimdata << "#Captura anual" <<endl;
-				ssimdata << s_catch_bio <<endl; //Los datos historicos 1990-2010
-                //agrega la captura next yr
-				for(k=styr_fut;k<=upk;k++){
-					ssimdata << " " << s_catch_future(l,k) << endl; //Agrega la captura
-				}				
-				//agrega la cpue no actualizada
-				ssimdata << "#Nobs_cpue"<< endl;
-				ssimdata << s_nobs_cpue+sim_num_obs << endl;
-				ssimdata << "#yrs con datos de cpue"<<endl;
-				ssimdata << s_yr_cpue << endl;
-				for(k=styr_fut;k<=upk;k++){
-					ssimdata << " "<< yrs(k) << endl; //Agrega y resta un yr
-				}				
-				ssimdata << "#CPUE"<<endl;
-				ssimdata << s_obs_cpue << endl;
-				for(k=styr_fut;k<=upk;k++){
-					ssimdata << " "<<s_sim_cpue(k) << endl; //Agrega y resta un yr
-				}
-				//agrega la biomasa de reclas
-				ssimdata << "#Nobs_survey"<< endl;
-				ssimdata << s_nobs_surv+sim_num_obs << endl;
-				ssimdata << "#yrs con datos de cpue"<<endl;
-				ssimdata << s_yr_surv << endl;
-				for(k=styr_fut;k<=upk;k++){
-					ssimdata << " " <<yrs(k) << endl; //Agrega y resta un yr
-				}				
-				ssimdata << "#Biomasa acustica reclas"<<endl;
-				ssimdata << s_obs_surv << endl;
-				for(k=styr_fut;k<=upk;k++){
-					ssimdata << " "<< s_sim_HB(k) << endl; //Agrega
-				}
-				//agrega la biomasa de pelaces
-				ssimdata << "#Nobs_survey_pelaces"<< endl;
-				ssimdata << s_nobs_survpel+sim_num_obs << endl;
-				ssimdata << "#yrs con datos de cpue"<<endl;
-				ssimdata << s_yr_survpel << endl;
-				for(k=styr_fut;k<=upk;k++){
-					ssimdata << " "<< yrs(k) << endl; //Agrega
-				}				
-				ssimdata << "#Biomasa acustica pelaces"<<endl;
-				ssimdata << s_obs_survpel << endl;
-				for(k=styr_fut;k<=upk;k++){
-					ssimdata << " "<<s_sim_HB2(k) << endl; //Agrega
-				}
-				//agrega los datos de compocisión por tallas
-				ssimdata <<"#Num tallas"<<endl;
-				ssimdata << s_nlenbins <<endl;
-				ssimdata << "#Nobs comp tallas"<<endl;
-				ssimdata << s_nobs_fishlen+sim_num_obs <<endl;
-				ssimdata << "#yrs con lenfreq"<<endl;
-				ssimdata << s_yr_fishlen << endl;
-				for(k=styr_fut;k<=upk;k++){
-					ssimdata << " "<< yrs(k) << endl; //Agrega
-				}
-				ssimdata << "#Obs prop talla en la captura:"<<endl;
-				ssimdata << s_obs_p_len_fish << endl;
-				for(k=styr_fut;k<=upk;k++)
-				{
-					ssimdata << " " <<s_sim_p_fishlen(k)<<endl;
-				}
-        ssimdata << "#Obs prop talla en reclas:"<<endl;
-        ssimdata << s_obs_p_len_rec << endl;
-        for(k=styr_fut;k<=upk;k++)
-          ssimdata << " " <<s_sim_p_reclen(k)<<endl;
-
-        ssimdata << "#Obs prop talla en pelaces:"<<endl;
-        ssimdata << s_obs_p_len_pel << endl;
-        for(k=styr_fut;k<=upk;k++)
-          ssimdata << " " <<s_sim_p_pellen(k)<<endl;
-          
-        ssimdata << "# peso a la edad :"<<endl;
-        ssimdata << s_wt << endl;
-        // for(k=styr_fut;k<=upk;k++)
-          // ssimdata << s_wt(endyr) << endl;
-
-				ssimdata << "#Opts_proy" << endl;
-				ssimdata << opt << endl;
-				ssimdata.close();
-				//AHORA escribe los datos para anchoveta
-				ofstream asimdata(a_simname);
-				asimdata << "#Datos simulados para el estimador de sardina-INPESCA"<<endl;
-				asimdata << "#Inicial yr"<<endl;
-				asimdata << a_styr  << endl;
-				asimdata << "#Final yr"<<endl;
-				asimdata << yrs(i)  << endl;
-				asimdata << "#numages"<<endl;
-				asimdata << a_nages <<endl;
-				
-				asimdata << "#Captura anual" <<endl;
-				asimdata << a_catch_bio <<endl; //Los datos historicos 1990-2010
-                //agrega la captura next yr
-				for(k=styr_fut;k<=upk;k++){
-					asimdata << " "<<a_catch_future(l,k) << endl; //Agrega la captura
-				}				
-				//agrega la cpue no actualizada
-				asimdata << "#Nobs_cpue"<< endl;
-				asimdata << a_nobs_cpue+sim_num_obs << endl;
-				asimdata << "#yrs con datos de cpue"<<endl;
-				asimdata << a_yr_cpue << endl;
-				for(k=styr_fut;k<=upk;k++){
-					asimdata << " " <<yrs(k) << endl; //Agrega y resta un yr
-				}				
-				asimdata << "#CPUE"<<endl;
-				asimdata << a_obs_cpue << endl;
-				for(k=styr_fut;k<=upk;k++){
-					asimdata << " " <<a_sim_cpue(k) << endl; //Agrega y resta un yr
-				}
-				//agrega la biomasa de reclas
-				asimdata << "#Nobs_survey"<< endl;
-				asimdata << a_nobs_surv+sim_num_obs << endl;
-				asimdata << "#yrs con datos de cpue"<<endl;
-				asimdata << a_yr_surv << endl;
-				for(k=styr_fut;k<=upk;k++){
-					asimdata << " " <<yrs(k) << endl; //Agrega y resta un yr
-				}				
-				asimdata << "#Biomasa acustica reclas"<<endl;
-				asimdata << a_obs_surv << endl;
-				for(k=styr_fut;k<=upk;k++){
-					asimdata << " " <<a_sim_HB(k) << endl; //Agrega
-				}
-				//agrega la biomasa de pelaces
-				asimdata << "#Nobs_survey_pelaces"<< endl;
-				asimdata << a_nobs_survpel+sim_num_obs << endl;
-				asimdata << "#yrs con datos de cpue"<<endl;
-				asimdata << a_yr_survpel << endl;
-				for(k=styr_fut;k<=upk;k++){
-					asimdata << " " <<yrs(k) << endl; //Agrega
-				}				
-				asimdata << "#Biomasa acustica pelaces"<<endl;
-				asimdata << a_obs_survpel << endl;
-				for(k=styr_fut;k<=upk;k++){
-					asimdata << " " <<a_sim_HB2(k) << endl; //Agrega
-				}
-				//agrega los datos de compocisión por tallas
-				asimdata <<"#Num tallas"<<endl;
-				asimdata << a_nlenbins <<endl;
-				asimdata << "#Nobs comp tallas"<<endl;
-				asimdata << a_nobs_fishlen+sim_num_obs <<endl;
-				asimdata << "#yrs con lenfreq"<<endl;
-				asimdata << a_yr_fishlen << endl;
-				for(k=styr_fut;k<=upk;k++){
-					asimdata << " "<<yrs(k) << endl; //Agrega
-				}
-				asimdata << "#Obs prop talla en la captura:"<<endl;
-				asimdata << a_obs_p_len << endl;
-				for(k=styr_fut;k<=upk;k++)
-				{
-					asimdata << " " <<a_sim_p_fishlen(k)<<endl;
-				}
-        asimdata << "#Obs prop talla en reclas:"<<endl;
-        asimdata << a_obs_p_len_rec << endl;
-        for(k=styr_fut;k<=upk;k++)
-          asimdata << " " <<a_sim_p_reclen(k)<<endl;
-
-        asimdata << "#Obs prop talla en pelaces:"<<endl;
-        asimdata << a_obs_p_len_pel << endl;
-        for(k=styr_fut;k<=upk;k++)
-          asimdata << " " <<a_sim_p_pellen(k)<<endl;
-          
-        asimdata << "# peso a la edad :"<<endl;
-        asimdata << a_wt << endl;
-				asimdata << "#Opts_proy" << endl;
-				asimdata << opt << endl;
-				asimdata.close();
-				
-				//ahora corre el estimador para dejar preparada la con styr_fut
-        // rv =system("sardina -nox -nohess -iprint 200");
-        int rv =system("runEM.sh");								
 			}
+				
+			//Simulacion de nuevos datos considerando la Mortalidad por Pesca generada por la captura
+
+			s_biomass_future(i) =0.;
+			a_biomass_future(i) =0.;
+			s_sim_HB(i)         =0.;		
+			a_sim_HB(i)         =0.;
+			s_ssbv_future(i)    =0.;
+			a_ssbv_future(i)    =0.;
+			for(j=1;j<=nages;j++)
+			{
+        s_sim_p_recage(i,j) =s_sel_reclas(j)*s_natage_future(i,j); //Solucion exacta
+        a_sim_p_recage(i,j) =a_sel_reclas(j)*a_natage_future(i,j); //Solucion exacta
+        s_biomass_future(i) +=s_wt(j)*s_natage_future(i,j);  //biomasa
+        a_biomass_future(i) +=a_wt(j)*a_natage_future(i,j);  //biomasa
+        s_sim_HB(i)         +=s_sel_reclas(j)*s_wt(j)*s_natage_future(i,j)*s_reclas_epsilon(i);
+        a_sim_HB(i)         +=a_sel_reclas(j)*a_wt(j)*a_natage_future(i,j)*a_reclas_epsilon(i);
+        s_ssbv_future(i)    +=s_natagev_fut(i,j)*s_wt(j)*s_mat(j)*mfexp(-.583*s_natmort);
+        a_ssbv_future(i)    +=a_natagev_fut(i,j)*a_wt(j)*a_mat(j)*mfexp(-.583*a_natmort);
+			}
+			s_freq.initialize();
+			a_freq.initialize();
+			ivector s_bin(1,100);
+			ivector a_bin(1,100);
+      s_sim_p_recage(i) = s_sim_p_recage(i)/sum(s_sim_p_recage(i));
+      a_sim_p_recage(i) = a_sim_p_recage(i)/sum(a_sim_p_recage(i));
+      s_sim_p_reclen(i) = s_sim_p_recage(i)*s_alk;
+      a_sim_p_reclen(i) = a_sim_p_recage(i)*a_alk;
+      s_p               = value(s_sim_p_reclen(i));
+      a_p               = value(a_sim_p_reclen(i));
+      s_p               /= sum(s_p);
+      a_p               /= sum(a_p);
+      s_bin.fill_multinomial(rng,s_p);
+      a_bin.fill_multinomial(rng,a_p);
+      for(j=1;j<=100;j++)
+      {
+        s_freq(s_bin(j))++;
+        a_freq(a_bin(j))++;
+      }
+      s_p               = s_freq/sum(s_freq);
+      a_p               = a_freq/sum(a_freq);
+      s_sim_p_reclen(i) = s_p; //Composicion por tallas reclas
+      a_sim_p_reclen(i) = a_p;				
+			
+			if(catch_future(l,i)!=0)
+			{
+				//Sardina 
+        dvariable s_ffpen = 0.0;
+        dvariable s_SK    = posfun((s_expl_biom(i)-s_catch_future(l,i))/s_expl_biom(i),0.05,s_ffpen);
+        s_Kobs_tot_catch  = s_expl_biom(i)-s_SK*s_expl_biom(i);
+        do_Newton_Raphson_for_mortality1(i);					
+        //Anchoveta
+        dvariable a_ffpen = 0.0;
+        dvariable a_SK    = posfun((a_expl_biom(i)-a_catch_future(l,i))/a_expl_biom(i),0.05,a_ffpen);
+        a_Kobs_tot_catch  = a_expl_biom(i)-a_SK*a_expl_biom(i);
+        do_Newton_Raphson_for_mortality2(i);
+        //Efecto total					
+        dvariable ffpen   = 0.0;
+        dvariable SK      = posfun((expl_biom(i)-catch_future(l,i))/expl_biom(i),0.05,ffpen);
+        Kobs_tot_catch    = expl_biom(i)-SK*expl_biom(i);
+        do_Newton_Raphson_for_mortality(i);					
+			}
+			else
+			{
+				s_F_future(i)=0.;
+				a_F_future(i)=0.;
+				F_future(i)=0.;
+			}				
+      
+      s_Z_future(i)         =s_F_future(i)+s_natmort;
+      s_S_future(i)         =exp(-1.*s_Z_future(i));
+      s_Fyr_future(l,i)     =max(s_F_future(i));
+      a_Z_future(i)         =a_F_future(i)+a_natmort;
+      a_S_future(i)         =exp(-1.*a_Z_future(i));
+      a_Fyr_future(l,i)     =max(a_F_future(i));
+      Z_future(i)           =F_future(i)+natmort;
+      S_future(i)           =exp(-1.*Z_future(i));
+      Fyr_future(l,i)       =max(F_future(i));				
+      s_Sv_future(i)        =mfexp(-1.*s_natmort);
+      a_Sv_future(i)        =mfexp(-1.*a_natmort);
+      future_biomass(l,i)   =0;
+      future_ssbiom(l,i)    =0;
+      s_future_biomass(l,i) =0;
+      s_future_ssbiom(l,i)  =0;
+      a_future_biomass(l,i) =0;
+      a_future_ssbiom(l,i)  =0;
+							
+			for(j=1;j<=nages;j++)
+			{
+        s_future_biomass(l,i) +=s_wt(j)*s_natage_future(i,j);
+        s_future_ssbiom(l,i)  +=s_natage_future(i,j)*s_wt(j)*s_mat(j)*mfexp(-.583*s_Z_future(i,j));
+        a_future_biomass(l,i) +=a_wt(j)*a_natage_future(i,j);
+        a_future_ssbiom(l,i)  +=a_natage_future(i,j)*a_wt(j)*a_mat(j)*mfexp(-.583*a_Z_future(i,j));
+        future_biomass(l,i)   +=s_future_biomass(l,i)+a_future_biomass(l,i);
+        future_ssbiom(l,i)    +=s_future_ssbiom(l,i)+a_future_ssbiom(l,i);
+			}
+			s_ssb1_ratio(l,i)=s_future_ssbiom(l,i)/s_ssb(endyr);
+			s_ssb2_ratio(l,i)=s_future_ssbiom(l,i)/s_avgssb;
+			s_ssb3_ratio(l,i)=s_future_ssbiom(l,i)/s_S0;
+			a_ssb1_ratio(l,i)=a_future_ssbiom(l,i)/a_ssb(endyr);
+			a_ssb2_ratio(l,i)=a_future_ssbiom(l,i)/a_avgssb;
+			a_ssb3_ratio(l,i)=a_future_ssbiom(l,i)/a_S0;
+			ssb1_ratio(l,i)=future_ssbiom(l,i)/ssb(endyr);
+			ssb2_ratio(l,i)=future_ssbiom(l,i)/avgssb;
+			ssb3_ratio(l,i)=future_ssbiom(l,i)/(s_S0+a_S0);				
+			s_rprp(l,i)=s_future_ssbiom(l,i)/s_ssbv_future(i);
+			a_rprp(l,i)=a_future_ssbiom(l,i)/a_ssbv_future(i);
+			rprp(l,i)=future_ssbiom(l,i)/(s_ssbv_future(i)+a_ssbv_future(i));
+			
+			//Recalcula los indices faltantes despues de la mortalidad por pesca generada por la CTP
+			s_ssbiom_future(i)=0.;
+			a_ssbiom_future(i)=0.;
+			ssbiom_future(i)=0.;
+			s_sim_HB2(i)=0.;
+			a_sim_HB2(i)=0.;
+
+			for(j=1;j<=nages;j++)
+			{
+        s_sim_p_fishage(i,j) = s_F_future(i,j)*s_natage_future(i,j)*(1-exp(-s_Z_future(i,j)))/s_Z_future(i,j);
+        a_sim_p_fishage(i,j) = a_F_future(i,j)*a_natage_future(i,j)*(1-exp(-a_Z_future(i,j)))/a_Z_future(i,j);
+        s_sim_p_pelage(i,j)  = s_sel_pelaces(j)*s_natage_future(i,j)*mfexp(-0.375*s_Z_future(i,j));
+        a_sim_p_pelage(i,j)  = a_sel_pelaces(j)*a_natage_future(i,j)*mfexp(-0.375*a_Z_future(i,j));
+        s_ssbiom_future(i)  += s_natage_future(i,j)*s_wt(j)*s_mat(j)*mfexp(-.583*s_Z_future(i,j));
+        a_ssbiom_future(i)  += a_natage_future(i,j)*a_wt(j)*a_mat(j)*mfexp(-.583*a_Z_future(i,j));
+        ssbiom_future(i)    += s_ssbiom_future(i)+a_ssbiom_future(i);
+        s_sim_HB2(i)        += s_q_pelaces*s_sel_pelaces(j)*s_wt(j)*s_natage_future(i,j)*mfexp(-0.375*s_Z_future(i,j))*s_pelaces_epsilon(i);
+        a_sim_HB2(i)        += a_q_pelaces*a_sel_pelaces(j)*a_wt(j)*a_natage_future(i,j)*mfexp(-0.375*a_Z_future(i,j))*a_pelaces_epsilon(i);
+			}
+			s_freq.initialize();
+			a_freq.initialize();
+			//ivector bin(1,100);
+      s_sim_p_pelage(i) =s_sim_p_pelage(i)/sum(s_sim_p_pelage(i));
+      s_sim_p_pellen(i) =s_sim_p_pelage(i)*s_alk;
+      a_sim_p_pelage(i) =a_sim_p_pelage(i)/sum(a_sim_p_pelage(i));
+      a_sim_p_pellen(i) =a_sim_p_pelage(i)*a_alk;
+			//sardina
+      s_p                = value(s_sim_p_pellen(i));
+      s_p                /=sum(s_p);
+      s_bin.fill_multinomial(rng,s_p);
+      for(j              =1;j<=100;j++){s_freq(s_bin(j))++;}
+      s_p                = s_freq/sum(s_freq);
+      s_sim_p_pellen(i)  =s_p;
+      //anchoveta
+      a_p                = value(a_sim_p_pellen(i));
+      a_p                /=sum(a_p);
+      a_bin.fill_multinomial(rng,a_p);
+      for(j              =1;j<=100;j++){a_freq(a_bin(j))++;}
+      a_p                = a_freq/sum(a_freq);
+      a_sim_p_pellen(i)  =a_p;
+      
+      //simula MPH			
+      s_sim_MPH(i)       =s_q_mph*s_ssbiom_future(i)*s_mph_epsilon(i);
+      a_sim_MPH(i)       =a_q_mph*a_ssbiom_future(i)*a_mph_epsilon(i);
+      //simula CPUE
+      s_sim_cpue(i)      =s_q_cpue*s_expl_biom(i)*s_cpue_epsilon(i);
+      a_sim_cpue(i)      =a_q_cpue*a_expl_biom(i)*a_cpue_epsilon(i);
+      
+      //catch at length 
+      s_freq.initialize();
+      a_freq.initialize();
+
+      //Sardina
+      s_sim_p_fishage(i) =s_sim_p_fishage(i)/sum(s_sim_p_fishage(i));
+      s_sim_p_fishlen(i) =s_sim_p_fishage(i)*s_alk;
+      s_p                = value(s_sim_p_fishlen(i));
+      s_p                /=sum(s_p);
+      s_bin.fill_multinomial(rng,s_p);
+      for(j=1;j<=100;j++)
+        s_freq(s_bin(j))++;
+      s_p                = s_freq/sum(s_freq);
+      s_sim_p_fishlen(i) =s_p;
+      //cout <<i<<" "<<s_sim_p_fishlen<<endl;
+
+      //anchoveta
+      a_sim_p_fishage(i) =a_sim_p_fishage(i)/sum(a_sim_p_fishage(i));
+      a_sim_p_fishlen(i) =a_sim_p_fishage(i)*a_alk;
+      a_p                = value(a_sim_p_fishlen(i));
+      a_p                /=sum(a_p);
+      a_bin.fill_multinomial(rng,a_p);
+      for(j=1;j<=100;j++)
+        a_freq(a_bin(j))++;
+      a_p                = a_freq/sum(a_freq);
+      a_sim_p_fishlen(i) = a_p;		
+
+      //Ahora actualiza la evaluacion de sardina
+      yrs(i)             = i;
+      upk                = i;
+      //numyear          = yrs(i)-s_ystr+1;
+      sim_num_obs        = yrs(i)-styr_fut+1;
+      opt                = 1;
+			ofstream ssimdata(s_simname);
+			ssimdata << "#Datos simulados para el estimador de sardina-INPESCA"<<endl;
+			ssimdata << "#Inicial yr"<<endl;
+			ssimdata << s_styr  << endl;
+			ssimdata << "#Final yr"<<endl;
+			ssimdata << yrs(i)  << endl;
+			ssimdata << "#numages"<<endl;
+			ssimdata << s_nages <<endl;
+			
+			ssimdata << "#Captura anual" <<endl;
+			ssimdata << s_obs_catch ; 
+			for(k=styr_fut;k<=upk;k++)
+				ssimdata << " " << s_catch_future(l,k) ; //Agrega la captura
+      ssimdata <<endl;
+
+			//agrega la cpue no actualizada
+      ssimdata << "#Nobs_cpue"<< endl <<"10 "<<endl<<
+     "1991  1992  1993  1994  1995  1996  1997  1998  1999  2000" <<endl<<
+     "3.7  3.4 2.8 2.9 3 4 3.9 2.9 3.5 3.7  " <<endl;
+			//agrega la biomasa de reclas
+			ssimdata << "#nobs_reclas"<< endl;
+			ssimdata << nobs_reclas+sim_num_obs << endl;
+			ssimdata << "#yrs reclas"<<endl;
+			ssimdata << yrs_reclas << endl;
+			for(k=styr_fut;k<=upk;k++)
+				ssimdata << " " <<yrs(k); //Agrega y resta un yr
+      ssimdata <<endl;
+			ssimdata << "#Biomasa acustica reclas"<<endl;
+			ssimdata << s_obs_reclas << endl;
+			for(k=styr_fut;k<=upk;k++)
+				ssimdata << " "<< s_sim_HB(k) ; //Agrega
+      ssimdata <<endl;
+
+			//agrega la biomasa de pelaces
+			ssimdata << "#Nobs_survey_pelaces"<< endl;
+			ssimdata << nobs_pel+sim_num_obs << endl;
+			ssimdata << "#yrs pelaces"<<endl;
+			ssimdata << yrs_pel << endl;
+			for(k=styr_fut;k<=upk;k++)
+				ssimdata << " "<< yrs(k) ; //Agrega
+      ssimdata<<endl;
+			ssimdata << "#Biomasa acustica pelaces"<<endl;
+			ssimdata << s_obs_pel << endl;
+			for(k=styr_fut;k<=upk;k++)
+				ssimdata << " "<<s_sim_HB2(k) ; //Agrega
+			ssimdata<<endl;
+
+			//agrega los datos de compocisión por tallas
+			ssimdata <<"#Num tallas"<<endl;
+			ssimdata << s_nlenbins <<endl;
+			ssimdata << "#Nobs comp tallas"<<endl;
+			ssimdata << s_nobs_lfdfish+sim_num_obs <<endl;
+      ssimdata<<"#Años Pesqueria estructura "<<endl;
+			ssimdata << s_yrs_lfdfish << endl;
+			for(k=styr_fut;k<=upk;k++)
+				ssimdata << " "<< yrs(k) ; //Agrega
+      ssimdata<<endl;
+      ssimdata<<"#Años Reclas estructura "<<endl;
+      ssimdata << s_yrs_lfdrec << endl;
+      for(k=styr_fut;k<=upk;k++)
+        ssimdata << " "<< yrs(k) ; //Agrega
+      ssimdata<<endl;
+      ssimdata<<"#Años Pelaces estructura "<<endl;
+      ssimdata << s_yrs_lfdpel << endl;
+      for(k=styr_fut;k<=upk;k++)
+        ssimdata << " "<< yrs(k) ; //Agrega
+      ssimdata<<endl;
+			ssimdata << "#Obs prop talla en la captura:"<<endl;
+			ssimdata << s_obs_p_len_fish << endl;
+      for(k=styr_fut;k<=upk;k++)
+        ssimdata << " " <<s_sim_p_fishlen(k)<<endl;;
+
+      ssimdata << "#Obs prop talla en reclas:"<<endl;
+      ssimdata << s_obs_p_len_rec << endl;
+      for(k=styr_fut;k<=upk;k++)
+        ssimdata << " " <<s_sim_p_reclen(k)<<endl;
+
+      ssimdata << "#Obs prop talla en pelaces:"<<endl;
+      ssimdata << s_obs_p_len_pel << endl;
+      for(k=styr_fut;k<=upk;k++)
+        ssimdata << " " <<s_sim_p_pellen(k)<<endl;
+        
+      ssimdata << "# peso a la edad :"<<endl;
+      for(k=styr;k<=upk;k++)
+        ssimdata << s_wt << endl;
+      // for(k=styr_fut;k<=upk;k++)
+        // ssimdata << s_wt(endyr) << endl;
+
+			ssimdata << "#Opts_proy" << endl;
+			ssimdata << opt << endl;
+			ssimdata.close();
+      
+			//AHORA escribe los datos para anchoveta
+			ofstream asimdata(a_simname);
+			asimdata << "#Datos simulados para el estimador de sardina-INPESCA"<<endl;
+			asimdata << "#Inicial yr"<<endl;
+			asimdata << a_styr  << endl;
+			asimdata << "#Final yr"<<endl;
+			asimdata << yrs(i)  << endl;
+			asimdata << "#numages"<<endl;
+			asimdata << a_nages <<endl;
+			
+			asimdata << "#Captura anual" <<endl;
+			asimdata << a_obs_catch; //Los datos historicos 1990-2010
+      //agrega la captura next yr
+			for(k=styr_fut;k<=upk;k++)
+				asimdata << " "<<a_catch_future(l,k) ; //Agrega la captura
+      asimdata <<endl;
+			//agrega la cpue no actualizada
+      asimdata << "#Nobs_cpue"<< endl <<"10 "<<endl<<
+     "1991  1992  1993  1994  1995  1996  1997  1998  1999  2000" <<endl<<
+     "2.18  2.29  2.54  3.18  2.85  2.39  2.75  3.66  3.63  3.25" <<endl;
+			//agrega la biomasa de reclas
+			asimdata << "#nobs_reclas"<< endl;
+			asimdata << nobs_reclas+sim_num_obs << endl;
+			asimdata << "#yrs reclas"<<endl;
+			asimdata << a_yr_surv << endl;
+			for(k=styr_fut;k<=upk;k++)
+				asimdata << " " <<yrs(k) ; //Agrega y resta un yr
+      asimdata <<endl;
+			asimdata << "#Biomasa acustica reclas"<<endl;
+			asimdata << a_obs_surv << endl;
+			for(k=styr_fut;k<=upk;k++)
+				asimdata << " " <<a_sim_HB(k) ; //Agrega
+      asimdata <<endl;
+			
+			//agrega la biomasa de pelaces
+			asimdata << "#Nobs_survey_pelaces"<< endl;
+			asimdata << nobs_pel+sim_num_obs << endl;
+			asimdata << "#yrs pelaces"<<endl;
+			asimdata << yrs_pel << endl;
+			for(k=styr_fut;k<=upk;k++)
+				asimdata << " " <<yrs(k) ; //Agrega
+      asimdata <<endl;
+			asimdata << "#Biomasa acustica pelaces"<<endl;
+			asimdata << a_obs_pel << endl;
+			for(k=styr_fut;k<=upk;k++)
+				asimdata << " " <<a_sim_HB2(k) ; //Agrega
+      asimdata <<endl;
+			
+			//agrega los datos de compocisión por tallas
+			asimdata <<"#Num tallas"<<endl;
+			asimdata << a_nlenbins <<endl;
+			asimdata << "#Nobs comp tallas"<<endl;
+			asimdata << a_nobs_lfdfish+sim_num_obs <<endl;
+      asimdata <<"#Años Pesqueria estructura "<<endl;
+      asimdata << a_yrs_lfdfish << endl;
+      for(k=styr_fut;k<=upk;k++)
+        asimdata << " "<< yrs(k) ; //Agrega
+      asimdata << endl;
+      asimdata <<"#Años Reclas estructura "<<endl;
+      asimdata << a_yrs_lfdrec << endl;
+      for(k=styr_fut;k<=upk;k++)
+        asimdata << " "<< yrs(k) ; //Agrega
+      asimdata << endl;
+      asimdata <<"#Años Pelaces estructura "<<endl;
+      asimdata << a_yrs_lfdpel << endl;
+      for(k=styr_fut;k<=upk;k++)
+        asimdata << " "<< yrs(k) ; //Agrega
+      asimdata << endl;     
+			asimdata << "#Obs prop talla en la captura:"<<endl;
+			asimdata << a_obs_p_len_fish << endl;
+			for(k=styr_fut;k<=upk;k++)
+				asimdata << " " <<a_sim_p_fishlen(k)<<endl;
+
+      asimdata << "#Obs prop talla en reclas:"<<endl;
+      asimdata << a_obs_p_len_rec << endl;
+      for(k=styr_fut;k<=upk;k++)
+        asimdata << " " <<a_sim_p_reclen(k)<<endl;
+
+      asimdata << "#Obs prop talla en pelaces:"<<endl;
+      asimdata << a_obs_p_len_pel << endl;
+      for(k=styr_fut;k<=upk;k++)
+        asimdata << " " <<a_sim_p_pellen(k)<<endl;
+        
+      asimdata << "# peso a la edad :"<<endl;
+      for(k=styr;k<=upk;k++)
+        asimdata << a_wt << endl;
+			asimdata << "#Opts_proy" << endl;
+			asimdata << opt << endl;
+			asimdata.close();
+			
+			//ahora corre el estimador para dejar preparada la con styr_fut
+      // rv =system("sardina -nox -nohess -iprint 200");
+      int rv =system("runEM.sh");								
 		}
 	}
 
