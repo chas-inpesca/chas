@@ -194,75 +194,6 @@ DATA_SECTION
  END_CALCS
 
 
-
-  //===+===+===+===+===+===+===+===+===+===
-  //OJO !!!!!!
-  //LEE LOS DATOS DE LOS ESTIMADORES (AQUI INSERTAR LA LECTURA DE DATOS HISTORICOS HASTA EL 2010) 
-  //!!ad_comm::change_datafile_name("srealdata.dat");
-  // copiar la lectura de datos del TPL del estimador
-	//******** LEE LOS DATOS REALES DEL ESTIMADOR ******* 
-	// SARDINA COMUN
-	!!ad_comm::change_datafile_name("sardinareal.dat");
-    init_int s_styr  
-    init_int s_endyr 
-    init_int s_nages  
-    init_vector s_catch_bio(s_styr,s_endyr)  //capturas anuales (ton)
-    //Datos de CPUE
-    init_int s_nobs_cpue
-    init_ivector s_yr_cpue(1,s_nobs_cpue)
-    init_vector s_obs_cpue(1,s_nobs_cpue)
-    //Datos Acustica reclas
-    init_int s_nobs_surv
-    init_ivector s_yr_surv(1,s_nobs_surv)
-    init_vector s_obs_surv(1,s_nobs_surv)
-    //Datos Acustica pelaces
-    init_int s_nobs_survpel
-    init_ivector s_yr_survpel(1,s_nobs_survpel)
-    init_vector s_obs_survpel(1,s_nobs_survpel)
-    //lee el numero de clases de talla
-    init_int s_nlenbins //Clases longitud
-    //Lee los datos de composicion por tallas
-    init_int s_nobs_fishlen //numero de datos, si se tiene 10 años (=10)
-    init_ivector s_yr_fishlen(1,s_nobs_fishlen) //los años para los cual se tiene los datos
-    init_matrix s_obs_p_len(1,s_nobs_fishlen,1,s_nlenbins) //la composicion por tallas
-    //init_matrix w(styr,endyr,1,nages)
-    //init_matrix maturity2(styr,endyr,1,nages)
-    //init_matrix M2(styr,endyr,1,nages)
-    //init_matrix mt(1,nlenbins,1,nages) 
-  
-    init_int s_opt_proy;
-	//***************************************************
-	//******** LEE LOS DATOS REALES DEL ESTIMADOR ******* 
-	// ANCHOVETA
-	!!ad_comm::change_datafile_name("anchreal.dat");
-    init_int a_styr  
-    init_int a_endyr 
-    init_int a_nages  
-    init_vector a_catch_bio(a_styr,a_endyr)  //capturas anuales (ton)
-    //Datos de CPUE
-    init_int a_nobs_cpue
-    init_ivector a_yr_cpue(1,a_nobs_cpue)
-    init_vector a_obs_cpue(1,a_nobs_cpue)
-    //Datos Acustica reclas
-    init_int a_nobs_surv
-    init_ivector a_yr_surv(1,a_nobs_surv)
-    init_vector a_obs_surv(1,a_nobs_surv)
-    //Datos Acustica pelaces
-    init_int a_nobs_survpel
-    init_ivector a_yr_survpel(1,a_nobs_survpel)
-    init_vector a_obs_survpel(1,a_nobs_survpel)
-    //lee el numero de clases de talla
-    init_int a_nlenbins //Clases longitud
-    //Lee los datos de composicion por tallas
-    init_int a_nobs_fishlen //numero de datos, si se tiene 10 años (=10)
-    init_ivector a_yr_fishlen(1,a_nobs_fishlen) //los años para los cual se tiene los datos
-    init_matrix a_obs_p_len(1,a_nobs_fishlen,1,a_nlenbins) //la composicion por tallas
-    //init_matrix w(styr,endyr,1,nages)
-    //init_matrix maturity2(styr,endyr,1,nages)
-    //init_matrix M2(styr,endyr,1,nages)
-    //init_matrix mt(1,nlenbins,1,nages) 
-  
-    init_int a_opt_proy;
 	//***************************************************
 	//ACTIVA el Modelo Operativo
 	int opm;
@@ -1244,7 +1175,7 @@ FUNCTION Oper_Model
 			ssimdata << "#Opts_proy" << endl;
 			ssimdata << opt << endl;
 			ssimdata.close();
-      
+
 			//AHORA escribe los datos para anchoveta
 			ofstream asimdata(a_simname);
 			asimdata << "#Datos simulados para el estimador de sardina-INPESCA"<<endl;
@@ -1269,12 +1200,12 @@ FUNCTION Oper_Model
 			asimdata << "#nobs_reclas"<< endl;
 			asimdata << nobs_reclas+sim_num_obs << endl;
 			asimdata << "#yrs reclas"<<endl;
-			asimdata << a_yr_surv << endl;
+			asimdata << yrs_reclas << endl;
 			for(k=styr_fut;k<=upk;k++)
 				asimdata << " " <<yrs(k) ; //Agrega y resta un yr
       asimdata <<endl;
 			asimdata << "#Biomasa acustica reclas"<<endl;
-			asimdata << a_obs_surv << endl;
+      asimdata << a_obs_reclas << endl;
 			for(k=styr_fut;k<=upk;k++)
 				asimdata << " " <<a_sim_HB(k) ; //Agrega
       asimdata <<endl;
