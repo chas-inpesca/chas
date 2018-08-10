@@ -733,7 +733,7 @@ FUNCTION spr
   }   
   Nspr(1,nages)=Nspr(1,nages-1)*exp(-1.*M)/(1.-exp(-1.*M));
   Nspr(2,nages)=Nspr(2,nages-1)*exp(-1.* (M+F60*age_sel(endyr,nages-1)))/(1.-exp(-1.*(M+F60*age_sel(endyr,nages))));
-  Nspr(3,nages)=Nspr(2,nages-1)*exp(-1.* (M+F40*age_sel(endyr,nages-1)))/(1.-exp(-1.*(M+F40*age_sel(endyr,nages))));
+  Nspr(3,nages)=Nspr(3,nages-1)*exp(-1.* (M+F40*age_sel(endyr,nages-1)))/(1.-exp(-1.*(M+F40*age_sel(endyr,nages))));
   Nspr(4,nages)=Nspr(4,nages-1)*exp(-1.* (M+F20*age_sel(endyr,nages-1)))/(1.-exp(-1.*(M+F20*age_sel(endyr,nages))));
 
   for (int j=1;j<=nages;j++)
@@ -1196,7 +1196,11 @@ FUNCTION MCWrite
 //###############  
 REPORT_SECTION
 //###############
- if(last_phase()) save_gradients(gradients);
+ if(last_phase()) 
+ {
+		save_gradients(gradients);
+		newabc << catch_future(1,styr_fut)<<endl;
+ }
     report << "$So" << endl;
     report << So << endl;
     report << "$F60" << endl;
@@ -1301,6 +1305,8 @@ GLOBALS_SECTION
   #define ECHO(object) echoinput << #object << "\n" << object << endl;
 
   ofstream echoinput("checkfile.rep");
+
+  ofstream newabc("newabc.rep");
 
 
 //################  
