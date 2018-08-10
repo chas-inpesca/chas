@@ -1,4 +1,6 @@
 *cor
+gradient.dat
+*.obj
 *.exe
 *.htp
 *.cpp

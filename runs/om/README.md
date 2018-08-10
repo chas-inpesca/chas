@@ -1,7 +1,15 @@
 # Operating model 
 
 ## Getting started
-  ' make mcmc '
+```
+ make mcmc 
+```
   will check of ../../src/om.tpl needs compiling, then run a rudimentary set from MCMC posterior and call runEM.sh...which needs updating obviously.
 
+```
+ make mceval 
+```
+uses the existing .psv for redoing the MSE
 
+*Key files:* 
+runEM.sh
