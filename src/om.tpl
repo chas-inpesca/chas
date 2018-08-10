@@ -98,6 +98,9 @@ DATA_SECTION
   init_int a_nobs_lfdpel
   init_ivector a_yrs_lfdpel(1,a_nobs_lfdpel)
   init_matrix a_obs_p_len_pel(1,a_nobs_lfdpel,1,nlen)
+  //----Added time-varying wt-age
+  init_matrix a_wta(styr,endyr,1,nages)                                     
+  init_matrix s_wta(styr,endyr,1,nages)                                     
   //====End of file
   init_number eof;
  LOCAL_CALCS
@@ -836,7 +839,6 @@ FUNCTION Oper_Model
 			catch_future(l,i)=s_catch_future(l,i)+a_catch_future(l,i);
 			//TODO: seleccion de criterio 
 			prop_fin_scatch_est_future(l,i)=s_catch_future(l,i)/catch_future(l,i);
-      cout <<prop_fin_scatch_est_future(l,i)<<" "<<s_CatchNow<<" " <<a_CatchNow<<endl;
 
 	    if(i<styr_fut+1)
 			{
@@ -1092,6 +1094,7 @@ FUNCTION Oper_Model
       a_p                = a_freq/sum(a_freq);
       a_sim_p_fishlen(i) = a_p;		
 
+      cout <<i<<" "<<s_sim_HB(i)/(a_sim_HB(i)+s_sim_HB(i)) <<" "<< prop_fin_scatch_est_future(l,i)<<" "<<s_CatchNow<<" " <<a_CatchNow<<endl;
       //Ahora actualiza la evaluacion de sardina
       yrs(i)             = i;
       upk                = i;
@@ -1181,6 +1184,7 @@ FUNCTION Oper_Model
         ssimdata << " " <<s_sim_p_pellen(k)<<endl;
         
       ssimdata << "# peso a la edad :"<<endl;
+      ssimdata << s_wta <<endl;
       for(k=styr;k<=upk;k++)
         ssimdata << s_wt << endl;
       // for(k=styr_fut;k<=upk;k++)
@@ -1274,6 +1278,7 @@ FUNCTION Oper_Model
         asimdata << " " <<a_sim_p_pellen(k)<<endl;
         
       asimdata << "# peso a la edad :"<<endl;
+      asimdata << a_wta <<endl;
       for(k=styr;k<=upk;k++)
         asimdata << a_wt << endl;
 			asimdata << "#Opts_proy" << endl;

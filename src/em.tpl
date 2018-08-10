@@ -190,7 +190,6 @@ INITIALIZATION_SECTION
   log_q_surv -0.001
   log_q_survpel -0.001
   sigr 0.6;
-  log_Bo 8.45;
   a50 .2
   a95 1.8
   a50p .2
@@ -212,14 +211,13 @@ PARAMETER_SECTION
   init_bounded_number Ts(0.1,1.0,-1) 
   init_bounded_number sigr(0.05,1,ph_sigmar) 
   init_bounded_number log_P(-4,0,-2)    // OjO not really used
-  init_bounded_number a50(-4,4,ph_sel_fish) 
-  init_bounded_number a95(0.1,7.,ph_sel_fish) 
-  init_bounded_number a50p(-4,4,ph_sel_fish)
-  init_bounded_number a95p(0.1,7,ph_sel_fish)
+  init_bounded_number a50(-4,4,ph_sel_fish+3) 
+  init_bounded_number a95(0.1,7.,ph_sel_fish+4) 
+  init_bounded_number a50p(-4,4,ph_sel_fish+2)
+  init_bounded_number a95p(0.1,7,ph_sel_fish+1)
   init_bounded_number F60(.01,7.,phase_F40)
   init_bounded_number F40(.01,7.,phase_F40)
-  init_bounded_number F20(.01,7.,phase_F40)
-  init_bounded_number log_Bo(4,12,-2)    // OjO not really used
+  init_bounded_number F20(.01,17.,-phase_F40)
   init_bounded_vector rec_dev_future(styr_fut,endyr_fut,-20.,20.,ph_recdev);
   init_bounded_vector cv_age(1,nages,0.02,0.18,-1)  
   init_bounded_dev_vector fmort_dev(styr,endyr,-10,10,ph_Fdev)  
@@ -265,8 +263,6 @@ PARAMETER_SECTION
   number cv_edad
   number k
   number Lo
-  number BPRo
-  number log_Ro
   number alfa
   number beta1
   number beta2
@@ -595,21 +591,16 @@ FUNCTION get_abundancia
   {
     Neq(j)     = Neq(j-1)*mfexp(-1*M);} 
     Neq(nages) = Neq(nages)/(1-exp(-1*M)); 
-    BPRo       = sum(elem_prod(Neq,wti));  
-    log_Ro     = log_Bo-log(BPRo);          // OjO, this parameter not used elsewhere...
     Nstage     = Neq*mfexp(mean_log_rec)+0.5*square(sigr);
     for (int j=2;j<=nages;j++)
-    {
       natage(styr,j)= mfexp(log_Nini+log_dev_ini(j))+0.5*square(sigr);
-    }
+    
     for (int i=styr;i<=2006;i++) 
-    {
       natage(i,1)=mfexp(mean_log_rec+rec_dev(i))+0.5*square(sigr);
-    }
+    
     for (int i=2007;i<=endyr;i++)
-    {
       natage(i,1)=mfexp(mean_log_rec1+rec_dev(i))+0.5*square(sigr);
-    }
+    
     for (int i=styr;i < endyr;i++)
     {
       natage(i+1)(2,nages)=++elem_prod(natage(i)(1,nages-1),S(i)(1,nages-1));
