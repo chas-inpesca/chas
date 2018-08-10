@@ -1081,15 +1081,15 @@ FUNCTION Oper_Model
 
 			for(j=1;j<=nages;j++)
 			{
-        s_sim_p_fishage(i,j) =s_F_future(i,j)*s_natage_future(i,j)*(1-exp(-1.*s_Z_future(i,j)))/s_Z_future(i,j);
-        a_sim_p_fishage(i,j) =a_F_future(i,j)*a_natage_future(i,j)*(1-exp(-1.*a_Z_future(i,j)))/a_Z_future(i,j);
-        s_sim_p_pelage(i,j)  =s_sel_pelaces(j)*s_natage_future(i,j)*mfexp(-0.375*s_Z_future(i,j));
-        a_sim_p_pelage(i,j)  =a_sel_pelaces(j)*a_natage_future(i,j)*mfexp(-0.375*a_Z_future(i,j));
-        s_ssbiom_future(i)   +=s_natage_future(i,j)*s_wt(j)*s_mat(j)*mfexp(-.583*s_Z_future(i,j));
-        a_ssbiom_future(i)   +=a_natage_future(i,j)*a_wt(j)*a_mat(j)*mfexp(-.583*a_Z_future(i,j));
-        ssbiom_future(i)     +=s_ssbiom_future(i)+a_ssbiom_future(i);
-        s_sim_HB2(i)         +=s_q_pelaces*s_sel_pelaces(j)*s_wt(j)*s_natage_future(i,j)*mfexp(-0.375*s_Z_future(i,j))*s_pelaces_epsilon(i);
-        a_sim_HB2(i)         +=a_q_pelaces*a_sel_pelaces(j)*a_wt(j)*a_natage_future(i,j)*mfexp(-0.375*a_Z_future(i,j))*a_pelaces_epsilon(i);
+        s_sim_p_fishage(i,j) = s_F_future(i,j)*s_natage_future(i,j)*(1-exp(-s_Z_future(i,j)))/s_Z_future(i,j);
+        a_sim_p_fishage(i,j) = a_F_future(i,j)*a_natage_future(i,j)*(1-exp(-a_Z_future(i,j)))/a_Z_future(i,j);
+        s_sim_p_pelage(i,j)  = s_sel_pelaces(j)*s_natage_future(i,j)*mfexp(-0.375*s_Z_future(i,j));
+        a_sim_p_pelage(i,j)  = a_sel_pelaces(j)*a_natage_future(i,j)*mfexp(-0.375*a_Z_future(i,j));
+        s_ssbiom_future(i)  += s_natage_future(i,j)*s_wt(j)*s_mat(j)*mfexp(-.583*s_Z_future(i,j));
+        a_ssbiom_future(i)  += a_natage_future(i,j)*a_wt(j)*a_mat(j)*mfexp(-.583*a_Z_future(i,j));
+        ssbiom_future(i)    += s_ssbiom_future(i)+a_ssbiom_future(i);
+        s_sim_HB2(i)        += s_q_pelaces*s_sel_pelaces(j)*s_wt(j)*s_natage_future(i,j)*mfexp(-0.375*s_Z_future(i,j))*s_pelaces_epsilon(i);
+        a_sim_HB2(i)        += a_q_pelaces*a_sel_pelaces(j)*a_wt(j)*a_natage_future(i,j)*mfexp(-0.375*a_Z_future(i,j))*a_pelaces_epsilon(i);
 			}
 			s_freq.initialize();
 			a_freq.initialize();
@@ -1134,6 +1134,7 @@ FUNCTION Oper_Model
         s_freq(s_bin(j))++;
       s_p                = s_freq/sum(s_freq);
       s_sim_p_fishlen(i) =s_p;
+      //cout <<i<<" "<<s_sim_p_fishlen<<endl;
 
       //anchoveta
       a_sim_p_fishage(i) =a_sim_p_fishage(i)/sum(a_sim_p_fishage(i));
@@ -1162,7 +1163,7 @@ FUNCTION Oper_Model
 			ssimdata << s_nages <<endl;
 			
 			ssimdata << "#Captura anual" <<endl;
-			ssimdata << s_catch_bio ; 
+			ssimdata << s_obs_catch ; 
 			for(k=styr_fut;k<=upk;k++)
 				ssimdata << " " << s_catch_future(l,k) ; //Agrega la captura
       ssimdata <<endl;
@@ -1204,16 +1205,25 @@ FUNCTION Oper_Model
 			ssimdata << s_nlenbins <<endl;
 			ssimdata << "#Nobs comp tallas"<<endl;
 			ssimdata << s_nobs_lfdfish+sim_num_obs <<endl;
-			ssimdata << "#yrs con lenfreq"<<endl;
+      ssimdata<<"#Años Pesqueria estructura "<<endl;
 			ssimdata << s_yrs_lfdfish << endl;
 			for(k=styr_fut;k<=upk;k++)
 				ssimdata << " "<< yrs(k) ; //Agrega
       ssimdata<<endl;
+      ssimdata<<"#Años Reclas estructura "<<endl;
+      ssimdata << s_yrs_lfdrec << endl;
+      for(k=styr_fut;k<=upk;k++)
+        ssimdata << " "<< yrs(k) ; //Agrega
+      ssimdata<<endl;
+      ssimdata<<"#Años Pelaces estructura "<<endl;
+      ssimdata << s_yrs_lfdpel << endl;
+      for(k=styr_fut;k<=upk;k++)
+        ssimdata << " "<< yrs(k) ; //Agrega
+      ssimdata<<endl;
 			ssimdata << "#Obs prop talla en la captura:"<<endl;
 			ssimdata << s_obs_p_len_fish << endl;
-			for(k=styr_fut;k<=upk;k++)
-				ssimdata << " " <<s_sim_p_fishlen(k);
-      ssimdata<<endl;
+      for(k=styr_fut;k<=upk;k++)
+        ssimdata << " " <<s_sim_p_fishlen(k)<<endl;;
 
       ssimdata << "#Obs prop talla en reclas:"<<endl;
       ssimdata << s_obs_p_len_rec << endl;
@@ -1226,13 +1236,15 @@ FUNCTION Oper_Model
         ssimdata << " " <<s_sim_p_pellen(k)<<endl;
         
       ssimdata << "# peso a la edad :"<<endl;
-      ssimdata << s_wt << endl;
+      for(k=styr;k<=upk;k++)
+        ssimdata << s_wt << endl;
       // for(k=styr_fut;k<=upk;k++)
         // ssimdata << s_wt(endyr) << endl;
 
 			ssimdata << "#Opts_proy" << endl;
 			ssimdata << opt << endl;
 			ssimdata.close();
+      
 			//AHORA escribe los datos para anchoveta
 			ofstream asimdata(a_simname);
 			asimdata << "#Datos simulados para el estimador de sardina-INPESCA"<<endl;
@@ -1244,7 +1256,7 @@ FUNCTION Oper_Model
 			asimdata << a_nages <<endl;
 			
 			asimdata << "#Captura anual" <<endl;
-			asimdata << a_catch_bio; //Los datos historicos 1990-2010
+			asimdata << a_obs_catch; //Los datos historicos 1990-2010
       //agrega la captura next yr
 			for(k=styr_fut;k<=upk;k++)
 				asimdata << " "<<a_catch_future(l,k) ; //Agrega la captura
@@ -1286,16 +1298,25 @@ FUNCTION Oper_Model
 			asimdata << a_nlenbins <<endl;
 			asimdata << "#Nobs comp tallas"<<endl;
 			asimdata << a_nobs_lfdfish+sim_num_obs <<endl;
-			asimdata << "#yrs con lenfreq"<<endl;
-			asimdata << a_yrs_lfdfish << endl;
-			for(k=styr_fut;k<=upk;k++)
-				asimdata << " "<<yrs(k) ; //Agrega
-      asimdata <<endl;
+      asimdata <<"#Años Pesqueria estructura "<<endl;
+      asimdata << a_yrs_lfdfish << endl;
+      for(k=styr_fut;k<=upk;k++)
+        asimdata << " "<< yrs(k) ; //Agrega
+      asimdata << endl;
+      asimdata <<"#Años Reclas estructura "<<endl;
+      asimdata << a_yrs_lfdrec << endl;
+      for(k=styr_fut;k<=upk;k++)
+        asimdata << " "<< yrs(k) ; //Agrega
+      asimdata << endl;
+      asimdata <<"#Años Pelaces estructura "<<endl;
+      asimdata << a_yrs_lfdpel << endl;
+      for(k=styr_fut;k<=upk;k++)
+        asimdata << " "<< yrs(k) ; //Agrega
+      asimdata << endl;     
 			asimdata << "#Obs prop talla en la captura:"<<endl;
 			asimdata << a_obs_p_len_fish << endl;
 			for(k=styr_fut;k<=upk;k++)
-				asimdata << " " <<a_sim_p_fishlen(k);
-      asimdata <<endl;
+				asimdata << " " <<a_sim_p_fishlen(k)<<endl;
 
       asimdata << "#Obs prop talla en reclas:"<<endl;
       asimdata << a_obs_p_len_rec << endl;
@@ -1308,7 +1329,8 @@ FUNCTION Oper_Model
         asimdata << " " <<a_sim_p_pellen(k)<<endl;
         
       asimdata << "# peso a la edad :"<<endl;
-      asimdata << a_wt << endl;
+      for(k=styr;k<=upk;k++)
+        asimdata << a_wt << endl;
 			asimdata << "#Opts_proy" << endl;
 			asimdata << opt << endl;
 			asimdata.close();
