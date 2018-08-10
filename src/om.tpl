@@ -74,6 +74,10 @@ DATA_SECTION
  END_CALCS
   //==+==+== Length Composition Fishery
   init_int nlen
+  int a_nlenbins;
+  int s_nlenbins ;
+   !! a_nlenbins  = nlen;
+   !! s_nlenbins  = nlen;
   init_int s_nobs_lfdfish
   init_ivector s_yrs_lfdfish(1,s_nobs_lfdfish)
   init_matrix s_obs_p_len_fish(1,s_nobs_lfdfish,1,nlen)  
@@ -194,6 +198,14 @@ DATA_SECTION
  END_CALCS
 
 
+
+  //===+===+===+===+===+===+===+===+===+===
+  //OJO !!!!!!
+  //LEE LOS DATOS DE LOS ESTIMADORES (AQUI INSERTAR LA LECTURA DE DATOS HISTORICOS HASTA EL 2010) 
+  //!!ad_comm::change_datafile_name("srealdata.dat");
+  // copiar la lectura de datos del TPL del estimador
+	//******** LEE LOS DATOS REALES DEL ESTIMADOR ******* 
+	// SARDINA COMUN
 	//***************************************************
 	//ACTIVA el Modelo Operativo
 	int opm;
@@ -812,17 +824,19 @@ FUNCTION Oper_Model
       s_CTP_tmp >> s_CatchNow;
       s_CTP_tmp.close();
       s_catch_future(l,i)  =s_CatchNow(l);
+
       //lee la estimacion de cuota de anchoveta
       ifstream a_CTP_tmp("a_abc.dat");
       a_CTP_tmp >> a_CatchNow;
       a_CTP_tmp.close();
       a_catch_future(l,i)  =a_CatchNow(l);
+
       //Juntamos la cuota segun enfoque de Pesca Mixta
 			//Ejemplo con cuota conjunta, la suma de las dos
 			catch_future(l,i)=s_catch_future(l,i)+a_catch_future(l,i);
 			//TODO: seleccion de criterio 
 			prop_fin_scatch_est_future(l,i)=s_catch_future(l,i)/catch_future(l,i);
-      cout <<s_CatchNow<<endl<<a_CatchNow<<endl;
+      cout <<prop_fin_scatch_est_future(l,i)<<" "<<s_CatchNow<<" " <<a_CatchNow<<endl;
 
 	    if(i<styr_fut+1)
 			{
@@ -1087,11 +1101,11 @@ FUNCTION Oper_Model
 			ofstream ssimdata(s_simname);
 			ssimdata << "#Datos simulados para el estimador de sardina-INPESCA"<<endl;
 			ssimdata << "#Inicial yr"<<endl;
-			ssimdata << s_styr  << endl;
+			ssimdata << styr  << endl;
 			ssimdata << "#Final yr"<<endl;
 			ssimdata << yrs(i)  << endl;
 			ssimdata << "#numages"<<endl;
-			ssimdata << s_nages <<endl;
+			ssimdata << nages <<endl;
 			
 			ssimdata << "#Captura anual" <<endl;
 			ssimdata << s_obs_catch ; 
@@ -1180,11 +1194,11 @@ FUNCTION Oper_Model
 			ofstream asimdata(a_simname);
 			asimdata << "#Datos simulados para el estimador de sardina-INPESCA"<<endl;
 			asimdata << "#Inicial yr"<<endl;
-			asimdata << a_styr  << endl;
+			asimdata << styr  << endl;
 			asimdata << "#Final yr"<<endl;
 			asimdata << yrs(i)  << endl;
 			asimdata << "#numages"<<endl;
-			asimdata << a_nages <<endl;
+			asimdata << nages <<endl;
 			
 			asimdata << "#Captura anual" <<endl;
 			asimdata << a_obs_catch; //Los datos historicos 1990-2010
