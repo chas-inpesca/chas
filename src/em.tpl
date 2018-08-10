@@ -218,7 +218,7 @@ PARAMETER_SECTION
   init_bounded_number a95p(0.1,7,ph_sel_fish)
   init_bounded_number F60(.01,7.,phase_F40)
   init_bounded_number F40(.01,7.,phase_F40)
-  init_bounded_number F20(.01,7.,-phase_F40)
+  init_bounded_number F20(.01,7.,phase_F40)
   init_bounded_number log_Bo(4,12,-2)    // OjO not really used
   init_bounded_vector rec_dev_future(styr_fut,endyr_fut,-20.,20.,ph_recdev);
   init_bounded_vector cv_age(1,nages,0.02,0.18,-1)  

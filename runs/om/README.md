@@ -1,2 +1,7 @@
 # Operating model 
-for NUTS sampling execute om -hbf 1 first to get the correct hessian for ADNUTS in R
+
+## Getting started
+  ' make mcmc '
+  will check of ../../src/om.tpl needs compiling, then run a rudimentary set from MCMC posterior and call runEM.sh...which needs updating obviously.
+
+

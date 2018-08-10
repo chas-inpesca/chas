@@ -26,6 +26,8 @@ mcmc: $(EXEC)
 	./$(EXEC) -mcmc 10000 -nox -mcsave 1000
 	./$(EXEC) -mceval
 	
+mceval: $(EXEC)
+	./$(EXEC) -mceval
 
 clean:
 	@$(RM) -f $(EXEC)
