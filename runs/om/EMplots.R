@@ -42,7 +42,8 @@ plotLengthComps <- function(obs,est,yrs,txt="Length Comps") {
 # Fits to survey biomass
 #-----------------------
 plotDataFit <- function(obs,est,yrsobs,yrsest=yrfish,txt="Survey Fits",...) {
-	plot(y=est,x=yrsest, type='l',lwd=2,...)
+	ylims <- range(c(obs,est))
+	plot(y=est,x=yrsest, type='l',lwd=2,ylim=ylims,xlab="Year",ylab=NA,...)
 	points(y=obs,x=yrsobs)
 	mtext(side=3,txt)
 }
