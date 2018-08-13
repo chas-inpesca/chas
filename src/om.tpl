@@ -7,7 +7,8 @@ DATA_SECTION
   !! *(ad_comm::global_datafile) >>  ctlfile_name; // First line is datafile 
   !!ad_comm::change_datafile_name(datafile_name);
 	int iseed
-	!!long int lseed=iseed;
+	int isim
+	!!long int lseed=iseed; isim=0;
 	!!CLASS random_number_generator rng(iseed);
 
   init_int debug
@@ -742,6 +743,7 @@ FUNCTION S_R_parameters
 
 FUNCTION Oper_Model
 	//Sardina
+	isim++;
 	dvector ran_rec_vect(styr_fut,endyr_fut); //Random para reclutamiento
 	dvector ran_prop_vect(styr_fut,endyr_fut); //Random proporcion de reclutas
 	dvector s_ran_reclas(styr_fut,endyr_fut);
@@ -836,9 +838,9 @@ FUNCTION Oper_Model
 
       //Juntamos la cuota segun enfoque de Pesca Mixta
 			//Ejemplo con cuota conjunta, la suma de las dos
-			catch_future(l,i)=s_catch_future(l,i)+a_catch_future(l,i);
+			// catch_future(l,i)=s_catch_future(l,i)+a_catch_future(l,i);
 			//TODO: seleccion de criterio 
-			prop_fin_scatch_est_future(l,i)=s_catch_future(l,i)/catch_future(l,i);
+			prop_fin_scatch_est_future(l,i)=s_catch_future(l,i)/(a_catch_future(l,i)+s_catch_future(l,i));
 
 	    if(i<styr_fut+1)
 			{
@@ -913,27 +915,27 @@ FUNCTION Oper_Model
 				
 			//Simulacion de nuevos datos considerando la Mortalidad por Pesca generada por la captura
 
-			s_biomass_future(i) =0.;
-			a_biomass_future(i) =0.;
-			s_sim_HB(i)         =0.;		
-			a_sim_HB(i)         =0.;
-			s_ssbv_future(i)    =0.;
-			a_ssbv_future(i)    =0.;
+			s_biomass_future(i) = 0.;
+			a_biomass_future(i) = 0.;
+			s_sim_HB(i)         = 0.;		
+			a_sim_HB(i)         = 0.;
+			s_ssbv_future(i)    = 0.;
+			a_ssbv_future(i)    = 0.;
 			for(j=1;j<=nages;j++)
 			{
-        s_sim_p_recage(i,j) =s_sel_reclas(j)*s_natage_future(i,j); //Solucion exacta
-        a_sim_p_recage(i,j) =a_sel_reclas(j)*a_natage_future(i,j); //Solucion exacta
-        s_biomass_future(i) +=s_wt(j)*s_natage_future(i,j);  //biomasa
-        a_biomass_future(i) +=a_wt(j)*a_natage_future(i,j);  //biomasa
-        s_sim_HB(i)         +=s_sel_reclas(j)*s_wt(j)*s_natage_future(i,j)*s_reclas_epsilon(i);
-        a_sim_HB(i)         +=a_sel_reclas(j)*a_wt(j)*a_natage_future(i,j)*a_reclas_epsilon(i);
-        s_ssbv_future(i)    +=s_natagev_fut(i,j)*s_wt(j)*s_mat(j)*mfexp(-.583*s_natmort);
-        a_ssbv_future(i)    +=a_natagev_fut(i,j)*a_wt(j)*a_mat(j)*mfexp(-.583*a_natmort);
+        s_sim_p_recage(i,j) =  s_sel_reclas(j)*s_natage_future(i,j); //Solucion exacta
+        a_sim_p_recage(i,j) =  a_sel_reclas(j)*a_natage_future(i,j); //Solucion exacta
+        s_biomass_future(i) += s_wt(j)*s_natage_future(i,j);  //biomasa
+        a_biomass_future(i) += a_wt(j)*a_natage_future(i,j);  //biomasa
+        s_sim_HB(i)         += s_sel_reclas(j)*s_wt(j)*s_natage_future(i,j)*s_reclas_epsilon(i);
+        a_sim_HB(i)         += a_sel_reclas(j)*a_wt(j)*a_natage_future(i,j)*a_reclas_epsilon(i);
+        s_ssbv_future(i)    += s_natagev_fut(i,j)*s_wt(j)*s_mat(j)*mfexp(-.583*s_natmort);
+        a_ssbv_future(i)    += a_natagev_fut(i,j)*a_wt(j)*a_mat(j)*mfexp(-.583*a_natmort);
 			}
 			s_freq.initialize();
 			a_freq.initialize();
-			ivector s_bin(1,100);
-			ivector a_bin(1,100);
+			ivector s_bin(1,N_sample);
+			ivector a_bin(1,N_sample);
       s_sim_p_recage(i) = s_sim_p_recage(i)/sum(s_sim_p_recage(i));
       a_sim_p_recage(i) = a_sim_p_recage(i)/sum(a_sim_p_recage(i));
       s_sim_p_reclen(i) = s_sim_p_recage(i)*s_alk;
@@ -944,7 +946,7 @@ FUNCTION Oper_Model
       a_p               /= sum(a_p);
       s_bin.fill_multinomial(rng,s_p);
       a_bin.fill_multinomial(rng,a_p);
-      for(j=1;j<=100;j++)
+      for(j=1;j<=N_sample;j++)
       {
         s_freq(s_bin(j))++;
         a_freq(a_bin(j))++;
@@ -1040,7 +1042,7 @@ FUNCTION Oper_Model
 			}
 			s_freq.initialize();
 			a_freq.initialize();
-			//ivector bin(1,100);
+			//ivector bin(1,N_sample);
       s_sim_p_pelage(i) =s_sim_p_pelage(i)/sum(s_sim_p_pelage(i));
       s_sim_p_pellen(i) =s_sim_p_pelage(i)*s_alk;
       a_sim_p_pelage(i) =a_sim_p_pelage(i)/sum(a_sim_p_pelage(i));
@@ -1049,14 +1051,14 @@ FUNCTION Oper_Model
       s_p                = value(s_sim_p_pellen(i));
       s_p                /=sum(s_p);
       s_bin.fill_multinomial(rng,s_p);
-      for(j              =1;j<=100;j++){s_freq(s_bin(j))++;}
+      for(j              =1;j<=N_sample;j++){s_freq(s_bin(j))++;}
       s_p                = s_freq/sum(s_freq);
       s_sim_p_pellen(i)  =s_p;
       //anchoveta
       a_p                = value(a_sim_p_pellen(i));
       a_p                /=sum(a_p);
       a_bin.fill_multinomial(rng,a_p);
-      for(j              =1;j<=100;j++){a_freq(a_bin(j))++;}
+      for(j              =1;j<=N_sample;j++){a_freq(a_bin(j))++;}
       a_p                = a_freq/sum(a_freq);
       a_sim_p_pellen(i)  =a_p;
       
@@ -1077,7 +1079,7 @@ FUNCTION Oper_Model
       s_p                = value(s_sim_p_fishlen(i));
       s_p                /=sum(s_p);
       s_bin.fill_multinomial(rng,s_p);
-      for(j=1;j<=100;j++)
+      for(j=1;j<=N_sample;j++)
         s_freq(s_bin(j))++;
       s_p                = s_freq/sum(s_freq);
       s_sim_p_fishlen(i) =s_p;
@@ -1089,12 +1091,12 @@ FUNCTION Oper_Model
       a_p                = value(a_sim_p_fishlen(i));
       a_p                /=sum(a_p);
       a_bin.fill_multinomial(rng,a_p);
-      for(j=1;j<=100;j++)
+      for(j=1;j<=N_sample;j++)
         a_freq(a_bin(j))++;
       a_p                = a_freq/sum(a_freq);
       a_sim_p_fishlen(i) = a_p;		
 
-      cout <<i<<" "<<s_sim_HB(i)/(a_sim_HB(i)+s_sim_HB(i)) <<" "<< prop_fin_scatch_est_future(l,i)<<" "<<s_CatchNow<<" " <<a_CatchNow<<endl;
+      cout <<isim<<" "<<i<<" "<<s_sim_HB(i)/(a_sim_HB(i)+s_sim_HB(i))<<" "<< prop_fin_scatch_est_future(l,i)<<" "<<s_CatchNow<<" " <<a_CatchNow<<endl;
       //Ahora actualiza la evaluacion de sardina
       yrs(i)             = i;
       upk                = i;
@@ -1287,7 +1289,7 @@ FUNCTION Oper_Model
 			
 			//ahora corre el estimador para dejar preparada la con styr_fut
       // rv =system("sardina -nox -nohess -iprint 200");
-      int rv =system("runEM.sh");								
+      int rv = system(adstring("runEM.sh ")+itoa(i,10)+" "+itoa(isim,10)+" "+itoa(l,10));
 		}
 	}
 
@@ -1976,19 +1978,19 @@ FUNCTION evaluate_the_objective_function  //-Funcion de Verosimilitud-------
    //ANCHOVETA
    if (active(a_sel_devs_f))
     {
-      sel_dev_like(2)+=100/a_group_num_f*norm2(a_sel_devs_f);
-      sel_dev_like(2)+=10/a_dim_sel_f*norm2(first_difference(first_difference(a_log_sel_f(styr))));
+      sel_dev_like(2) += 100./a_group_num_f*norm2(a_sel_devs_f);
+      sel_dev_like(2) += 10./a_dim_sel_f*norm2(first_difference(first_difference(a_log_sel_f(styr))));
       for (i=styr;i<endyr;i++)
-       {
+      {
         if (!(i%a_group_num_f))
-         {
-          sel_dev_like(2)+=10/a_dim_sel_f*norm2(first_difference(first_difference(a_log_sel_f(i+1))));
-         }
-       }
+        {
+          sel_dev_like(2) += 10./a_dim_sel_f*norm2(first_difference(first_difference(a_log_sel_f(i+1))));
+        }
+      }
     }
     else
     {
-      sel_dev_like(2)+=10*norm2(first_difference(first_difference(a_log_sel_f(styr))));
+      sel_dev_like(2) += 10.*norm2(first_difference(first_difference(a_log_sel_f(styr))));
     }
 
 
@@ -1997,78 +1999,78 @@ FUNCTION evaluate_the_objective_function  //-Funcion de Verosimilitud-------
   s_sel_like_reclas=10*norm2(first_difference(first_difference(s_log_sel_reclas)));
   for (j=1;j<nages;j++)
   {
-  if(s_log_sel_reclas(j)>s_log_sel_reclas(j+1))
+    if(s_log_sel_reclas(j)>s_log_sel_reclas(j+1))
     {
-     s_sel_like_reclas+=10*square(s_log_sel_reclas(j)-s_log_sel_reclas(j+1));
+      s_sel_like_reclas+=10*square(s_log_sel_reclas(j)-s_log_sel_reclas(j+1));
     }
-   }
+  }
 
   //====RECLAS ANCHOVETA======
   a_sel_like_reclas=10*norm2(first_difference(first_difference(a_log_sel_reclas)));
   for (j=1;j<nages;j++)
   {
-  if(a_log_sel_reclas(j)>a_log_sel_reclas(j+1))
+    if(a_log_sel_reclas(j)>a_log_sel_reclas(j+1))
     {
-     a_sel_like_reclas+=10*square(a_log_sel_reclas(j)-a_log_sel_reclas(j+1));
+      a_sel_like_reclas+=10*square(a_log_sel_reclas(j)-a_log_sel_reclas(j+1));
     }
-   }
+  }
 
   //====PELACES SARDINA======
   s_sel_like_pel=10*norm2(first_difference(first_difference(s_log_sel_pelaces)));
   for (j=1;j<nages;j++)
   {
-  if(s_log_sel_pelaces(j)>s_log_sel_pelaces(j+1))
+    if(s_log_sel_pelaces(j)>s_log_sel_pelaces(j+1))
     {
-     s_sel_like_pel+=10*square(s_log_sel_pelaces(j)-s_log_sel_pelaces(j+1));
+      s_sel_like_pel+=10*square(s_log_sel_pelaces(j)-s_log_sel_pelaces(j+1));
     }
-   }
+  }
 
   //====PELACES ANCHOVETA======
   a_sel_like_pel=10*norm2(first_difference(first_difference(a_log_sel_pelaces)));
   for (j=1;j<nages;j++)
   {
-  if(a_log_sel_pelaces(j)>a_log_sel_pelaces(j+1))
+    if(a_log_sel_pelaces(j)>a_log_sel_pelaces(j+1))
     {
-     a_sel_like_pel+=10*square(a_log_sel_pelaces(j)-a_log_sel_pelaces(j+1));
+      a_sel_like_pel+=10*square(a_log_sel_pelaces(j)-a_log_sel_pelaces(j+1));
     }
-   }
+  }
 
    //prop_like=1.*norm2(prop-0.5);
     //==+==+==Componentes de verosimilitud +==+==+==+==+==
-   f+=rec_like;
-   f+=sum(ssqcatch);
-   f+=sum(age_like);
-   f+=sum(surv_like);
-   f+=sum(sel_dev_like);
-   f+=sum(sel_like);
-   f+=s_sel_like_reclas;
-   f+=a_sel_like_reclas;
-   f+=s_sel_like_pel;
-   f+=a_sel_like_pel;
-   f+=10.*square(s_avgsel_reclas);
-   f+=10.*square(s_avgsel_pelaces);
-   f+=10.*square(a_avgsel_reclas);
-   f+=10.*square(a_avgsel_pelaces);
-   f+=10.*square(s_avgsel_fish);
-   f+=10.*square(a_avgsel_fish);
+  f += rec_like;
+  f += sum(ssqcatch);
+  f += sum(age_like);
+  f += sum(surv_like);
+  f += sum(sel_dev_like);
+  f += sum(sel_like);
+  f += s_sel_like_reclas;
+  f += a_sel_like_reclas;
+  f += s_sel_like_pel;
+  f += a_sel_like_pel;
+  f += 10.*square(s_avgsel_reclas);
+  f += 10.*square(s_avgsel_pelaces);
+  f += 10.*square(a_avgsel_reclas);
+  f += 10.*square(a_avgsel_pelaces);
+  f += 10.*square(s_avgsel_fish);
+  f += 10.*square(a_avgsel_fish);
 
-   //Phases less than 3, penalize high F's
-   if (current_phase()<3)
-     {
-     fpen(1)=10.*norm2(mfexp(s_log_avg_fmort+s_fmort_dev)-.2);
-     fpen(2)=10.*norm2(mfexp(a_log_avg_fmort+a_fmort_dev)-.2);
+  //Phases less than 3, penalize high F's
+  if (current_phase()<3)
+  {
+    fpen(1)=10.*norm2(mfexp(s_log_avg_fmort+s_fmort_dev)-.2);
+    fpen(2)=10.*norm2(mfexp(a_log_avg_fmort+a_fmort_dev)-.2);
      //prop_like=10*norm2(prop-0.5);
-     }
-   else
-     {
-     fpen(1)=0.001*norm2(mfexp(s_log_avg_fmort+s_fmort_dev)-.2);
-     fpen(2)=0.001*norm2(mfexp(a_log_avg_fmort+a_fmort_dev)-.2);
-     //prop_like=0.001*norm2(prop-0.5);
-     }
-   fpen(1)+=norm2(s_fmort_dev);
-   fpen(2)+=norm2(a_fmort_dev);
-   f+=prop_like;
-   f+=sum(fpen);
+  }
+  else
+  {
+    fpen(1)=0.001*norm2(mfexp(s_log_avg_fmort+s_fmort_dev)-.2);
+    fpen(2)=0.001*norm2(mfexp(a_log_avg_fmort+a_fmort_dev)-.2);
+    //prop_like=0.001*norm2(prop-0.5);
+  }
+  fpen(1) += norm2(s_fmort_dev);
+  fpen(2) += norm2(a_fmort_dev);
+  f       += prop_like;
+  f       += sum(fpen);
 
 FUNCTION write_mcmc_pars
   mcrep(s_log_q_reclas);
