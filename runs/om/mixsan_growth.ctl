@@ -73,7 +73,7 @@
 4
 4
 #Fase_q_Reclas
--3
+4
 #Fase_q_Pelaces
 3
 #Fase_q_Effort

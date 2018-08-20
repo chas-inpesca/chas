@@ -613,49 +613,49 @@ FUNCTION get_abundancia
   q_survpel = exp(log_q_survpel);
   for (int i=styr;i<=endyr;i++)
   {
-   pred_cpue(i)     =0.;
-   pred_surv(i)     =0.;
-   pred_survnum(i)  =0.;
-   pred_survpel(i)  =0.;
-   pred_survnump(i) =0.;
-   explbiom(i)      =0.;
-   totbiom(i)       =0.;
-   ssbiom(i)        =0.;
-   bioadul(i)       =0.;
-   BR(i)            =0.;
-   RPR(i)           =0.;
-   for (int j=1;j<=nages;j++)
-   {
-//cpue
-	  pred_cpue(i)+=q_fish*age_sel(i,j)*natage(i,j)*wta(i,j);    
-//crucero reclas
-	  pred_surv(i)+=q_surv*natage(i,j)*wta(i,j)*age_selr(i,j)*exp(-reclasMo_Frac*Z(i,j)); 
-      pred_survnum(i)+=q_surv*natage(i,j)*age_selr(i,j)*exp(-reclasMo_Frac*Z(i,j));
-//cucero pelaces
-	  pred_survpel(i)+=q_survpel*natage(i,j)*wta(i,j)*age_selp(i,j)*exp(-pelacesMo_Frac*Z(i,j));
-      pred_survnump(i)+=q_survpel*natage(i,j)*age_selp(i,j)*exp(-pelacesMo_Frac*Z(i,j));	  
-//variables estado
-	  explbiom(i)+=natage(i,j)*age_sel(i,j)*wta(i,j)*(1.-exp(-Z(i,j)))/Z(i,j);
-      totbiom(i)+=natage(i,j)*wta(i,j);
-      ssbiom(i)+=natage(i,j)*wta(i,j)*maturity(j)*mfexp(-SpawnMo_Frac*Z(i,j));
-      bioadul(i)+=natage(i,j)*wta(i,j)*maturity(j);
-	  BR(i)=natage(i,1);
-	  RPR(i)=ssbiom(i)/So;
+    pred_cpue(i)     =0.;
+    pred_surv(i)     =0.;
+    pred_survnum(i)  =0.;
+    pred_survpel(i)  =0.;
+    pred_survnump(i) =0.;
+    explbiom(i)      =0.;
+    totbiom(i)       =0.;
+    ssbiom(i)        =0.;
+    bioadul(i)       =0.;
+    BR(i)            =0.;
+    RPR(i)           =0.;
+    for (int j=1;j<=nages;j++)
+    {
+  //cpue
+	    pred_cpue(i)     += q_fish*age_sel(i,j)*natage(i,j)*wta(i,j);    
+  //crucero reclas
+	    pred_surv(i)     += q_surv*natage(i,j)*wta(i,j)*age_selr(i,j)*exp(-reclasMo_Frac*Z(i,j)); 
+      pred_survnum(i)  += q_surv*natage(i,j)*age_selr(i,j)*exp(-reclasMo_Frac*Z(i,j));
+  //cucero pelaces
+	    pred_survpel(i)  += q_survpel*natage(i,j)*wta(i,j)*age_selp(i,j)*exp(-pelacesMo_Frac*Z(i,j));
+      pred_survnump(i) += q_survpel*natage(i,j)*age_selp(i,j)*exp(-pelacesMo_Frac*Z(i,j));	  
+  //variables estado
+	    explbiom(i)      += natage(i,j)*age_sel(i,j)*wta(i,j)*(1.-exp(-Z(i,j)))/Z(i,j);
+      totbiom(i)       += natage(i,j)*wta(i,j);
+      ssbiom(i)        += natage(i,j)*wta(i,j)*maturity(j)*mfexp(-SpawnMo_Frac*Z(i,j));
+      bioadul(i)       += natage(i,j)*wta(i,j)*maturity(j);
+	    BR(i)             = natage(i,1);
+	    RPR(i)            = ssbiom(i)/So;
     }
   }
-  natsize  =natage*trans;
-  endbtot  =totbiom(endyr);
-  endbadul =bioadul(endyr);
-  endssb   =ssbiom(endyr);
-  lastF    =Fmort(endyr);
-  Rlast    =natage(endyr,1);
-  Rmedio   =mean(BR);
-  Fmsylast =lastF/F60;
+  natsize  = natage*trans;
+  endbtot  = totbiom(endyr);
+  endbadul = bioadul(endyr);
+  endssb   = ssbiom(endyr);
+  lastF    = Fmort(endyr);
+  Rlast    = natage(endyr,1);
+  Rmedio   = mean(BR);
+  Fmsylast = lastF/F60;
   
   for (int i=styr;i<=endyr;i++)
   {
-   recruits(i)=natage(i,1);
-   tasa_E(i)=catch_bio(i)/totbiom(i);
+    recruits(i) = natage(i,1);
+    tasa_E(i)   = catch_bio(i)/totbiom(i);
   }
 
 //###################  
@@ -672,16 +672,16 @@ FUNCTION get_captura
      pred_p_age(i)=catage(i)/sum(catage(i));
    }
    for (int i=1;i<=nobs_fishlen;i++)
-    {
+   {
      pred_p_len(i)=pred_p_age(yr_fishlen(i))*trans;
-    }
-    pred_p_residual=obs_p_len-pred_p_len;
+   }
+   pred_p_residual=obs_p_len-pred_p_len;
 	
 //offset para el multinomial
     for (int i=styr; i<= endyr; i++)
     {
       pred_p_agep(i)=natage(i)/sum(natage(i));
-     }
+    }
  
 //tallas predichas crucero RECLAS
   for (int i=1;i<=nobs_surv;i++)

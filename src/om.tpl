@@ -8,7 +8,8 @@ DATA_SECTION
   !!ad_comm::change_datafile_name(datafile_name);
 	int iseed
 	int isim
-	!!long int lseed=iseed; isim=0;
+	int N_sample
+	!!long int lseed=iseed; isim=0; N_sample=100;
 	!!CLASS random_number_generator rng(iseed);
 
   init_int debug
