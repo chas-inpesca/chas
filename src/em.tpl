@@ -74,8 +74,8 @@ DATA_SECTION
   init_number M_prior     //parámetros de crecimiento
   init_int opt_VB                  //opcion para estimar o no el crecimiento
   init_int nlen_fish               //n muestreal para longitudes pesqueria
-  init_int nlen_fishr              //n muestreal para longitudes reclas
-  init_int nlen_fishp              //n muestreal para longitudes pelaces  
+  init_int nlen_reclas              //n muestreal para longitudes reclas
+  init_int nlen_pelaces              //n muestreal para longitudes pelaces  
   init_number CV_surv              //Coeficiente de variacion para el crucero reclas
   init_number CV_survpel           //Coeficiente de variacion para el crucero pelaces
   init_number CV_catch             //Coef. de Var para las capturas
@@ -127,8 +127,8 @@ DATA_SECTION
   ECHO(crecimiento);
   ECHO(opt_VB);
   ECHO(nlen_fish  );
-  ECHO(nlen_fishr );
-  ECHO(nlen_fishp );  
+  ECHO(nlen_reclas );
+  ECHO(nlen_pelaces );  
   ECHO(CV_surv    );
   ECHO(CV_survpel );
   ECHO(CV_catch   );
@@ -190,10 +190,10 @@ INITIALIZATION_SECTION
   log_q_surv -0.001
   log_q_survpel -0.001
   sigr 0.6;
-  a50 .2
-  a95 1.8
-  a50p .2
-  a95p 1.5
+  a50_reclas 1.2
+  a95_reclas 1.9
+  a50_pelaces 1.2
+  a95_pelaces 1.9
   //linf Linfdat   // CG eliminado
   //k1 kdat
   //t0 t0dat
@@ -211,10 +211,10 @@ PARAMETER_SECTION
   init_bounded_number Ts(0.1,1.0,-1) 
   init_bounded_number sigr(0.05,1,ph_sigmar) 
   init_bounded_number log_P(-4,0,-2)    // OjO not really used
-  init_bounded_number a50(-4,4,ph_sel_fish+3) 
-  init_bounded_number a95(0.1,7.,ph_sel_fish+4) 
-  init_bounded_number a50p(-4,4,ph_sel_fish+2)
-  init_bounded_number a95p(0.1,7,ph_sel_fish+1)
+  init_bounded_number a50_reclas(-1.0,7,ph_sel_fish+1) 
+  init_bounded_number a95_reclas(0.1,7.,ph_sel_fish+2) 
+  init_bounded_number a50_pelaces(-1.0,7,ph_sel_fish+2)
+  init_bounded_number a95_pelaces(0.1,7,ph_sel_fish+1)
   init_bounded_number F60(.01,7.,phase_F40)
   init_bounded_number F40(.01,7.,phase_F40)
   init_bounded_number F20(.01,17.,-phase_F40)
@@ -278,8 +278,8 @@ PARAMETER_SECTION
   number sigmar_fut;
   number Kobs_tot_catch;
   vector Nstage(1,nages)
-  vector sel_fishr(1,nages)
-  vector sel_fishp(1,nages)
+  vector sel_reclas(1,nages)
+  vector sel_pelaces(1,nages)
   vector Rpred(styr,endyr)
   vector pred_survnum(styr,endyr)
   vector pred_survnump(styr,endyr)   
@@ -311,9 +311,9 @@ PARAMETER_SECTION
   matrix trans(1,nages,1,nlenbins)
   matrix sel_fish(styr,endyr,1,nages)
   matrix age_sel2(styr,endyr,1,nages)
-  matrix size_sel(styr,endyr,1,nlenbins)
-  matrix size_selr(styr,endyr,1,nlenbins)
-  matrix size_selp(styr,endyr,1,nlenbins)
+  // matrix size_sel(styr,endyr,1,nlenbins) // these aren't used for anything...
+  // matrix size_selr(styr,endyr,1,nlenbins)
+  // matrix size_selp(styr,endyr,1,nlenbins)
   matrix age_selr(styr,endyr,1,nages)
   matrix age_selp(styr,endyr,1,nages)
   matrix pred_p_age(styr,endyr,1,nages)                 
@@ -484,85 +484,73 @@ FUNCTION get_selectividad
   int ii;
   if(active(sel_devs_f1))
   {
-   ii=1;
-   for (int i=styr;i<endyr;i++)
+    ii=1;
+    for (int i=styr;i<endyr;i++)
     {
-     if (!(i%group_num_f1))
-     {
-      for (int j=1;j<=nselagef1;j++)
-       {
-        log_sel_f1(i+1,j)=log_sel_f1(i,j)+sel_devs_f1(ii,j);
-       }
-      for (int j=nselagef1+1;j<=nages;j++)
-       {
-        log_sel_f1(i+1,j)=log_sel_f1(i+1,j-1);
-       }
-      ii++;
-      log_sel_f1(i+1)-=log(mean(mfexp(log_sel_f1(i+1))));
-     }
-  else
-  {
-    for (int j=1;j<=nselagef1;j++)
-    {
-      log_sel_f1(i+1,j)=log_sel_f1(i,j);
-    }
-      for (int j=nselagef1+1;j<=nages;j++)
+      if (!(i%group_num_f1))
       {
-        log_sel_f1(i+1,j)=log_sel_f1(i+1,j-1);
+        for (int j=1;j<=nselagef1;j++)
+        {
+          log_sel_f1(i+1,j)=log_sel_f1(i,j)+sel_devs_f1(ii,j);
+        }
+        for (int j=nselagef1+1;j<=nages;j++)
+        {
+          log_sel_f1(i+1,j)=log_sel_f1(i+1,j-1);
+        }
+        ii++;
+        log_sel_f1(i+1)-=log(mean(mfexp(log_sel_f1(i+1))));
       }
-      log_sel_f1(i+1)-=log(mean(mfexp(log_sel_f1(i+1))));
+      else
+      {
+        for (int j=1;j<=nselagef1;j++)
+        {
+          log_sel_f1(i+1,j)=log_sel_f1(i,j);
+        }
+        for (int j=nselagef1+1;j<=nages;j++)
+        {
+          log_sel_f1(i+1,j)=log_sel_f1(i+1,j-1);
+        }
+        log_sel_f1(i+1)-=log(mean(mfexp(log_sel_f1(i+1))));
+      }
     }
-  }
   }
   else
   {
    for (int i=styr;i<endyr;i++)
    {
       for (int j=1;j<=nselagef1;j++)
-      {
         log_sel_f1(i+1,j)=log_sel_f1(i,j);
-      }
       for (int j=nselagef1+1;j<=nages;j++)
-      {
         log_sel_f1(i+1,j)=log_sel_f1(i+1,j-1);
-      }
     }
   }
-  sel_f1   =exp(log_sel_f1);
-  age_sel  =sel_f1;
-  size_sel =age_sel*trans;  
+  sel_f1   = mfexp(log_sel_f1);
+  age_sel  = sel_f1;
+  // size_sel =age_sel*trans;  
   
 //Selectividad Reclas
-  // a_50 = mfexp(log_a50);
-  // a_95 = mfexp(log_a95);
   for (int j=1;j<=nages;j++)
   {
-    sel_fishr(j)=1./(1.+mfexp(-log(19)*(edad(j)-a50)/(a95)));
+    sel_reclas(j)=1./(1.+mfexp(-log(19)*(edad(j)-a50_reclas)/(a95_reclas)));
   }
   for (int i=styr;i<=endyr;i++)
   {
-    for(int j=1;j<=nages;j++)
-    {
-      age_selr(i,j) = sel_fishr(j);
-    }
+    age_selr(i) = sel_reclas;
   }  
-  size_selr=age_selr*trans;//conversion a tallas
+  // size_selr=age_selr*trans;//conversion a tallas
 
 //Selectividad Pelaces
-  // a_50p = mfexp(log_a50p);
-  // a_95p = mfexp(log_a95p);
+  // a_50_pelaces = mfexp(log_a50_pelaces);
+  // a_95_pelaces = mfexp(log_a95_pelaces);
   for (int j=1;j<=nages;j++)
   {
-    sel_fishp(j) = 1./(1.+mfexp(-log(19)*(edad(j)-a50p)/(a95p)));
+    sel_pelaces(j) = 1./(1.+mfexp(-log(19)*(edad(j)-a50_pelaces)/(a95_pelaces)));
   }
   for (int i=styr;i<=endyr;i++)
   {
-    for(int j=1;j<=nages;j++)
-     {
-        age_selp(i,j)=sel_fishp(j);
-       }
-    }  
-  size_selp=age_selp*trans;//conversion a tallas  
+    age_selp(i)=sel_pelaces;
+  }  
+  // size_selp = age_selp*trans;//conversion a tallas  
 
 //####################  
 FUNCTION get_mortalidad
@@ -863,59 +851,57 @@ FUNCTION Future_projections_fixed_catch
   for (int l=1;l<=5;l++)
   {
     if (l<5) 
-      {
-       catch_future(l)=MLE_catch(l);
-      }
+      catch_future(l)=MLE_catch(l);
     for (int i=styr_fut;i<=endyr_fut;i++)
     {
 //reclutamiento futuro (desovantes)
       nage_future(i,1)=mfexp(rec_dev_future(i)+mean_log_rec);
 //resuelve F
-        expl_biom(i)=nage_future(i)*elem_prod(age_sel(endyr),wt);
-        if (l==5)
-         {
-          F_future(i)=0.;
-         }
-        else
-         {
-         dvariable ffpen=0.0;
+      expl_biom(i)=nage_future(i)*elem_prod(age_sel(endyr),wt);
+      if (l==5)
+      {
+        F_future(i)=0.;
+      }
+      else
+      {
+        dvariable ffpen= 0.0;
 // this "kludges" the total catch in case it exceeds the population
-         dvariable SK=posfun((expl_biom(i)-catch_future(l,i))/expl_biom(i),0.05,ffpen);
-         Kobs_tot_catch=expl_biom(i)-SK*expl_biom(i); 
+        dvariable SK   = posfun((expl_biom(i)-catch_future(l,i))/expl_biom(i),0.05,ffpen);
+        Kobs_tot_catch = expl_biom(i)-SK*expl_biom(i); 
 // hace newton raphson para la capturabilidada
-          do_Newton_Raphson_for_mortality(i);
-         }
-         Z_future(i)=F_future(i)+M;
-         S_future(i)=exp(-1.*Z_future(i));
-         avg_F_future(l)=mean(F_future);
-         bioadul_future(i)=elem_prod(nage_future(i),maturity)*wt;
-         biomass_future(i)=0;
-         ssbiom_future(i)=0;
-         for (int j=1;j<=nages;j++)
-           {
-            ssbiom_future(i)+=nage_future(i,j)*maturity(j)*wt(j)*exp(SpawnMo_Frac*Z_future(i,j));
-            biomass_future(i)+=nage_future(i,j)*wt(j);
-           }
+        do_Newton_Raphson_for_mortality(i);
+      }
+      Z_future(i)       = F_future(i)+M;
+      S_future(i)       = exp(-1.*Z_future(i));
+      avg_F_future(l)   = mean(F_future);
+      bioadul_future(i) = elem_prod(nage_future(i),maturity)*wt;
+      biomass_future(i) = 0.;
+      ssbiom_future(i)  = 0.;
+      for (int j=1;j<=nages;j++)
+      {
+        ssbiom_future(i)  +=nage_future(i,j)*maturity(j)*wt(j)*exp(SpawnMo_Frac*Z_future(i,j));
+        biomass_future(i) +=nage_future(i,j)*wt(j);
+      }
 //Now graduate for the next year....
-         if (i<endyr_fut)
-          {
-           nage_future(i+1)(2,nages)=++elem_prod(nage_future(i)(1,nages-1),S_future(i)(1,nages-1));
-           nage_future(i+1,nages)+=nage_future(i,nages)*S_future(i,nages);
-          }
+      if (i<endyr_fut)
+      {
+        nage_future(i+1)(2,nages) =++elem_prod(nage_future(i)(1,nages-1),S_future(i)(1,nages-1));
+        nage_future(i+1,nages)    +=nage_future(i,nages)*S_future(i,nages);
+      }
     }
 // Now get catch at future ages
-	 for (int i=styr_fut; i<=endyr_fut; i++)
+	  for (int i=styr_fut; i<=endyr_fut; i++)
     {
       if (l!=5) // Don't compute catch for F=0
       {
-        catage_future(i)=elem_prod(elem_div(F_future(i),Z_future(i)),elem_prod(1.-S_future(i),nage_future(i)));
-        catch_future(l,i)=catage_future(i)*wt;
-		}
+        catage_future(i)  =elem_prod(elem_div(F_future(i),Z_future(i)),elem_prod(1.-S_future(i),nage_future(i)));
+        catch_future(l,i) =catage_future(i)*wt;
+		  }
       future_biomass(l,i) = biomass_future(i);
       future_bioadul(l,i) = bioadul_future(i);
-      future_ssbiom(l,i) = ssbiom_future(i);
-      bio1_ratio(l,i)=biomass_future(i)/endbtot;
-      bio2_ratio(l,i)=bioadul_future(i)/endbadul;
+      future_ssbiom(l,i)  = ssbiom_future(i);
+      bio1_ratio(l,i)     =biomass_future(i)/endbtot;
+      bio2_ratio(l,i)     =bioadul_future(i)/endbadul;
     }
   }
 	
@@ -991,7 +977,7 @@ FUNCTION evaluate_the_objective_function
     {
       for (int j=1; j<=nlenbins; j++)
       {
-        age_liker-=nlen_fishr*obs_p_lenreclas(i,j)*log(pred_p_lenreclas(i,j)+1.e-13);
+        age_liker-=nlen_reclas*obs_p_lenreclas(i,j)*log(pred_p_lenreclas(i,j)+1.e-13);
 		//surv_like_residuals=(obs_p_lenreclas-pred_p_lenreclas)/std_dev(obs_p_lenreclas);
       }
     }
@@ -1002,7 +988,7 @@ FUNCTION evaluate_the_objective_function
     {
       for (int j=1; j<=nlenbins; j++)
       {
-        age_likep-=nlen_fishp*obs_p_lenpelaces(i,j)*log(pred_p_lenpelaces(i,j)+1.e-13);
+        age_likep-=nlen_pelaces*obs_p_lenpelaces(i,j)*log(pred_p_lenpelaces(i,j)+1.e-13);
       }
     }
     //age_likep-=offsetp;
@@ -1057,14 +1043,14 @@ FUNCTION evaluate_the_objective_function
   sel_dev_like.initialize();
   for (int i=styr;i<=endyr;i++)
   {
-  for (int j=1;j<nages;j++)
+    for (int j=1;j<nages;j++)
     {
-   if (log_sel_f1(i,j)>log_sel_f1(i,j+1))
+      if (log_sel_f1(i,j)>log_sel_f1(i,j+1))
       {
-       sel_like+=lambda(1)*square(log_sel_f1(i,j)-log_sel_f1(i,j+1));
-       }
-     }
-   }
+         sel_like+=lambda(1)*square(log_sel_f1(i,j)-log_sel_f1(i,j+1));
+      }
+    }
+  }
 //opciones
    if (active(sel_devs_f1))
     {
@@ -1082,6 +1068,9 @@ FUNCTION evaluate_the_objective_function
     {
       sel_dev_like+=lambda(3)*norm2(first_difference(first_difference(log_sel_f1(styr))));
     }
+ // Condition survey selectivities to behave such that last two ages converge to be == 1.0
+  if (active(a50_reclas)) 
+		sel_like += 100.*(norm2(log(sel_reclas(nages-1,nages))) + norm2(log(sel_pelaces(nages-1,nages))));
 
   //verosimilitudes total  
   f += rec_like;
@@ -1201,6 +1190,20 @@ REPORT_SECTION
 		save_gradients(gradients);
 		newabc << catch_future(1,styr_fut)<<endl;
  }
+  REPORT(rec_like) ;
+  REPORT(sel_like) ;
+  REPORT(sel_dev_like) ;
+  REPORT(age_like) ;
+  REPORT(age_liker) ;
+  REPORT(age_likep) ;
+  REPORT(cpue_like) ;
+  REPORT(catch_like) ;
+  REPORT(surv_like) ;
+  REPORT(surv_likepel) ;
+  REPORT(cvage_like) ;
+  REPORT(fpen);
+  REPORT(sprpen);
+  
     report << "$So" << endl;
     report << So << endl;
     report << "$F60" << endl;
@@ -1303,6 +1306,9 @@ GLOBALS_SECTION
   */
   #undef ECHO
   #define ECHO(object) echoinput << #object << "\n" << object << endl;
+
+	#undef REPORT 
+	#define REPORT(object) report << "$"<< #object "\n" << object << endl;
 
   ofstream echoinput("checkfile.rep");
 

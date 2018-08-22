@@ -1290,7 +1290,13 @@ FUNCTION Oper_Model
 			
 			//ahora corre el estimador para dejar preparada la con styr_fut
       // rv =system("sardina -nox -nohess -iprint 200");
-      int rv = system(adstring("runEM.sh ")+itoa(i,10)+" "+itoa(isim,10)+" "+itoa(l,10));
+      #if defined _WIN32 || defined _WIN64
+        int rv = system(adstring("runEM.bat ")+itoa(i,10)+" "+itoa(isim,10)+" "+itoa(l,10));
+      #else
+        int rv = system(adstring("runEM.sh ")+itoa(i,10)+" "+itoa(isim,10)+" "+itoa(l,10));
+      #endif
+
+
 		}
 	}
 
@@ -1328,12 +1334,12 @@ FUNCTION get_selectivity
   //==+==+==+==+Selectividad Pesq Sardina
   s_avgsel_fish=log(mean(exp(s_log_selcoffs_f)));
   for(j=1;j<=s_nselagef;j++)
-    {
-     s_log_sel_f(styr,j)=s_log_selcoffs_f(j);
-    }
+  {
+    s_log_sel_f(styr,j)=s_log_selcoffs_f(j);
+  }
   for (j=s_nselagef+1;j<=nages;j++)
   {
-     s_log_sel_f(styr,j)=s_log_sel_f(styr,j-1);
+    s_log_sel_f(styr,j)=s_log_sel_f(styr,j-1);
   }
   s_log_sel_f(styr)-=log(mean(exp(s_log_sel_f(styr))));
 
@@ -1342,11 +1348,11 @@ FUNCTION get_selectivity
 
   for (j=1;j<=a_nselagef;j++)
   {
-     a_log_sel_f(styr,j)=a_log_selcoffs_f(j);
+    a_log_sel_f(styr,j)=a_log_selcoffs_f(j);
   }
   for (j=a_nselagef+1;j<=nages;j++)
   {
-     a_log_sel_f(styr,j)=a_log_sel_f(styr,j-1);
+    a_log_sel_f(styr,j)=a_log_sel_f(styr,j-1);
   }
   a_log_sel_f(styr)-=log(mean(exp(a_log_sel_f(styr))));
 
@@ -1356,38 +1362,38 @@ FUNCTION get_selectivity
   {
    ii=1;
    for (i=styr;i<endyr;i++)
-    {
+   {
      if (!(i%s_group_num_f))
      {
-      for (j=1;j<=s_nselagef;j++)
+       for (j=1;j<=s_nselagef;j++)
        {
-        s_log_sel_f(i+1,j)=s_log_sel_f(i,j)+s_sel_devs_f(ii,j);
+         s_log_sel_f(i+1,j)=s_log_sel_f(i,j)+s_sel_devs_f(ii,j);
        }
-      for (j=s_nselagef+1;j<=nages;j++)
+       for (j=s_nselagef+1;j<=nages;j++)
        {
-        s_log_sel_f(i+1,j)=s_log_sel_f(i+1,j-1);
+         s_log_sel_f(i+1,j)=s_log_sel_f(i+1,j-1);
        }
-      ii++;
-      s_log_sel_f(i+1)-=log(mean(mfexp(s_log_sel_f(i+1))));
+       ii++;
+       s_log_sel_f(i+1)-=log(mean(mfexp(s_log_sel_f(i+1))));
      }
      else
      {
-      for (j=1;j<=s_nselagef;j++)
+       for (j=1;j<=s_nselagef;j++)
        {
-        s_log_sel_f(i+1,j)=s_log_sel_f(i,j);
+         s_log_sel_f(i+1,j)=s_log_sel_f(i,j);
        }
-      for (j=s_nselagef+1;j<=nages;j++)
+       for (j=s_nselagef+1;j<=nages;j++)
        {
-        s_log_sel_f(i+1,j)=s_log_sel_f(i+1,j-1);
+         s_log_sel_f(i+1,j)=s_log_sel_f(i+1,j-1);
        }
-      s_log_sel_f(i+1)-=log(mean(mfexp(s_log_sel_f(i+1))));
-     }
+       s_log_sel_f(i+1)-=log(mean(mfexp(s_log_sel_f(i+1))));
+      }
     }
   }
   else
   {
-   for (i=styr;i<endyr;i++)
-   {
+    for (i=styr;i<endyr;i++)
+    {
       for (j=1;j<=s_nselagef;j++)
       {
         s_log_sel_f(i+1,j)=s_log_sel_f(i,j);
@@ -1402,42 +1408,42 @@ FUNCTION get_selectivity
   s_sel_f=mfexp(s_log_sel_f);
 
   for (i=styr;i<=endyr;i++)
-    {
-     s_sel_f(i)=s_sel_f(i)/max(s_sel_f(i));
-    }
+  {
+    s_sel_f(i)=s_sel_f(i)/max(s_sel_f(i));
+  }
 
   //==+==+====+==+==+==+Selectividad Anchoveta==+==+==+==+==+==++
   if(active(a_sel_devs_f))
   {
-   ii=1;
-   for (i=styr;i<endyr;i++) 
+    ii=1;
+    for (i=styr;i<endyr;i++) 
     {
-     if (!(i%a_group_num_f))
-     {
-      for (j=1;j<=a_nselagef;j++)
+      if (!(i%a_group_num_f))
+      {
+       for (j=1;j<=a_nselagef;j++)
        {
-        a_log_sel_f(i+1,j)=a_log_sel_f(i,j)+a_sel_devs_f(ii,j);
+         a_log_sel_f(i+1,j)=a_log_sel_f(i,j)+a_sel_devs_f(ii,j);
        }
-      for (j=a_nselagef+1;j<=nages;j++)
+       for (j=a_nselagef+1;j<=nages;j++)
        {
-        a_log_sel_f(i+1,j)=a_log_sel_f(i+1,j-1);
+         a_log_sel_f(i+1,j)=a_log_sel_f(i+1,j-1);
        }
-      ii++;
-      a_log_sel_f(i+1)-=log(mean(mfexp(a_log_sel_f(i+1))));
+       ii++;
+       a_log_sel_f(i+1)-=log(mean(mfexp(a_log_sel_f(i+1))));
      }
      else
      {
-      for (j=1;j<=a_nselagef;j++)
+       for (j=1;j<=a_nselagef;j++)
        {
-        a_log_sel_f(i+1,j)=a_log_sel_f(i,j);
-       }
+         a_log_sel_f(i+1,j)=a_log_sel_f(i,j);
+      }
       for (int j=a_nselagef+1;j<=nages;j++)
-       {
+      {
         a_log_sel_f(i+1,j)=a_log_sel_f(i+1,j-1);
-       }
+      }
       a_log_sel_f(i+1)-=log(mean(mfexp(a_log_sel_f(i+1))));
-     }
     }
+   }
   }
   else
   {
@@ -1467,26 +1473,26 @@ FUNCTION get_selectivity
   s_avgsel_reclas=log(mean(exp(s_log_selcoffs_reclas)));
   for (j=1;j<=s_nselagesurv;j++)
   {
-   s_log_sel_reclas(j)=s_log_selcoffs_reclas(j);
-    }
+    s_log_sel_reclas(j)=s_log_selcoffs_reclas(j);
+  }
   for (j=s_nselagesurv+1;j<=nages;j++)
-   {
-   s_log_sel_reclas(j)=s_log_sel_reclas(j-1);
-    }
-  s_log_sel_reclas-=log(mean(exp(s_log_sel_reclas)));
-  s_sel_reclas=mfexp(s_log_sel_reclas);
-  s_sel_reclas=s_sel_reclas/max(s_sel_reclas);
+  {
+    s_log_sel_reclas(j)=s_log_sel_reclas(j-1);
+  }
+  s_log_sel_reclas -= log(mean(exp(s_log_sel_reclas)));
+  s_sel_reclas      = mfexp(s_log_sel_reclas);
+  s_sel_reclas      = s_sel_reclas/max(s_sel_reclas);
 
  //====RECLAS ANCHOVETA====
-  a_avgsel_reclas=log(mean(exp(a_log_selcoffs_reclas)));
+  a_avgsel_reclas = log(mean(exp(a_log_selcoffs_reclas)));
   for (j=1;j<=a_nselagesurv;j++)
   {
-   a_log_sel_reclas(j)=a_log_selcoffs_reclas(j);
-    }
+   a_log_sel_reclas(j) = a_log_selcoffs_reclas(j);
+  }
   for (j=a_nselagesurv+1;j<=nages;j++)
-   {
-   a_log_sel_reclas(j)=a_log_sel_reclas(j-1);
-    }
+  {
+    a_log_sel_reclas(j)=a_log_sel_reclas(j-1);
+  }
   a_log_sel_reclas-=log(mean(exp(a_log_sel_reclas)));
   a_sel_reclas=mfexp(a_log_sel_reclas);
   a_sel_reclas=a_sel_reclas/max(a_sel_reclas);
@@ -1510,7 +1516,7 @@ FUNCTION get_selectivity
   for (j=1;j<=a_nselagesurv;j++)
   {
     a_log_sel_pelaces(j)=a_log_selcoffs_pelaces(j);
-   }
+  }
   for (j=a_nselagesurv+1;j<=nages;j++)
    {
      a_log_sel_pelaces(j)=a_log_sel_pelaces(j-1);
@@ -1757,25 +1763,25 @@ FUNCTION get_predicted_values
   //cout << "a_pred_p_len_fish "<< a_pred_p_len_fish<< endl; 
   //==+==+== Compo por talla crucero
   //RECLAS
-     for (i=1;i<=s_nobs_lfdrec;i++)
-      {
-      ii=s_yrs_lfdrec(i);
-      for (j=1;j<=nages;j++)
-        {
-         s_pred_p_age_rec(i,j)=s_sel_reclas(j)*s_natage(ii,j)/s_pred_num_reclas(i);
-        }
-       s_pred_p_len_rec(i)=s_pred_p_age_rec(i)*s_alk;
-      }
+   for (i=1;i<=s_nobs_lfdrec;i++)
+   {
+     ii=s_yrs_lfdrec(i);
+     for (j=1;j<=nages;j++)
+     {
+       s_pred_p_age_rec(i,j)=s_sel_reclas(j)*s_natage(ii,j)/s_pred_num_reclas(i);
+     }
+     s_pred_p_len_rec(i)=s_pred_p_age_rec(i)*s_alk;
+   }
 
-     for (i=1;i<=a_nobs_lfdrec;i++)
-      {
-      ii=a_yrs_lfdrec(i);
-      for (j=1;j<=nages;j++)
-        {
-         a_pred_p_age_rec(i,j)=a_sel_reclas(j)*a_natage(ii,j)/a_pred_num_reclas(i);
-        }
-       a_pred_p_len_rec(i)=a_pred_p_age_rec(i)*a_alk;
-      }
+   for (i=1;i<=a_nobs_lfdrec;i++)
+   {
+     ii=a_yrs_lfdrec(i);
+     for (j=1;j<=nages;j++)
+     {
+       a_pred_p_age_rec(i,j)=a_sel_reclas(j)*a_natage(ii,j)/a_pred_num_reclas(i);
+     }
+     a_pred_p_len_rec(i)=a_pred_p_age_rec(i)*a_alk;
+   }
 
   //PELACES
     for (i=1;i<=s_nobs_lfdpel;i++)

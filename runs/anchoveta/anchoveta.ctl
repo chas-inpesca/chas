@@ -35,9 +35,9 @@
 #Fase q
 3
 #Fase q_surv reclas
-4
+-4
 #Fase q_surv pelaces
-4
+-4
 #fase selecitividada
 #2#3
 #Natmort prior y cvnatmortprior
