@@ -1,5 +1,5 @@
 cd ..\..\src
 call admb om.tpl
-cd ..\runs\mixsan
-copy ..\..\src\om.exe 
-om -nox -iprint 200
+call admb em.tpl
+copy *exe ..\runs\om
+cd ..\runs\om
