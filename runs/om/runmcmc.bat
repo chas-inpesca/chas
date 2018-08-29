@@ -1,2 +1,2 @@
-	om -mcmc 10000 -nox -mcsave 1000
+	om -mcmc 1000 -nox -mcsave 500
 	om -mceval
