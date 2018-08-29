@@ -210,7 +210,6 @@ PARAMETER_SECTION
   init_bounded_number C(0.1,1,-1)     
   init_bounded_number Ts(0.1,1.0,-1) 
   init_bounded_number sigr(0.05,1,ph_sigmar) 
-  init_bounded_number log_P(-4,0,-2)    // OjO not really used
   init_bounded_number a50_reclas(-1.0,7,ph_sel_fish+1) 
   init_bounded_number a95_reclas(0.1,7.,ph_sel_fish+2) 
   init_bounded_number a50_pelaces(-1.0,7,ph_sel_fish+2)
