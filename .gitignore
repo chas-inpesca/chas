@@ -18,3 +18,4 @@ gradient.dat
 *.cov
 *.dep
 *.hes
+.Rproj.user
